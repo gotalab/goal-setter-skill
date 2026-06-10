@@ -74,24 +74,31 @@ What goal-setter does first — explores the repo, then mirrors the outcome imag
 What gets activated:
 
 ```text
-/goal Migrate src/api from the v1 ApiClient to the v2 SDK with behavior
-unchanged. Verify success through the existing integration tests in
-tests/api and a final diff review. Read src/api/client.ts and
-docs/v2-migration.md first; discover adjacent tests/docs as needed. Keep
-changes scoped to src/api and directly related tests; do not change public
-API, auth behavior, retry semantics, or other modules unless explicitly
-required. Validate with `pnpm test tests/api` and `pnpm build`; do not
-satisfy them by deleting, weakening, or skipping tests. Maintain visible
-progress with a concise checklist and checkpoint updates (progress,
-evidence, remaining work, next step). Use available read-only subagents
-when materially useful for migration-doc research, validation discovery,
-or final review. Done when every v1 ApiClient import under src/api is
-gone, `pnpm test tests/api` and `pnpm build` exit 0, and the final diff
-review confirms no public API or auth changes. If two approaches fail to
-improve evidence, review strategy and pivot within constraints; do not
-silently change the objective, Done, evidence, or constraints. Stop only
-if v1/v2 behavior differences cannot be safely inferred from docs or
-tests, or a required credential or service blocks validation.
+/goal Context: this migration unblocks v2-only work for the API team, so
+behavior parity matters more than speed. Migrate src/api from the v1
+ApiClient to the v2 SDK with behavior unchanged. Verify success through
+the existing integration tests in tests/api and a final diff review. Read
+src/api/client.ts and docs/v2-migration.md first; discover adjacent
+tests/docs as needed. Keep changes scoped to src/api and directly related
+tests — the simplest change that meets the objective, no refactors beyond
+it; do not change public API, auth behavior, retry semantics, or other
+externally visible contracts unless explicitly required. Validate with `pnpm test tests/api` and `pnpm build`;
+do not satisfy them by deleting, weakening, or skipping tests. Use
+available read-only subagents for migration-doc research and validation
+discovery; before claiming Done, have a fresh-context subagent verify the
+evidence. Maintain visible progress with a concise checklist and
+checkpoint updates; audit each progress claim against a tool result first
+— unverified work is reported as unverified, never as done. When you have
+enough information to act, act; never end a turn on a plan or a promise.
+Done when every v1 ApiClient import under src/api is gone, `pnpm test
+tests/api` and `pnpm build` exit 0, and the final diff review confirms no
+public API or auth changes. If two approaches fail to improve evidence,
+review strategy and pivot within constraints; do not silently change the
+objective, Done, evidence, or constraints. Stop only if v1/v2 behavior
+differences cannot be safely inferred from docs or tests, or a required
+credential or service blocks validation. Write the final report for a
+reader who watched none of the run: outcome first, plain words, in the
+user's language.
 ```
 
 Compare that to what most of us actually type after `/goal` — that delta is the product.
@@ -109,7 +116,7 @@ Why the table looks like this: as of Claude Code v2.1.170 there is **no model-ca
 
 ## What a contract covers
 
-Every non-trivial goal includes: one objective · evidence surface · context to read first · constraints + anti-gaming rule · validation (or a discovery rule for it) · subagent policy · visible progress reporting (in your language) · progress/pivot rules · binary Done · explicit block conditions.
+Every non-trivial goal includes: a one-line context note (what the outcome serves and for whom) · one objective · evidence surface · context to read first · task-specific constraints + anti-gaming rule · validation (or a discovery rule for it) · subagent policy with fresh-context verification before Done · progress reporting audited against tool results (in your language) · a persistence rule (act on sufficient information; never end a turn on a promise) · progress/pivot rules · binary Done · explicit block conditions · a final report rule (outcome first, plain words, your language).
 
 Full reference: [`skills/goal-setter/references/goal-contract.md`](skills/goal-setter/references/goal-contract.md)
 

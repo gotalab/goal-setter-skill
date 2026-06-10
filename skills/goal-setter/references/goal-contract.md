@@ -14,18 +14,21 @@ Use context-minimalist wording. Do not shrink or reinterpret the user's requeste
 
 Every inline Goal or `GOAL.md` must cover:
 
+- a one-line context note: what the outcome serves and for whom, compressed from the intended outcome image
 - one objective
 - evidence surface / verification environment
 - context to read first
-- constraints and anti-gaming rule
+- task-specific constraints and anti-gaming rule
 - validation or validation discovery rule
-- subagent/context-separation policy
-- visible progress / checkpoint reporting rule
+- subagent/context-separation policy, including fresh-context verification before claiming Done
+- visible progress / checkpoint reporting rule, with progress claims audited against tool results
+- persistence rule
 - progress/pivot rule
 - done condition
 - block condition
+- final report rule (outcome first, plain words, user's language)
 
-Every non-trivial Goal should explicitly allow available governed subagents for separable investigation, source-backed research, validation discovery, test-failure triage, strategy review when progress stalls, and final review. Prefer read-only subagents unless an external side effect is required, allowed by policy, and part of end-to-end completion. Do not rely on implicit agent autonomy or generic "use tools" wording for this permission; keep the authorization short but present.
+Every non-trivial Goal should explicitly allow available governed subagents for separable investigation, source-backed research, validation discovery, test-failure triage, strategy review when progress stalls, and final fresh-context review. Prefer read-only subagents unless an external side effect is required, allowed by policy, and part of end-to-end completion. Do not rely on implicit agent autonomy or generic "use tools" wording for this permission; keep the authorization short but present.
 
 Use measurable targets where they are meaningful. Use observable evidence when strict measurement would be brittle or would distort the work.
 
@@ -37,7 +40,9 @@ Before clarifying, exploring, or drafting, reconstruct a short intended outcome 
 
 The image fixes what and why; it does not fix how. Leave implementation method, sequencing, and tactics to the agent. Capture the intended outcome of this task only, not the user's general values, preferences, or working style.
 
-Because a Goal runs autonomously and long, a wrong starting image is amplified across the whole run, so an honest image is a precondition for an honest contract and the cheapest place to correct course. Reach a trustworthy image dynamically: infer from the request, repo, tests, docs, and nearby behavior; run bounded exploration when reality is unknown but discoverable; ask only the highest-leverage questions when intent is user-owned. When the prompt is minimal or rough, mirror the reconstructed image back compactly so the user can correct it in one pass before the long run begins; bundle any critical clarification questions into that same message so the user answers in one round trip. Keep the image out of the Goal text itself; let it shape the objective, evidence, validation, constraints, and Done. A single intent or north-star line may survive into the Goal only when it changes the agent's judgment at forks.
+Because a Goal runs autonomously and long, a wrong starting image is amplified across the whole run, so an honest image is a precondition for an honest contract and the cheapest place to correct course. Reach a trustworthy image dynamically: infer from the request, repo, tests, docs, and nearby behavior; run bounded exploration when reality is unknown but discoverable; ask only the highest-leverage questions when intent is user-owned. When the prompt is minimal or rough, mirror the reconstructed image back compactly so the user can correct it in one pass before the long run begins; bundle any critical clarification questions into that same message so the user answers in one round trip.
+
+Compress the image into a single context line that opens the Goal text: what the outcome serves and for whom. Long-running models perform measurably better when they know the reason behind the request, not only the request — the context line lets the executor connect forks and tradeoffs to the real intent instead of guessing it. Keep the rest of the image out of the Goal; it shapes the objective, evidence, validation, constraints, and Done.
 
 ## Clarification Gate
 
@@ -112,6 +117,7 @@ Keep optional operational patterns such as checkpoint commits, draft PRs, or ext
 Before activation, run a bloat pass:
 
 - Delete examples, repeated synonyms, explanatory rationale, and implementation sequencing that do not change Done.
+- Replace boilerplate constraint denylists with the 1-3 boundaries that matter for this task plus the general externally-visible-contracts criterion (see Constraints).
 - Replace long file lists with mandatory anchors plus a discovery rule unless every listed file is part of the evidence surface.
 - Replace step-by-step implementation instructions with constraints, validation, and pivot rules. Preserve "what must be true", not "how to build it", unless the user explicitly requires a specific method.
 - Keep optional operations such as commits, PRs, sidecars, broad fan-out, notifications, or external writes out unless they are requested or required for honest Done evidence.
@@ -122,7 +128,7 @@ Preserve execution freedom:
 
 - Do not encode routine implementation order, architecture choices, tool order, file edit order, or debugging steps when the repo can determine them.
 - Allow small reversible assumptions and better discovered validation/evidence methods when they preserve the same user outcome.
-- Specify hard boundaries for public API, schema, auth, security, billing, data retention, production dependencies, approval boundaries, and coverage claims; leave low-risk implementation tactics to the agent.
+- Specify only the hard boundaries this task could actually break, plus the general externally-visible-contracts criterion (see Constraints); leave low-risk implementation tactics to the agent.
 
 ## Objective
 
@@ -158,13 +164,13 @@ If the evidence surface is missing or unrealistic, require the agent to create t
 
 ## Constraints
 
-Common constraints:
+Instantiate constraints per task; do not paste a generic denylist. Current frontier models follow decision criteria better than exhaustive enumerations, and boilerplate lists carried from older prompts dilute the boundaries that actually matter. Write:
 
-- Keep changes scoped to the requested feature and directly related tests/docs.
-- Do not make unrelated cleanup changes.
-- Do not change public API, schema, auth behavior, billing behavior, security behavior, data retention behavior, or production dependencies unless the spec explicitly requires it.
-- Prefer the smallest reversible assumption when the spec is incomplete.
-- Do not satisfy metrics by deleting, weakening, bypassing, or narrowing required behavior, tests, data, sources, or review criteria unless explicitly approved.
+- a scope rule: keep changes scoped to the objective; do the simplest thing that meets it — no refactors, features, or abstractions beyond it, no unrelated cleanup.
+- the 1-3 hard boundaries this task could actually break, named concretely (e.g. "public API signatures unchanged", "auth behavior unchanged", "no schema migration"). Pick them from the intended outcome image and the evidence surface.
+- one general criterion as the catch-all: do not alter externally visible contracts or cross destructive boundaries unless the objective explicitly requires it.
+- the anti-gaming rule when metrics, tests, coverage, rankings, or visual criteria are involved: do not satisfy them by deleting, weakening, bypassing, or narrowing required behavior, tests, data, sources, or review criteria unless explicitly approved.
+- prefer the smallest reversible assumption when the spec is incomplete.
 
 ## Validation
 
@@ -181,11 +187,20 @@ Examples:
 - eval score threshold
 - coverage does not decrease for the touched module
 - target latency remains below `<threshold>`
-- final diff review confirms no public API, schema, auth, billing, security, data retention, or unrelated dependency changes
+- final diff review confirms the task's named hard boundaries were not crossed
 
 If validation is unknown, require the agent to discover relevant validation commands from repo docs, scripts, package metadata, nearby CI config, or the evidence surface, then record what was run when notes are used.
 
 For visual Goals, convert references into checklist or design-system criteria where possible. Do not chase pixel-perfect asset recreation unless the user explicitly requires it.
+
+When an independent verification harness is available (a check-pack or verification skill that runs its own checks and reports ready/blocked), its report can serve directly as Done evidence — "Done when the verification run reports ready with zero failed critical checks" is a strong, transcript-visible criterion.
+
+## Research Goals
+
+For source-backed research or investigation Goals, add two rules that do not belong in implementation Goals:
+
+- Evidence budget: use the minimum evidence sufficient to answer correctly, cite it precisely, then stop searching. Define when one broad pass suffices versus when additional lookups are required, so the run neither under-sources claims nor searches without a stopping rule.
+- Absence versus negation: lack of evidence is reported as "unconfirmed", never converted into a factual "no". Preserve the distinction between missing data and confirmed negatives in the final artifact.
 
 ## Progress and Pivot
 
@@ -196,7 +211,13 @@ Start with a concise checklist for reaching Done. Track each item as not started
 - remaining work
 - next step
 
+Ground every progress claim: before reporting, audit each claim against a tool result from the run. Unverified work is reported as unverified, never as done. This wording measurably suppresses fabricated progress reports on long autonomous runs, so keep it in the Goal text rather than treating it as implied.
+
+Include a persistence rule: when the executor has enough information to act, it acts — it does not ask permission for reversible in-scope actions, and it never ends a turn on a plan, a question it can answer itself, or a promise about work not yet done. Long-horizon models occasionally end turns on intent statements deep into a session; this clause is the countermeasure. The block rules define the only legitimate stops.
+
 Do not update so often that reporting displaces execution. If a design judgment is needed, record the adopted option and reason instead of leaving ambiguity hidden. If commits are explicitly in scope, summarize implemented changes, validation, and next actions before and after committing.
+
+The final report addresses a reader who watched none of the run: outcome first, then supporting detail, in complete sentences and plain words in the user's language — no working shorthand, arrow chains, or labels invented mid-run.
 
 Compare progress against the Done condition using evidence, not effort spent.
 
@@ -219,7 +240,7 @@ Make completion binary and evidence-bounded. Done should require the whole reque
 - measurable targets are met where defined
 - required validation passes, or any remaining failure is proven unrelated and documented with evidence
 - broad or sampled work records coverage bounds and omitted areas
-- high-confidence completion includes final read-only review or completeness criticism when useful
+- the evidence is verified by a fresh-context check before Done is claimed — an independent read-only subagent or equivalent independent verification, not self-review; fresh-context verifiers outperform self-critique on long runs
 - notes are current and reviewable when sidecars are used
 - final diff is scoped to intended code/tests/docs plus any run files
 - final response summarizes implementation, evidence, and user-review-needed decisions
@@ -261,6 +282,7 @@ Before activation, score each item 0, 1, or 2:
 
 - One objective
 - Intended outcome image formed; objective, evidence, and Done derived from it; image mirrored back for one-pass correction when the prompt was minimal
+- Context line opens the Goal: what the outcome serves and for whom, compressed from the image
 - Clarification gate passed, or unresolved questions were asked before activation
 - Bounded exploration gate passed when discoverable project/data/tool/validation facts were needed
 - Binary Done when
@@ -270,6 +292,11 @@ Before activation, score each item 0, 1, or 2:
 - Evidence surface / verification environment is explicit or has a discovery rule
 - Concrete validation surface or a discovery rule for validation
 - Anti-gaming constraint included when metrics, tests, coverage, rankings, or visual criteria are involved
+- Constraints instantiated for this task (1-3 concrete boundaries plus the general criterion), not a boilerplate denylist
+- Progress claims are required to be audited against tool results; unverified work reported as unverified
+- Persistence rule present: act on sufficient information, never end a turn on a plan or promise
+- Fresh-context verification (independent subagent or equivalent) required before Done is claimed
+- Final report rule present: outcome first, plain words, user's language, written for a reader who watched none of the run
 - Inline condition length checked: ordinary target <= 2,500 characters, portable target <= 3,500 characters, hard cap <= 4,000 characters
 - Bloat pass completed: no repeated rationale, long examples, avoidable file lists, or optional operations that weaken the main objective
 - Execution freedom preserved: the Goal states outcome, evidence, constraints, validation, pivot, Done, and block rules without unnecessary implementation sequencing

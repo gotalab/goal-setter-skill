@@ -5,6 +5,8 @@ Created: {{created_at}}
 
 ## Objective
 
+Context (one line — what this outcome serves and for whom, from the intended outcome image): ...
+
 {{objective}}
 
 Keep this run focused on the user's requested outcome. Do not shrink or reinterpret that outcome; minimize only the surrounding prompt. Preserve evidence, constraints, validation, explicit subagent/delegation authorization, progress visibility, Done, and On block rules; avoid adding routine implementation sequencing or optional operations that do not change Done.
@@ -26,9 +28,10 @@ Add concrete files here when known:
 
 ## Constraints
 
-- Keep changes scoped to the requested outcome and directly related tests/docs.
-- Do not make unrelated cleanup changes.
-- Do not change public API, schema, auth behavior, billing behavior, security behavior, data retention behavior, or production dependencies unless the spec explicitly requires it.
+- Keep changes scoped to the requested outcome and directly related tests/docs; do the simplest thing that meets the objective — no refactors, features, or abstractions beyond it, no unrelated cleanup.
+- Task-specific hard boundaries (name the 1-3 this task could actually break, e.g. public API signatures, schema, auth behavior):
+  - ...
+- Do not alter other externally visible contracts or cross destructive boundaries unless the spec explicitly requires it.
 - Prefer the smallest reversible assumption when the spec is incomplete.
 - Do not satisfy metrics by deleting, weakening, bypassing, or narrowing required behavior, tests, data, sources, or review criteria unless explicitly approved.
 - Record material assumptions and tradeoffs in `execution-notes.md`.
@@ -65,7 +68,9 @@ For broad review, audit, research, migration, or bug-finding work, state the int
 
 ## Progress and pivot
 
-Start with a concise checklist for reaching Done. Track each item as not started, in progress, complete, or blocked. At meaningful checkpoints, update the checklist and report in the user's language (match the language of the request): progress made, evidence confirmed, remaining work, and next step. Do not update so often that reporting displaces execution. If a design judgment is needed, record the adopted option and reason instead of leaving ambiguity hidden. If commits are explicitly in scope, summarize implemented changes, validation, and next actions before and after committing.
+Start with a concise checklist for reaching Done. Track each item as not started, in progress, complete, or blocked. At meaningful checkpoints, update the checklist and report in the user's language (match the language of the request): progress made, evidence confirmed, remaining work, and next step. Before reporting progress, audit each claim against a tool result from this run; unverified work is reported as unverified, never as done. Do not update so often that reporting displaces execution.
+
+When you have enough information to act, act: do not ask permission for reversible in-scope actions, and never end a turn on a plan, a self-answerable question, or a promise about work not yet done — do that work now. On block rules define the only legitimate stops. If a design judgment is needed, record the adopted option and reason instead of leaving ambiguity hidden. If commits are explicitly in scope, summarize implemented changes, validation, and next actions before and after committing.
 
 Compare progress against the Done condition using evidence, not effort spent. If two distinct approaches fail to improve the evidence surface, use read-only strategy review when available, preferably with a subagent; otherwise do a short self-review. Diagnose why progress is stalled, and decide whether to continue, narrow tactics without narrowing the requested outcome, change approach, improve validation, or stop under On block.
 
@@ -86,10 +91,10 @@ When completeness matters, continue discovery until the explicit coverage bound 
 - Measurable targets are met where defined.
 - Required validation passes, or any remaining failure is proven unrelated and documented with evidence.
 - Broad or sampled work records the coverage bound and any omitted areas.
-- High-confidence completion includes final read-only review or completeness criticism when useful.
+- The evidence is verified by a fresh-context check before Done is claimed: an independent read-only subagent or equivalent independent verification, not self-review.
 - `execution-notes.md` is current and reviewable.
 - The final diff is scoped to intended code/tests/docs plus this run's two files.
-- The final response summarizes implementation, evidence, and decisions needing user review.
+- The final response is written for a reader who watched none of the run — outcome first, plain words, in the user's language — and summarizes implementation, evidence, and decisions needing user review.
 
 ## On block
 

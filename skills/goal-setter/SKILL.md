@@ -65,7 +65,9 @@ If the task is a bad fit, say so and suggest a normal prompt or a planning pass 
 
 ## Intended Outcome Image
 
-Before clarifying, exploring, or drafting, form a short intended outcome image: reconstruct what the user is actually trying to create or achieve, and why it matters, in 2-4 sentences. This image is the source from which the objective, evidence surface, validation criteria, constraints, and Done are derived, not prose to paste into the Goal. It fixes what and why, not how, so leave method and sequencing to the agent. Capture this task's intended outcome, not the user's general values or working style.
+Before clarifying, exploring, or drafting, form a short intended outcome image: reconstruct what the user is actually trying to create or achieve, and why it matters, in 2-4 sentences. This image is the source from which the objective, evidence surface, validation criteria, constraints, and Done are derived. It fixes what and why, not how, so leave method and sequencing to the agent. Capture this task's intended outcome, not the user's general values or working style.
+
+Compress the image into one context line that opens the Goal text — what the outcome serves and for whom. Models perform better on long autonomous runs when they know the reason behind the request, not only the request; the rest of the image stays out of the Goal and shapes the contract instead.
 
 Because a Goal runs autonomously and long, a wrong starting image is amplified across the whole run, so getting it right is the highest-leverage step and a precondition for an honest contract. Reach it dynamically: infer, explore, or ask by risk and what is discoverable; the gates below are tools for resolving the image, not a strict sequence. When the prompt is minimal or rough, mirror the reconstructed image back compactly for one-pass correction before the long run starts, and bundle any critical clarification questions into that same message so the user answers in one round trip. See the image-to-criteria-to-constraints derivation in `references/goal-contract.md`.
 
@@ -130,28 +132,32 @@ Steps:
 
 The inline condition is the default output. It should include only the information needed to keep the agent aimed at the finish line:
 
+- a one-line context note compressed from the intended outcome image (what the outcome serves and for whom)
 - one objective
-- a one-line intent/north-star note only when it changes the agent's judgment at forks (otherwise fold intent into the objective)
 - evidence surface / verification environment
 - important context to read first
-- constraints and anti-gaming rule
+- task-specific constraints and anti-gaming rule (instantiate the boundaries that matter for this task; do not paste a generic denylist)
 - validation or validation discovery rule
-- subagent/context-separation policy
+- subagent/context-separation policy, including fresh-context verification before claiming Done
 - optional dynamic workflow / fan-out policy when explicitly needed
-- visible progress / checkpoint reporting rule
+- visible progress / checkpoint reporting rule, with progress claims audited against tool results
+- persistence rule (act on sufficient information; never end a turn on a plan or promise)
 - progress/pivot rule
 - Done condition
 - block condition
+- final report rule (outcome first, plain words, user's language)
 
-For non-trivial Goals, explicitly include permission to use available governed subagents for separable investigation, source-backed research, validation discovery, test-failure triage, strategy review when progress stalls, and final review. Prefer read-only subagents unless an external side effect is required, allowed by policy, and part of end-to-end completion. Do not rely on implicit agent autonomy for this permission; keep the authorization short but present.
+For non-trivial Goals, include a short authorization to use available governed subagents for separable research, validation discovery, triage, strategy review when progress stalls, and final fresh-context review. Prefer read-only subagents unless an external side effect is required, allowed by policy, and part of end-to-end completion. Do not rely on implicit agent autonomy for this permission.
 
 Length budget (canonical values and the over-budget fallback live in `references/goal-contract.md`): target <= 2,500 characters for ordinary inline goals, <= 3,500 for portable Codex/Claude Code goals, hard cap <= 4,000. Compress examples, context lists, and optional operations before weakening core completion criteria.
 
 Use this compact shape when activating without sidecars:
 
 ```text
-<objective>. Verify success through <evidence surface>. Read <minimal context> and discover adjacent tests/docs as needed. Keep changes scoped; do not change public API, schema, auth, security, billing, data retention, production dependencies, required behavior, tests, sources, or review criteria unless explicitly required. Validate with <known checks> or discover and run relevant checks. Maintain visible progress with a concise checklist and checkpoint updates in the user's language for progress, evidence, remaining work, and next step; do not let reporting displace execution. Use available governed subagents/tools when materially useful for separable research, validation discovery, triage, strategy review, or final review; use broad fan-out/dynamic workflow only with bounded scope, ownership split, and merge/review evidence. Done when <binary evidence-backed condition>. If two approaches fail to improve evidence, review strategy and pivot within constraints; do not silently change the objective, Done, evidence, constraints, approval boundaries, or coverage claim. Stop only if <block rules>.
+Context: this serves <who/what> by <why the outcome matters>. <objective>. Verify success through <evidence surface>. Read <minimal context> and discover adjacent tests/docs as needed. Keep changes scoped to the objective and do the simplest thing that meets it — no refactors, features, or abstractions beyond it; do not alter <the 1-3 boundaries that matter for this task> or other externally visible contracts or destructive boundaries unless the objective explicitly requires it. Validate with <known checks> or discover and run relevant checks. Use available governed subagents when materially useful for separable research, validation discovery, triage, or strategy review; before claiming Done, verify the evidence with a fresh-context check (independent subagent or equivalent), not self-review. Maintain visible progress with a concise checklist and checkpoint updates in the user's language; before reporting progress, audit each claim against a tool result from this run — unverified work is reported as unverified, never as done; do not let reporting displace execution. When you have enough information to act, act; do not ask permission for reversible in-scope actions, and never end a turn on a plan or a promise — do that work now. Done when <binary evidence-backed condition>. If two approaches fail to improve evidence, review strategy and pivot within constraints; do not silently change the objective, Done, evidence, constraints, approval boundaries, or coverage claim. Stop only if <block rules>. The final report is for a reader who watched none of the run: outcome first, plain words, in the user's language.
 ```
+
+Instantiate the placeholders against this task: the context line comes from the intended outcome image, and the constraint boundaries name only what this task could actually break (e.g. public API signatures, schema, auth behavior) — replacing the long generic denylist keeps the contract inside the length budget while the new context, evidence-audit, and persistence clauses earn their characters.
 
 ## Sidecars
 

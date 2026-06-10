@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0 — 2026-06-11
+
+Contract shape refined against the GPT-5.5 and Claude Fable 5 prompting guides. Goals get thicker success/evidence discipline and thinner procedure.
+
+- **Context line**: every goal now opens with one line on what the outcome serves and for whom, compressed from the Intended Outcome Image ("give the reason, not only the request")
+- **Evidence-audited progress**: progress claims must be audited against tool results before reporting; unverified work is reported as unverified — suppresses fabricated progress on long runs
+- **Persistence rule**: act on sufficient information; never end a turn on a plan or promise — counters late-session early stopping
+- **Task-instantiated constraints**: the generic 11-item denylist is replaced by 1-3 concrete boundaries per task plus one general externally-visible-contracts criterion ("decision criteria over enumerations")
+- **Fresh-context verification before Done**: independent subagent (or equivalent) verifies the evidence instead of self-review; an independent verification harness's ready/blocked report can serve as Done evidence
+- **Final report rule**: written for a reader who watched none of the run — outcome first, plain words, user's language
+- **Research goals**: evidence budget (minimum sufficient evidence, cite, stop) and absence-vs-negation rule (unconfirmed ≠ no)
+- Readiness audit, `GOAL.template.md`, and README examples updated to match
+
 ## 0.1.0 — 2026-06-10
 
 Initial release.
