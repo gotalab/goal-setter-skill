@@ -14,11 +14,11 @@ Built for **Codex**, and works with **Claude Code**. One skill, both runtimes.
 
 A goal keeps the agent working until a completion condition is true ([Using goals in Codex](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex)). Writing that condition well is real work: you have to state the outcome, how success is verified, what must not change, and when to stop. Skip any of it and the run drifts — a goal runs unattended, so a weak starting condition is amplified for hours.
 
-goal-setter exists because writing that condition is exactly the part people skip. You already have the finished picture in your head; what you actually type is one short line. This skill takes that line, rebuilds the picture, checks it with you in one round trip when needed, and carries it all the way to an activated goal.
+goal-setter exists because writing that condition is exactly the part people skip. You already have the finished picture in your head; what you actually type is one short line. This skill takes that line, rebuilds the picture, keeps checking with you until no outcome-changing ambiguity remains — questions are bundled, so it is usually one round trip — and carries it all the way to an activated goal.
 
 ## What it does
 
-- **Rebuilds the intended outcome first.** Before drafting anything, it reconstructs what you are trying to build and why, in a few sentences. When your request is minimal, it shows you that reconstruction for a one-pass correction instead of asking a list of questions. Success criteria, constraints, and the Done condition are all derived from it.
+- **Rebuilds the intended outcome first.** Before drafting anything, it reconstructs what you are trying to build and why, in a few sentences. When your request is minimal, it shows you that reconstruction to correct, bundling any critical questions into the same message; if ambiguity remains, it keeps asking until the outcome is safe. Success criteria, constraints, and the Done condition are all derived from it.
 - **Asks only what changes the outcome.** Scope, verification, safety boundaries. Everything discoverable in the repo gets explored instead of asked; low-risk details become stated assumptions.
 - **Writes a compact condition.** The goal text fixes *what* and *why* and leaves *how* to the agent. No step-by-step recipes.
 - **Builds in stop and honesty rules.** Checks may not be passed by weakening them; stalled approaches trigger a strategy review, then a hard stop; the objective and Done condition cannot be quietly rewritten mid-run; progress may only be reported against actual tool results.
