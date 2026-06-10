@@ -61,14 +61,15 @@ goal-setter forms the outcome image, runs its gates, drafts the compact conditio
 
 ## How activation works
 
+goal-setter only uses the runtime's **native** goal mechanism — it never spawns child sessions or side processes to activate a goal.
+
 | Runtime | Path | Status |
 |---|---|---|
 | Codex | native `set_goal` tool — fully autonomous activation | ✅ works |
-| Claude Code (interactive) | emits the exact `/goal …` line for you to send | ✅ works |
-| Claude Code (hands-off) | **launcher pattern**: spawns `claude -p "/goal …"` as a headless child run, optionally fed by sidecar `GOAL.md` | ✅ verified |
+| Claude Code | emits the exact `/goal …` line for you to send | ✅ works |
 | Claude Code (in-session, autonomous) | Stop-hook based goal armer shipped with this plugin | 🚧 roadmap |
 
-Why the table looks like this: as of Claude Code v2.1.170 there is **no model-callable tool to set a goal on the current session** — `/goal` is a user command wrapping a session-scoped Stop hook. The launcher pattern works today because `/goal` is fully supported in headless `-p` mode: the child session sets the goal, runs the loop to completion, and exits when the evaluator confirms the condition. Sidecar files double as the context bridge into the child session.
+Why the table looks like this: as of Claude Code v2.1.170 there is **no model-callable tool to set a goal on the current session** — `/goal` is a user command wrapping a session-scoped Stop hook. So on Claude Code, goal-setter prepares the contract and hands you the exact line; activation stays a deliberate, native, one-keystroke act. (If you want unattended runs, `/goal` also works in headless `-p` mode — that's a native Claude Code feature you can use yourself; goal-setter doesn't do it for you.)
 
 ## What a contract covers
 
