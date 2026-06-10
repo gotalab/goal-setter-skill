@@ -96,32 +96,31 @@ goal-setter はリポジトリを探索し、復元した完成像を見せる�
 発動されるもの：
 
 ```text
-/goal Context: this migration unblocks v2-only work for the API team, so
-behavior parity matters more than speed. Migrate src/api from the v1
-ApiClient to the v2 SDK with behavior unchanged. Verify success through
-the existing integration tests in tests/api and a final diff review. Read
-src/api/client.ts and docs/v2-migration.md first; discover adjacent
-tests/docs as needed. Keep changes scoped to src/api and directly related
-tests — the simplest change that meets the objective, no refactors beyond
-it; do not change public API, auth behavior, retry semantics, or other
-externally visible contracts unless explicitly required. Validate with
-`pnpm test tests/api` and `pnpm build`; do not satisfy them by deleting,
-weakening, or skipping tests. Use available read-only subagents for
-migration-doc research and validation discovery; before claiming Done,
-have a fresh-context subagent verify the evidence. Maintain visible
-progress with a concise checklist and checkpoint updates; audit each
-progress claim against a tool result first — unverified work is reported
-as unverified, never as done. When you have enough information to act,
-act; never end a turn on a plan or a promise. Done when every v1
-ApiClient import under src/api is gone, `pnpm test tests/api` and `pnpm
-build` exit 0, and the final diff review confirms no public API or auth
-changes. If two approaches fail to improve evidence, review strategy and
-pivot within constraints; do not silently change the objective, Done,
-evidence, or constraints. Stop only if v1/v2 behavior differences cannot
-be safely inferred from docs or tests, or a required credential or
-service blocks validation. Write the final report for a reader who
-watched none of the run: outcome first, plain words, in the user's
-language.
+/goal Context: the API team is blocked on v2-only features until src/api
+stops using the v1 client; behavior parity matters more than speed.
+Migrate src/api from the v1 ApiClient to the v2 SDK with no behavior
+change. Read docs/v2-migration.md and src/api/client.ts first; discover
+adjacent tests and docs as needed. Success is verified by the integration
+tests in tests/api and a final diff review. Hard boundaries: public API
+signatures, auth behavior, and retry semantics stay unchanged unless the
+migration doc explicitly requires it. Make the simplest change that
+completes the migration — no refactors beyond it. Validate with `pnpm
+test tests/api` and `pnpm build`; never pass them by deleting, weakening,
+or skipping tests. Read-only subagents are authorized for migration-doc
+research and validation discovery; before claiming Done, have a
+fresh-context subagent verify the evidence rather than self-reviewing.
+Report progress at checkpoints in the user's language, claiming only what
+a tool result from this run backs — unverified work is reported as
+unverified. Act whenever you have enough information; never end a turn on
+a plan or a promise. Done when no v1 ApiClient import remains under
+src/api, both commands exit 0, and the final diff review confirms the
+boundaries above were not crossed. If approaches stop improving the
+evidence, review strategy and pivot within these constraints — without
+changing the objective, Done, or evidence. Stop only if v1/v2 behavior
+differences cannot be safely inferred from docs or tests, or a missing
+credential or service blocks validation. Write the final report for a
+reader who watched none of the run: outcome first, plain words, in the
+user's language.
 ```
 
 打ったのは一行だけ。残りはすべて、リポジトリの探索と復元した完成像から導かれたものだ。
