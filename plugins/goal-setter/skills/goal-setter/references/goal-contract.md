@@ -104,6 +104,14 @@ When reporting exploration, keep it short: facts found, remaining unknowns that 
 
 Default to an inline goal condition. The must-cover elements are the contract, not any fixed sentence order or stock phrasing: write the condition in the task's own terms, drop clauses that genuinely do not apply, and treat numeric defaults (stalled-approach triggers, retry counts) as defaults to tune, not rules to copy.
 
+Reference shape for a full-governance goal (adapt freely; on short low-risk runs most governance clauses drop out):
+
+```text
+Context: this serves <who/what> by <why the outcome matters>. <objective>. Verify success through <evidence surface>. Read <minimal context> and discover adjacent tests/docs as needed. Keep changes scoped to the objective and do the simplest thing that meets it — no refactors, features, or abstractions beyond it; do not alter <the 1-3 boundaries that matter for this task> or other externally visible contracts or destructive boundaries unless the objective explicitly requires it. Validate with <known checks> or discover and run relevant checks. Use available governed subagents when materially useful for separable research, validation discovery, triage, or strategy review; before claiming Done, verify the evidence with a fresh-context check (independent subagent or equivalent), not self-review. Maintain visible progress with checkpoint updates in the user's language; before reporting progress, audit each claim against a tool result from this run — unverified work is reported as unverified, never as done. When you have enough information to act, act; do not ask permission for reversible in-scope actions, and never end a turn on a plan or a promise. Done when <binary evidence-backed condition>. If approaches stop improving evidence, review strategy and pivot within constraints; do not silently change the objective, Done, evidence, constraints, or coverage claim. Stop only if <block rules>. The final report is for a reader who watched none of the run: outcome first, plain words, in the user's language.
+```
+
+Instantiate every placeholder in the task's own terms: the context line comes from the intended outcome image, and the constraint boundaries name only what this task could actually break.
+
 Length budget:
 
 - Shorter is better. The right length is the shortest contract in which every sentence can change the executor's behavior; most goals should land around 800-1,800 characters. Treat 2,500 as the ordinary ceiling, not a target.

@@ -15,6 +15,7 @@ Initial release.
   - Goal readiness audit (0/1/2 scoring, n/a allowed) before activation
   - Sidecar mode (`GOAL.md` + `execution-notes.md`) for day-scale runs with durable audit/resume
   - Checkpoint reporting and final report in the user's language
+  - SKILL.md kept to routing, modes, and gates (88 lines); contract detail lives in gated references (progressive disclosure per skill-creator practice)
 - **Runtimes**: Codex (native goal-tool activation via `create_goal`) and Claude Code (emits exact `/goal` line) from a single skill
 - **Distribution**: Codex plugin marketplace metadata uses the standard `.agents/plugins/marketplace.json` -> `./plugins/goal-setter` layout, with the plugin manifest and vendored skill under `plugins/goal-setter/`; skill-only installs still use the root `skills/goal-setter/`; Claude Code plugin metadata remains in `.claude-plugin/`
 - **Docs**: README hero image added as a text-free abstract concept visual under `assets/`
