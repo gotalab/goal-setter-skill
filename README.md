@@ -18,6 +18,8 @@ A goal keeps the agent working until a completion condition is true ([Using goal
 
 goal-setter exists because writing that condition is exactly the part people skip. You already have the finished picture in your head; what you actually type is one short line. This skill takes that line, rebuilds the picture, and checks with you until no outcome-changing ambiguity remains; questions come bundled, so it is usually one round trip. Then it carries the goal all the way to activation.
 
+This is not a shortcut for the lazy. Even if you write goals carefully, folding in the evaluator's mechanics (Claude Code's judge only sees the conversation; Codex won't use subagents unless the goal text grants it), the stop conditions, and the no-weakening-tests rule by hand, every time, is not realistic. The gap between this and your hand-written goal is the value.
+
 ## What it does
 
 - **Rebuilds the intended outcome first.** Before drafting anything, it reconstructs what you are trying to build and why, in a few sentences. When your request is minimal, it shows you that reconstruction to correct, bundling any critical questions into the same message; if ambiguity remains, it keeps asking until the outcome is safe. Success criteria, constraints, and the Done condition are all derived from it.
