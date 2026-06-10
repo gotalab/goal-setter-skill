@@ -6,7 +6,9 @@
 
 [English](README.md)
 
-<img src="assets/goal-setter-concept.png" alt="ばらばらの作業が1つのgoal契約へ収束するイメージ" width="33%">
+<p align="center">
+  <img src="assets/goal-setter-concept.png" alt="ばらばらの作業が1つのgoal契約へ収束するイメージ" width="50%">
+</p>
 
 ---
 
