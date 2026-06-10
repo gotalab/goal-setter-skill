@@ -76,6 +76,20 @@ git clone https://github.com/gotalab/goal-setter-skill.git
 ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" ~/.claude/skills/goal-setter
 ```
 
+### Any agent (skills CLI / skillport)
+
+Skill-only installers that work across agents also pick this repo up directly:
+
+```bash
+# skills CLI (Codex, Claude Code, Cursor, and ~70 other agents)
+npx skills add gotalab/goal-setter-skill
+
+# skillport (CLI or MCP; uv tool install skillport)
+skillport add gotalab/goal-setter-skill skills
+```
+
+Both discover `skills/goal-setter/` from the repo and link it into each agent's skill directory.
+
 ## Usage
 
 **Draft** — get a reviewed condition without activating it:
