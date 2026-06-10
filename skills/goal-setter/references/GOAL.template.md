@@ -124,7 +124,7 @@ When blocked, report:
 - exact blocker
 - smallest user decision needed
 
-## Compact set_goal objective
+## Compact goal objective
 
 ```text
 Execute `{{goal_path}}` as the completion contract. Work autonomously until its Done when is satisfied by evidence, preserving its constraints, validation, progress/pivot, and On block rules. Keep `{{notes_path}}` current only at meaningful checkpoints with material decisions, evidence, coverage limits, blockers, and final review. Do not restate or expand the plan in the native Goal; stop only under `GOAL.md` On block rules.

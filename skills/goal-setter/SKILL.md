@@ -17,7 +17,7 @@ Default to an inline goal condition. Create sidecar files only when they are use
 
 Before setting a Goal, resolve ambiguity that could produce the wrong outcome. Ask the necessary focused questions together when missing decisions affect the objective, evidence surface, Done condition, scope, safety, public contract, auth, security, billing, data handling, production dependencies, or another high-risk boundary. For low-risk implementation details, make the smallest safe assumption, encode it in the Goal, and continue.
 
-When the user asks to run or activate a Goal, set the native goal using the visible goal tool. Codex and Claude Code both expose a `/goal` command; Codex also exposes a `set_goal` tool. Prefer the visible native goal tool/function; if none is visible, emit the exact `/goal ...` command instead. Do not claim the goal was set unless it was actually set.
+When the user asks to run or activate a Goal, set the native goal using the visible goal tool. Codex and Claude Code both expose a `/goal` command; Codex also exposes native goal tools (`create_goal`, `get_goal`, `update_goal`). Prefer the visible native goal tool/function; if none is visible, emit the exact `/goal ...` command instead. Do not claim the goal was set unless it was actually set.
 
 ## Reference Read Gates
 
@@ -107,7 +107,7 @@ Output:
 
 ### Activate Mode
 
-Use when the user asks to set, run, execute, activate, start, or use `set_goal`.
+Use when the user asks to set, run, execute, activate, start, or use the native goal tool.
 
 Steps:
 
@@ -124,7 +124,7 @@ Steps:
    - `execution-notes.md`
 10. Do not create extra run-management files such as `INDEX.md`, `validation-log.md`, `subagents.md`, or subagent report files unless the user explicitly asks or a bulky evidence artifact is genuinely needed.
 11. Audit the Goal using the readiness audit in `references/goal-contract.md`.
-12. If a native goal-setting tool/function is visible, use it.
+12. If a native goal-setting tool/function is visible, use it. When a goal-state tool (`get_goal`) is also visible, check the active goal first: reuse an active goal that already matches the intent instead of creating a duplicate, and ask before replacing one that conflicts.
 13. If native goal setting is not visible, output the exact `/goal ...` command instead.
 14. Do not claim the goal was set unless it was actually set.
 

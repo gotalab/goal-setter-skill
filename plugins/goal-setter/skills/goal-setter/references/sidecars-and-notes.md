@@ -103,7 +103,7 @@ Before filling or auditing `GOAL.md`, read `references/goal-contract.md`. If the
 9. `Progress and pivot`
 10. `Done when`
 11. `On block`
-12. `Compact set_goal objective`
+12. `Compact goal objective`
 
 ## execution-notes.md
 
@@ -167,7 +167,7 @@ python3 -B <skill-path>/scripts/init_goal_run.py \
   --objective "Implement the checkout confirmation flow and verify it with checkout tests."
 ```
 
-After creating sidecars, set the native goal with the `Compact set_goal objective` from `GOAL.md`, or emit the exact `/goal ...` command when no native goal tool is visible.
+After creating sidecars, set the native goal with the `Compact goal objective` from `GOAL.md`, or emit the exact `/goal ...` command when no native goal tool is visible.
 
 The compact launcher objective should only point to `GOAL.md`, require updates to `execution-notes.md` at meaningful checkpoints, and preserve the On block rules. It should not restate the full sidecar plan or turn into another long Goal.
 

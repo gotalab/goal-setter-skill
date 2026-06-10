@@ -159,7 +159,7 @@ goal-setter only uses the runtime's own goal mechanism. It never spawns child se
 
 | Runtime | Path |
 |---|---|
-| Codex | sets the goal itself via the native `set_goal` tool |
+| Codex | sets the goal itself via the native goal tool (`create_goal`) |
 | Claude Code | hands you the exact `/goal …` line to send |
 
 The difference exists because Claude Code (as of v2.1.170) has no tool a model can call to set a goal on the current session — `/goal` is a user command. So on Claude Code the skill prepares everything and you activate by sending that one line.
