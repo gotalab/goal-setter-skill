@@ -75,19 +75,15 @@ git clone https://github.com/gotalab/goal-setter-skill.git
 ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" ~/.claude/skills/goal-setter
 ```
 
-### 任意のエージェント（skills CLI / skillport）
+### 任意のエージェント（skills CLI）
 
-エージェント横断のスキル専用インストーラからも、このリポジトリを直接入れられる：
+エージェント横断の skills CLI（Codex、Claude Code、Cursor ほか約70エージェント対応）からも、このリポジトリを直接入れられる：
 
 ```bash
-# skills CLI（Codex、Claude Code、Cursor ほか約70エージェント対応）
 npx skills add gotalab/goal-setter-skill
-
-# skillport（CLI または MCP。uv tool install skillport）
-skillport add gotalab/goal-setter-skill skills
 ```
 
-どちらもリポジトリから `skills/goal-setter/` を発見し、各エージェントのスキルディレクトリにリンクする。
+リポジトリから `skills/goal-setter/` を発見し、各エージェントのスキルディレクトリにリンクする。
 
 ## 使い方
 
