@@ -61,7 +61,7 @@ Bad fits:
 - subjective output with no rubric
 - destructive/high-risk changes without explicit approval boundaries
 
-If the task is a bad fit, say so and suggest a normal prompt or a planning pass first.
+If the task is a bad fit, say so and suggest a normal prompt or a planning pass first. One exception: when the only blocker is a missing verification surface (no rubric, eval, checklist, or baseline), offer a preliminary Goal that builds that surface first, with the main Goal to follow — see `references/goal-contract.md`.
 
 ## Intended Outcome Image
 

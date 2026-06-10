@@ -164,6 +164,8 @@ State where the final result can be checked. This can be a running app, browser 
 
 If the evidence surface is missing or unrealistic, require the agent to create the smallest practical verification surface or stop if that requires unavailable credentials, services, devices, data, or user approval.
 
+When the outcome itself cannot be measured yet — no rubric, no eval, no checklist, no baseline — do not draft a vague main Goal. Propose a preliminary Goal whose Done is the verification surface itself: a written rubric, an eval set with a baseline score, a checklist, or a reliable reproduction. The main Goal then starts against an honest evaluator instead of a guess. This turns "subjective output with no rubric" from a bad fit into a two-stage path; offer the pair, and activate only the preliminary Goal first.
+
 ## Constraints
 
 Instantiate constraints per task; do not paste a generic denylist. Current frontier models follow decision criteria better than exhaustive enumerations, and boilerplate lists carried from older prompts dilute the boundaries that actually matter. Write:
