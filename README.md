@@ -173,6 +173,7 @@ Full reference: [`skills/goal-setter/references/goal-contract.md`](skills/goal-s
 ## Structure
 
 ```text
+.agents/plugins/marketplace.json   # Codex marketplace; points at ./plugins/goal-setter
 skills/goal-setter/
 ├── SKILL.md                      # routing, modes, gates
 ├── references/
@@ -185,9 +186,14 @@ skills/goal-setter/
 │   ├── init_goal_run.py          # sidecar scaffolding helper
 │   └── check_python_syntax.py
 └── agents/openai.yaml            # Codex surface metadata
+plugins/goal-setter/
+├── .codex-plugin/plugin.json      # Codex plugin manifest
+└── skills/goal-setter/            # vendored copy for Codex plugin installs
 ```
 
-Plugin packaging lives at the repo root: `.codex-plugin/plugin.json` + `.agents/plugins/marketplace.json` for Codex, `.claude-plugin/` (plugin.json + marketplace.json) for Claude Code — both point at the same `skills/goal-setter/` folder.
+Codex marketplace packaging uses the standard `./plugins/goal-setter` layout.
+The root `skills/goal-setter/` folder remains for skill-only installs. Claude
+Code packaging lives in `.claude-plugin/`.
 
 ## License
 

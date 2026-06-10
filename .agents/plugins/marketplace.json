@@ -8,7 +8,7 @@
       "name": "goal-setter",
       "source": {
         "source": "local",
-        "path": "./"
+        "path": "./plugins/goal-setter"
       },
       "policy": {
         "installation": "AVAILABLE",

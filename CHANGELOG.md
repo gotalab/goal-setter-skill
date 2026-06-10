@@ -14,5 +14,5 @@ Initial release.
   - Sidecar mode (`GOAL.md` + `execution-notes.md`) for day-scale runs with durable audit/resume
   - Checkpoint reporting and final report in the user's language
 - **Runtimes**: Codex (native `set_goal` activation) and Claude Code (emits exact `/goal` line) from a single skill
-- **Distribution**: Codex skill install is the primary path via `$skill-installer` into `$CODEX_HOME/skills` (default `~/.codex/skills`) or an equivalent manual symlink; optional Codex plugin marketplace metadata (`.codex-plugin/` + `.agents/plugins/marketplace.json`, validator-checked) and Claude Code plugin metadata (`.claude-plugin/`, strict-validated) share one `skills/goal-setter/`
+- **Distribution**: Codex plugin marketplace metadata uses the standard `.agents/plugins/marketplace.json` -> `./plugins/goal-setter` layout, with the plugin manifest and vendored skill under `plugins/goal-setter/`; skill-only installs still use the root `skills/goal-setter/`; Claude Code plugin metadata remains in `.claude-plugin/`
 - **Docs**: README hero image added as a text-free abstract concept visual under `assets/`
