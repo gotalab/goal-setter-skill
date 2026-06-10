@@ -6,6 +6,8 @@ Works with **Claude Code** and **Codex**. One skill, both runtimes.
 
 [日本語](README.ja.md)
 
+![Abstract concept of loose work converging into an evidence-backed goal contract](assets/goal-setter-concept.png)
+
 ---
 
 ## Why

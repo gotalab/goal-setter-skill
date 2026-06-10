@@ -6,6 +6,8 @@
 
 [English](README.md)
 
+![雑な作業依頼が証拠付きの完了契約へ収束する抽象イメージ](assets/goal-setter-concept.png)
+
 ---
 
 ## なぜ必要か
