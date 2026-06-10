@@ -90,45 +90,58 @@ goal-setter rebuilds the outcome, asks anything critical, drafts and audits the 
 
 ## Example
 
+Actual output, from running the skill on a small repo that uses `@acme/api-client` v1 (three modules under `src/api`, tests, and a `docs/v2-migration.md`).
+
 What you type:
 
 > set a goal: migrate src/api to the v2 client
 
-goal-setter explores the repo, then shows you the outcome it reconstructed:
+goal-setter explores the repo, then shows you the outcome it reconstructed — note that it caught the v2 retry-default change from the migration doc on its own:
 
-> **Image:** Replace every v1 `ApiClient` usage under `src/api` with the v2 SDK so behavior is unchanged — existing integration tests stay green, no public interface or auth changes. Correct me if this is off, otherwise I'll activate.
+> Here's what I understand you want: migrate everything under src/api off the deprecated @acme/api-client (v1) onto @acme/sdk (v2, already in your dependencies at ^2.3.0), following docs/v2-migration.md — `createClient(opts)` instead of `new ApiClient(opts)`, `auth: { token | tokenProvider }` instead of the `authToken` callback, `retry: { attempts }` instead of `retries`, and `SdkError` instead of `ApiError` — with no behavior change for the code that calls these modules. I plan to: keep retries at 3 by passing `retry: { attempts: 3 }` explicitly (the v2 default changed from 0 to 2); keep the exported signatures of getUser, listUsers, createOrder, and makeScopedClient stable, except makeScopedClient's return type moves to the v2 client type; and remove @acme/api-client from package.json once nothing references it. Done means no v1 references remain in src/ or tests/ and `npm test`, `npm run build`, and `npm run lint` all pass. Correct me if any of that is off — otherwise I'll set the goal.
 
-What gets activated:
+What gets activated (2,450 characters):
 
 ```text
-/goal Context: the API team is blocked on v2-only features until src/api
-stops using the v1 client; behavior parity matters more than speed.
-Migrate src/api from the v1 ApiClient to the v2 SDK with no behavior
-change. Read docs/v2-migration.md and src/api/client.ts first; discover
-adjacent tests and docs as needed. Success is verified by the integration
-tests in tests/api and a final diff review. Hard boundaries: public API
-signatures, auth behavior, and retry semantics stay unchanged unless the
-migration doc explicitly requires it. Make the simplest change that
-completes the migration — no refactors beyond it. Validate with `pnpm
-test tests/api` and `pnpm build`; never pass them by deleting, weakening,
-or skipping tests. Read-only subagents are authorized for migration-doc
-research and validation discovery; before claiming Done, have a
-fresh-context subagent verify the evidence rather than self-reviewing.
-Report progress at checkpoints in the user's language, claiming only what
-a tool result from this run backs — unverified work is reported as
-unverified. Act whenever you have enough information; never end a turn on
-a plan or a promise. Done when no v1 ApiClient import remains under
-src/api, both commands exit 0, and the final diff review confirms the
-boundaries above were not crossed. If approaches stop improving the
-evidence, review strategy and pivot within these constraints — without
-changing the objective, Done, or evidence. Stop only if v1/v2 behavior
-differences cannot be safely inferred from docs or tests, or a missing
-credential or service blocks validation. Write the final report for a
-reader who watched none of the run: outcome first, plain words, in the
-user's language.
+/goal Context: this serves the shop-backend team by getting src/api off
+the deprecated @acme/api-client v1 and onto the supported @acme/sdk v2
+(already in dependencies) with no behavior change for callers. Migrate
+all code under src/api from @acme/api-client to @acme/sdk per
+docs/v2-migration.md, leaving zero v1 references and unchanged
+caller-facing behavior. Verify through npm test, npm run build, and npm
+run lint passing, plus a grep showing no @acme/api-client, ApiClient, or
+ApiError references left in src/ or tests/. Read docs/v2-migration.md,
+src/api/client.ts, and src/api/orders.ts first; discover adjacent tests
+under tests/api as needed. Keep changes scoped to the migration and do
+the simplest thing that meets it. Hard boundaries: preserve current retry
+behavior by passing retry: { attempts: 3 } explicitly (the v2 default
+changed from 0 to 2); keep the exported signatures and behavior of
+getUser, listUsers, createOrder, and makeScopedClient stable for callers,
+except makeScopedClient's return type moves to the v2 client type; map
+ApiError handling to SdkError without changing .status semantics. Do not
+alter other externally visible contracts, and do not make checks pass by
+deleting, weakening, or skipping tests. Remove @acme/api-client from
+package.json once no code references remain. Use available governed
+read-only subagents when materially useful for separable triage,
+validation discovery, or strategy review; before claiming Done, verify
+the evidence with a fresh-context check (independent subagent or
+equivalent), not self-review. Maintain a concise checklist with
+checkpoint updates; before reporting progress, audit each claim against a
+tool result from this run - unverified work is reported as unverified,
+never as done. When you have enough information to act, act; never end a
+turn on a plan or a promise. Done when src/ and tests/ contain no
+@acme/api-client references, the v1 dependency is removed from
+package.json, and npm test, npm run build, and npm run lint all pass. If
+two approaches fail to improve the evidence, review strategy and pivot
+within constraints; do not silently change the objective, Done condition,
+evidence, or constraints. Stop only if @acme/sdk lacks a documented
+equivalent for required behavior or validation stays blocked by the same
+failure after 3 distinct attempts. The final report is for a reader who
+watched none of the run: outcome first, plain words, in the user's
+language.
 ```
 
-The one line you typed is the entire input. Everything else came from the repo and the reconstructed outcome.
+The one line you typed is the entire input. Every file path, command, and boundary above came from exploring the repo and the migration doc.
 
 ## How activation works
 
