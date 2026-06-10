@@ -1,0 +1,14 @@
+{
+  "name": "goal-setter",
+  "owner": {
+    "name": "gotalab"
+  },
+  "plugins": [
+    {
+      "name": "goal-setter",
+      "source": "./",
+      "description": "Shape rough requests into compact, evidence-backed /goal completion contracts before long autonomous runs.",
+      "category": "productivity"
+    }
+  ]
+}

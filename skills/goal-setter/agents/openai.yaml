@@ -1,0 +1,4 @@
+interface:
+  display_name: "Goal Setter"
+  short_description: "Shape rough work into goal contracts"
+  default_prompt: "Use $goal-setter to clarify, lightly explore, and draft a compact /goal completion contract for this task."
