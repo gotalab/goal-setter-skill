@@ -1,8 +1,8 @@
 # goal-setter
 
-**Turn a few words into a complete `/goal` condition — before the long run starts.**
+**Turn one short request into a `/goal` condition you can trust with a long autonomous run.**
 
-Built for **Codex**, and works with **Claude Code**. One skill, both runtimes.
+Built for **Codex**. Works on **Claude Code** too.
 
 [日本語](README.ja.md)
 
@@ -16,7 +16,7 @@ Built for **Codex**, and works with **Claude Code**. One skill, both runtimes.
 
 A goal keeps the agent working until a completion condition is true ([Using goals in Codex](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex)). Writing that condition well is real work: you have to state the outcome, how success is verified, what must not change, and when to stop. Skip any of it and the run drifts — a goal runs unattended, so a weak starting condition is amplified for hours.
 
-goal-setter exists because writing that condition is exactly the part people skip. You already have the finished picture in your head; what you actually type is one short line. This skill takes that line, rebuilds the picture, keeps checking with you until no outcome-changing ambiguity remains — questions are bundled, so it is usually one round trip — and carries it all the way to an activated goal.
+goal-setter exists because writing that condition is exactly the part people skip. You already have the finished picture in your head; what you actually type is one short line. This skill takes that line, rebuilds the picture, and checks with you until no outcome-changing ambiguity remains; questions come bundled, so it is usually one round trip. Then it carries the goal all the way to activation.
 
 ## What it does
 
@@ -110,7 +110,7 @@ goal-setter explores the repo, then shows you the outcome it reconstructed — n
 
 > Here's the outcome I understand you want, so the run starts aimed right: move the API layer of shop-backend (src/api/client.ts, users.ts, orders.ts) off the legacy `@acme/api-client` v1 onto the `@acme/sdk` v2 client, following docs/v2-migration.md — `createClient` instead of `new ApiClient`, `auth.tokenProvider` instead of the `authToken` callback, and `retry: { attempts: 3 }` kept explicit since v2's default changed. The exported functions (getUser, listUsers, createOrder, makeScopedClient) keep their current signatures and request behavior, so callers and the existing vitest tests are unaffected; `makeScopedClient`'s return type moves to the v2 client type. I'll assume removing the now-unused `@acme/api-client` from package.json is in scope, and success is verified by `npm test`, `npm run build`, and `npm run lint` all green with zero v1 references left in src/ and tests/. Correct anything here before I set the goal.
 
-What gets activated (1,352 characters — the skill judged this a short, low-risk run and dropped the governance clauses that would not change it, keeping subagent permission, the anti-gaming rule, independent verification, and the stop rule):
+What gets activated (1,352 characters — the skill judged this a short, low-risk run and left out the operating rules that would not change it, such as step-by-step progress reporting, while keeping subagent permission, the no-weakening-tests rule, independent verification, and the stop rule):
 
 ```text
 /goal Context: this keeps shop-backend on the supported @acme/sdk v2 client
