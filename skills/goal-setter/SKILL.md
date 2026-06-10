@@ -132,6 +132,8 @@ Steps:
 
 The inline condition is the default output. It should include only the information needed to keep the agent aimed at the finish line:
 
+The first group below belongs in every Goal; the governance items after it scale with run length and risk — on short low-risk goals, drop what would not change the run (see `references/goal-contract.md`).
+
 - a one-line context note compressed from the intended outcome image (what the outcome serves and for whom)
 - one objective
 - evidence surface / verification environment
@@ -149,7 +151,7 @@ The inline condition is the default output. It should include only the informati
 
 For non-trivial Goals, include a short authorization to use available governed subagents for separable research, validation discovery, triage, strategy review when progress stalls, and final fresh-context review. Prefer read-only subagents unless an external side effect is required, allowed by policy, and part of end-to-end completion. Keep this authorization explicit because some runtimes (Codex in particular) will not use subagents during a goal run unless the goal text grants it; never compress it away.
 
-Length budget (canonical values and the over-budget fallback live in `references/goal-contract.md`): target <= 2,500 characters for ordinary inline goals, <= 3,500 for portable Codex/Claude Code goals, hard cap <= 4,000. Compress examples, context lists, and optional operations before weakening core completion criteria.
+Length budget (canonical values and the over-budget fallback live in `references/goal-contract.md`): shorter is better — most goals should land around 800-1,800 characters, with 2,500 the ordinary ceiling (3,500 portable, 4,000 hard cap). A long Goal crowds out the model's own judgment, so every sentence must be able to change the executor's behavior; scale the governance clauses to the run and drop the ones whose absence would not change it. Compress examples, context lists, and optional operations before weakening core completion criteria.
 
 Reference shape for activating without sidecars. It is a shape, not a fixed template: the covered elements are the contract, so reword, reorder, drop clauses that do not apply, and phrase everything in the task's own terms — a contract written for the task reads better and runs better than boilerplate. Numeric defaults in it (two stalled approaches before a pivot review) are defaults; adjust them when the task warrants.
 

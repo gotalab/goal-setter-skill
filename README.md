@@ -108,47 +108,30 @@ What you type:
 
 goal-setter explores the repo, then shows you the outcome it reconstructed — note that it caught the v2 retry-default change from the migration doc on its own:
 
-> Here's what I understand you want: migrate everything under src/api off the deprecated @acme/api-client (v1) onto @acme/sdk (v2, already in your dependencies at ^2.3.0), following docs/v2-migration.md — `createClient(opts)` instead of `new ApiClient(opts)`, `auth: { token | tokenProvider }` instead of the `authToken` callback, `retry: { attempts }` instead of `retries`, and `SdkError` instead of `ApiError` — with no behavior change for the code that calls these modules. I plan to: keep retries at 3 by passing `retry: { attempts: 3 }` explicitly (the v2 default changed from 0 to 2); keep the exported signatures of getUser, listUsers, createOrder, and makeScopedClient stable, except makeScopedClient's return type moves to the v2 client type; and remove @acme/api-client from package.json once nothing references it. Done means no v1 references remain in src/ or tests/ and `npm test`, `npm run build`, and `npm run lint` all pass. Correct me if any of that is off — otherwise I'll set the goal.
+> Here's the outcome I understand you want, so the run starts aimed right: move the API layer of shop-backend (src/api/client.ts, users.ts, orders.ts) off the legacy `@acme/api-client` v1 onto the `@acme/sdk` v2 client, following docs/v2-migration.md — `createClient` instead of `new ApiClient`, `auth.tokenProvider` instead of the `authToken` callback, and `retry: { attempts: 3 }` kept explicit since v2's default changed. The exported functions (getUser, listUsers, createOrder, makeScopedClient) keep their current signatures and request behavior, so callers and the existing vitest tests are unaffected; `makeScopedClient`'s return type moves to the v2 client type. I'll assume removing the now-unused `@acme/api-client` from package.json is in scope, and success is verified by `npm test`, `npm run build`, and `npm run lint` all green with zero v1 references left in src/ and tests/. Correct anything here before I set the goal.
 
-What gets activated (2,450 characters):
+What gets activated (1,352 characters — the skill judged this a short, low-risk run and dropped the governance clauses that would not change it, keeping subagent permission, the anti-gaming rule, independent verification, and the stop rule):
 
 ```text
-/goal Context: this serves the shop-backend team by getting src/api off
-the deprecated @acme/api-client v1 and onto the supported @acme/sdk v2
-(already in dependencies) with no behavior change for callers. Migrate
-all code under src/api from @acme/api-client to @acme/sdk per
-docs/v2-migration.md, leaving zero v1 references and unchanged
-caller-facing behavior. Verify through npm test, npm run build, and npm
-run lint passing, plus a grep showing no @acme/api-client, ApiClient, or
-ApiError references left in src/ or tests/. Read docs/v2-migration.md,
-src/api/client.ts, and src/api/orders.ts first; discover adjacent tests
-under tests/api as needed. Keep changes scoped to the migration and do
-the simplest thing that meets it. Hard boundaries: preserve current retry
-behavior by passing retry: { attempts: 3 } explicitly (the v2 default
-changed from 0 to 2); keep the exported signatures and behavior of
-getUser, listUsers, createOrder, and makeScopedClient stable for callers,
-except makeScopedClient's return type moves to the v2 client type; map
-ApiError handling to SdkError without changing .status semantics. Do not
-alter other externally visible contracts, and do not make checks pass by
-deleting, weakening, or skipping tests. Remove @acme/api-client from
-package.json once no code references remain. Use available governed
-read-only subagents when materially useful for separable triage,
-validation discovery, or strategy review; before claiming Done, verify
-the evidence with a fresh-context check (independent subagent or
-equivalent), not self-review. Maintain a concise checklist with
-checkpoint updates; before reporting progress, audit each claim against a
-tool result from this run - unverified work is reported as unverified,
-never as done. When you have enough information to act, act; never end a
-turn on a plan or a promise. Done when src/ and tests/ contain no
-@acme/api-client references, the v1 dependency is removed from
-package.json, and npm test, npm run build, and npm run lint all pass. If
-two approaches fail to improve the evidence, review strategy and pivot
-within constraints; do not silently change the objective, Done condition,
-evidence, or constraints. Stop only if @acme/sdk lacks a documented
-equivalent for required behavior or validation stays blocked by the same
-failure after 3 distinct attempts. The final report is for a reader who
-watched none of the run: outcome first, plain words, in the user's
-language.
+/goal Context: this keeps shop-backend on the supported @acme/sdk v2 client
+so the API layer stays current and maintainable. Migrate src/api (client.ts,
+users.ts, orders.ts) from @acme/api-client v1 to @acme/sdk v2 per
+docs/v2-migration.md: createClient replaces new ApiClient, the authToken
+callback becomes auth.tokenProvider, and retries: 3 becomes retry: {
+attempts: 3 } — keep attempts explicit since the v2 default changed. Update
+the exported makeScopedClient return type to the v2 client type, switch any
+ApiError handling to SdkError, and remove @acme/api-client from package.json
+once unused. Read docs/v2-migration.md first. Keep changes scoped to the
+migration: the functions exported from src/api keep their current signatures
+and request behavior (paths, query shapes, retry count); no refactors or
+features beyond it. Validate with npm test, npm run build, and npm run lint,
+all green; do not weaken, skip, or delete tests to make them pass. Use
+read-only subagents where useful, and before claiming Done have a
+fresh-context check (independent subagent or equivalent) confirm the diff
+against the migration doc. Done when grep finds zero @acme/api-client
+references in src/ and tests/ and all three checks pass. If a v1 behavior
+has no v2 equivalent, stop and ask rather than approximate. Final report:
+outcome first, plain words, in English.
 ```
 
 The one line you typed is the entire input. Every file path, command, and boundary above came from exploring the repo and the migration doc.
@@ -167,6 +150,8 @@ The difference exists because Claude Code (as of v2.1.170) has no tool a model c
 ## What a goal covers
 
 Every non-trivial goal includes: a one-line note on what the outcome serves and for whom · one objective · how success is verified · what to read first · the few hard boundaries this task could break, plus the rule against passing checks by weakening them · validation commands (or how to discover them) · subagent permission, including an independent check before Done · progress reported against tool results, in your language · a rule to keep acting instead of ending on a promise · pivot rules for stalled approaches · a binary Done condition · explicit stop conditions · a final report written for someone who did not watch the run.
+
+The contract scales with the run: short low-risk tasks get short contracts, and clauses that would not change the run are dropped — a long goal crowds out the model's own judgment.
 
 Full reference: [`skills/goal-setter/references/goal-contract.md`](skills/goal-setter/references/goal-contract.md)
 

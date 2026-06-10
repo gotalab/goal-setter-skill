@@ -30,6 +30,8 @@ Every inline Goal or `GOAL.md` must cover:
 
 Every non-trivial Goal should explicitly allow available governed subagents for separable investigation, source-backed research, validation discovery, test-failure triage, strategy review when progress stalls, and final fresh-context review. Prefer read-only subagents unless an external side effect is required, allowed by policy, and part of end-to-end completion. Keep the authorization short but present, and never compress it away: some runtimes (Codex in particular) will not use subagents during a goal run unless the goal text grants it, so implicit agent autonomy or generic "use tools" wording is not enough.
 
+Cover does not mean spell out. Objective, verification, the boundaries that matter, Done, and stop rules belong in every Goal. The governance clauses — checkpoint reporting, evidence-audited progress claims, persistence, fresh-context verification, the final report rule — earn their characters on long or high-risk autonomous runs; on short low-risk goals, drop the ones whose absence would not change the run. Current models already do much of this well by default, so write a rule only where a violation would be costly.
+
 Use measurable targets where they are meaningful. Use observable evidence when strict measurement would be brittle or would distort the work.
 
 Before setting a Goal, resolve ambiguity that could produce the wrong outcome. Ask the necessary focused questions together when missing decisions affect the objective, evidence surface, Done condition, scope, safety, public contract, auth, security, billing, data handling, production dependencies, or another high-risk boundary. For low-risk implementation details, prefer autonomous progress when a safe, reversible assumption or observable evidence rule can be inferred from the spec, evidence surface, tests, docs, or nearby product behavior.
@@ -104,9 +106,9 @@ Default to an inline goal condition. The must-cover elements are the contract, n
 
 Length budget:
 
-- Target <= 2,500 characters for ordinary inline goals.
-- Target <= 3,500 characters for portable Codex/Claude Code goals.
-- Hard cap <= 4,000 characters.
+- Shorter is better. The right length is the shortest contract in which every sentence can change the executor's behavior; most goals should land around 800-1,800 characters. Treat 2,500 as the ordinary ceiling, not a target.
+- A long Goal does not just cost tokens — it crowds out the model's own judgment. When the text reads like it is steering every move, cut until only outcome, verification, boundaries, and stops remain.
+- <= 3,500 characters for portable Codex/Claude Code goals. Hard cap <= 4,000.
 - If too long, compress examples, context lists, and optional operations before weakening objective, evidence, constraints, validation, subagent policy, progress/pivot, done, or block conditions.
 - If still too long, ask whether to use sidecar files plus a compact launcher objective for durable audit/resume or plan/spec ownership, or split/narrow the Goal.
 
@@ -188,6 +190,16 @@ Examples:
 - coverage does not decrease for the touched module
 - target latency remains below `<threshold>`
 - final diff review confirms the task's named hard boundaries were not crossed
+
+Make targets concrete by domain — numbers that represent real success, not decorative precision:
+
+- bugs: reproduce first, fix second; success is the failing case now passing, with no related regressions
+- tests/CI: the exact command and its required pass condition
+- performance: metric, threshold, measurement method, and number of runs (e.g. p95 < 250 ms across 3 consecutive benchmark runs)
+- quality work: an observable acceptance bar — lint/typecheck/tests green, N reviewed examples, or a user-approved artifact
+- research: the decision the research must enable, the sources in scope, and the evidence standard
+- migrations/batch work: counts verified by query or grep (records migrated, references removed), with the coverage bound stated
+- operations: healthy state, monitoring window, failure threshold, and rollback trigger
 
 If validation is unknown, require the agent to discover relevant validation commands from repo docs, scripts, package metadata, nearby CI config, or the evidence surface, then record what was run when notes are used.
 
