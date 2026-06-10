@@ -1,4 +1,5 @@
 __pycache__/
 *.pyc
 .DS_Store
-.agents/
+.agents/*
+!.agents/plugins/

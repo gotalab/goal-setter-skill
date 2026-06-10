@@ -44,9 +44,17 @@ git clone https://github.com/gotalab/goal-setter-skill.git
 ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" ~/.claude/skills/goal-setter
 ```
 
-### Codex
+### Codex（プラグイン）
 
-Codex 内で同梱インストーラを使うのが最短です（public な GitHub リポなら何でも入ります）：
+```bash
+codex plugin marketplace add gotalab/goal-setter-skill
+```
+
+その後 Codex 内で `/plugins` を開いて **Goal Setter** をインストールします（新しめの CLI なら `codex plugin add goal-setter@goal-setter` も使えます）。
+
+### Codex（スキル単体）
+
+Codex 内で同梱インストーラを使う方法（public な GitHub リポなら何でも入ります）：
 
 ```text
 $skill-installer install https://github.com/gotalab/goal-setter-skill/tree/main/skills/goal-setter
@@ -150,6 +158,8 @@ skills/goal-setter/
 │   └── check_python_syntax.py
 └── agents/openai.yaml            # Codex 向けメタデータ
 ```
+
+プラグインのパッケージングはリポジトリ直下にあります：Claude Code 用は `.claude-plugin/`（plugin.json + marketplace.json）、Codex 用は `.codex-plugin/plugin.json` と `.agents/plugins/marketplace.json` — どちらも同じ `skills/goal-setter/` を指します。
 
 ## ライセンス
 

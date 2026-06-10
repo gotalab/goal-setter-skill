@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.2 — 2026-06-11
+
+Codex plugin packaging.
+
+- `.codex-plugin/plugin.json` (interface metadata, validated with the bundled plugin-creator validator) and `.agents/plugins/marketplace.json` (repo marketplace, `local` source at repo root) — same `skills/goal-setter/` serves Claude Code and Codex plugins from one layout
+- `.gitignore` fixed so `.agents/plugins/` is committed while run artifacts stay ignored
+- READMEs: Codex plugin install (`codex plugin marketplace add gotalab/goal-setter-skill` + `/plugins`) alongside the skill-only paths; marketplace add verified end-to-end against codex-cli 0.128.0
+
 ## 0.2.1 — 2026-06-11
 
 Execution-freedom pass and verified distribution setup for the public release.

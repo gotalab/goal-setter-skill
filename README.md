@@ -44,7 +44,15 @@ git clone https://github.com/gotalab/goal-setter-skill.git
 ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" ~/.claude/skills/goal-setter
 ```
 
-### Codex
+### Codex (plugin)
+
+```bash
+codex plugin marketplace add gotalab/goal-setter-skill
+```
+
+Then open `/plugins` inside Codex and install **Goal Setter**. (Newer CLIs also support `codex plugin add goal-setter@goal-setter`.)
+
+### Codex (skill only)
 
 Inside Codex, use the bundled installer (works with any public GitHub repo):
 
@@ -148,6 +156,8 @@ skills/goal-setter/
 │   └── check_python_syntax.py
 └── agents/openai.yaml            # Codex surface metadata
 ```
+
+Plugin packaging lives at the repo root: `.claude-plugin/` (plugin.json + marketplace.json) for Claude Code, `.codex-plugin/plugin.json` + `.agents/plugins/marketplace.json` for Codex — both point at the same `skills/goal-setter/` folder.
 
 ## License
 

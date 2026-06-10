@@ -1,0 +1,34 @@
+{
+  "name": "goal-setter",
+  "version": "0.2.2",
+  "description": "Shape rough requests into compact, evidence-backed /goal completion contracts before long autonomous runs.",
+  "author": {
+    "name": "gotalab",
+    "url": "https://github.com/gotalab"
+  },
+  "homepage": "https://github.com/gotalab/goal-setter-skill",
+  "repository": "https://github.com/gotalab/goal-setter-skill",
+  "license": "MIT",
+  "keywords": [
+    "goal",
+    "autonomous",
+    "long-running",
+    "completion-contract",
+    "codex",
+    "claude-code"
+  ],
+  "interface": {
+    "displayName": "Goal Setter",
+    "shortDescription": "Evidence-backed goal contracts for long autonomous runs",
+    "longDescription": "Turns a rough request into a compact /goal completion contract: intended-outcome image first, clarification and bounded-exploration gates, anti-gaming constraints, evidence-audited progress rules, and a readiness audit before activation. Works with Codex set_goal and Claude Code /goal.",
+    "developerName": "gotalab",
+    "category": "Productivity",
+    "defaultPrompt": [
+      "Set a goal: shape this request into a completion contract.",
+      "Draft a goal contract for this task without activating it."
+    ],
+    "capabilities": [
+      "Interactive"
+    ]
+  }
+}
