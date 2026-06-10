@@ -1,50 +1,32 @@
 # goal-setter
 
-**Shape rough requests into evidence-backed `/goal` completion contracts — before the long run starts.**
+**Turn a few words into a complete `/goal` condition — before the long run starts.**
 
-Works with **Claude Code** and **Codex**. One skill, both runtimes.
+Built for **Codex**, and works with **Claude Code**. One skill, both runtimes.
 
 [日本語](README.ja.md)
 
-![Abstract concept of loose work converging into an evidence-backed goal contract](assets/goal-setter-concept.png)
+![Loose pieces of work converging into a single goal contract](assets/goal-setter-concept.png)
 
 ---
 
 ## Why
 
-`/goal` turns your coding agent into a long-horizon worker: it keeps going — for hours if needed — until a completion condition is met. That's also the risk. A goal runs unattended, so **a sloppy starting condition is amplified across the entire run**. Vague objective, no evidence surface, no stop rules — you come back to hours of confidently wrong work.
+A goal keeps the agent working until a completion condition is true ([Using goals in Codex](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex)). Writing that condition well is real work: you have to state the outcome, how success is verified, what must not change, and when to stop. Skip any of it and the run drifts — a goal runs unattended, so a weak starting condition is amplified for hours.
 
-The prompt you type after `/goal` is doing most of the work, and the prompt you'd write yourself almost never has enough in it.
-
-goal-setter is the missing intake step. It takes your rough, minimal ask and turns it into a **completion contract**: one objective, an evidence surface, validation rules, anti-gaming constraints, pivot rules, a binary Done condition, and explicit stop conditions. You can't build what you can't picture — so it resolves the picture first, then derives everything else from it.
+goal-setter exists because writing that condition is exactly the part people skip. You already have the finished picture in your head; what you actually type is one short line. This skill takes that line, rebuilds the picture, checks it with you in one round trip when needed, and carries it all the way to an activated goal.
 
 ## What it does
 
-- **Intended Outcome Image** — reconstructs what you're actually trying to build and why, in 2–4 sentences, *before* drafting anything. Evaluation criteria follow from the image, constraints from the criteria, Done from both. When your prompt is minimal, it mirrors the image back for a one-pass correction instead of interrogating you.
-- **Clarification & exploration gates** — asks only the questions that change the outcome (scope, evidence, safety boundaries); explores the repo for everything discoverable; assumes-and-encodes the rest.
-- **Compact, contract-shaped output** — context-minimalist goal text (target ≤2,500 chars) that fixes *what* and *why* while leaving *how* to the agent. No step-by-step recipes that strangle execution freedom.
-- **Anti-gaming & loop protection** — constraints against satisfying metrics by weakening tests; strategy review after 2 failed approaches; hard stop after 3; goal-amendment boundary so the agent can't silently move the goalposts.
-- **Explicit subagent authorization** — non-trivial goals grant bounded delegation for research, validation discovery, triage, and final review, instead of relying on implicit autonomy.
-- **Readiness audit** — every goal is scored against a 0/1/2 checklist before activation. Score a zero, revise before launch.
-- **Sidecar mode** — for day-scale work: `GOAL.md` + `execution-notes.md` give you durable audit, resume state, and a reviewable decision log.
+- **Rebuilds the intended outcome first.** Before drafting anything, it reconstructs what you are trying to build and why, in a few sentences. When your request is minimal, it shows you that reconstruction for a one-pass correction instead of asking a list of questions. Success criteria, constraints, and the Done condition are all derived from it.
+- **Asks only what changes the outcome.** Scope, verification, safety boundaries. Everything discoverable in the repo gets explored instead of asked; low-risk details become stated assumptions.
+- **Writes a compact condition.** The goal text fixes *what* and *why* and leaves *how* to the agent. No step-by-step recipes.
+- **Builds in stop and honesty rules.** Checks may not be passed by weakening them; stalled approaches trigger a strategy review, then a hard stop; the objective and Done condition cannot be quietly rewritten mid-run; progress may only be reported against actual tool results.
+- **Grants subagent use explicitly.** Codex will not use subagents during a goal run unless the goal text permits it, so the permission is always written in.
+- **Audits before activating.** Every goal is checked against the contract checklist before it is set. Anything missing gets fixed first.
+- **Sidecar files for day-scale work.** `GOAL.md` + `execution-notes.md` when you need a durable record and resume state.
 
 ## Install
-
-### Claude Code (plugin)
-
-```text
-/plugin marketplace add gotalab/goal-setter-skill
-/plugin install goal-setter@goal-setter
-```
-
-After install, the skill triggers from your request automatically, or invoke it explicitly with `/goal-setter:goal-setter`.
-
-Or manually:
-
-```bash
-git clone https://github.com/gotalab/goal-setter-skill.git
-ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" ~/.claude/skills/goal-setter
-```
 
 ### Codex (plugin)
 
@@ -62,18 +44,34 @@ Inside Codex, use the bundled installer (works with any public GitHub repo):
 $skill-installer install https://github.com/gotalab/goal-setter-skill/tree/main/skills/goal-setter
 ```
 
-Or manually — Codex discovers skills in `~/.agents/skills/` (symlinks are supported; `~/.codex/skills/` still works but is deprecated):
+Or manually — Codex discovers skills in `~/.agents/skills/` (symlinks work; `~/.codex/skills/` still works but is deprecated):
 
 ```bash
 git clone https://github.com/gotalab/goal-setter-skill.git
 ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" ~/.agents/skills/goal-setter
 ```
 
-Restart Codex to pick up the skill, then invoke it explicitly with `$goal-setter` or let it trigger from your request.
+Restart Codex, then invoke with `$goal-setter` or let it trigger from your request.
+
+### Claude Code (plugin)
+
+```text
+/plugin marketplace add gotalab/goal-setter-skill
+/plugin install goal-setter@goal-setter
+```
+
+After install, the skill triggers from your request, or invoke it with `/goal-setter:goal-setter`.
+
+Or manually:
+
+```bash
+git clone https://github.com/gotalab/goal-setter-skill.git
+ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" ~/.claude/skills/goal-setter
+```
 
 ## Usage
 
-**Draft** — get a reviewed contract without activating it:
+**Draft** — get a reviewed condition without activating it:
 
 > draft a goal for migrating our API client to v2
 
@@ -81,7 +79,7 @@ Restart Codex to pick up the skill, then invoke it explicitly with `$goal-setter
 
 > set a goal: all checkout tests pass after the refactor
 
-goal-setter forms the outcome image, runs its gates, drafts the compact condition, audits it, and activates it through whatever path the runtime offers (see below). If your request is too small or too vague to be an honest goal, it says so and suggests a normal prompt instead.
+goal-setter rebuilds the outcome, asks anything critical, drafts and audits the condition, then activates it through the runtime's own goal mechanism (see below). If the request is too small or too vague to make an honest goal, it says so and suggests a normal prompt instead.
 
 ## Example
 
@@ -89,7 +87,7 @@ What you type:
 
 > set a goal: migrate src/api to the v2 client
 
-What goal-setter does first — explores the repo, then mirrors the outcome image back:
+goal-setter explores the repo, then shows you the outcome it reconstructed:
 
 > **Image:** Replace every v1 `ApiClient` usage under `src/api` with the v2 SDK so behavior is unchanged — existing integration tests stay green, no public interface or auth changes. Correct me if this is off, otherwise I'll activate.
 
@@ -104,41 +102,42 @@ src/api/client.ts and docs/v2-migration.md first; discover adjacent
 tests/docs as needed. Keep changes scoped to src/api and directly related
 tests — the simplest change that meets the objective, no refactors beyond
 it; do not change public API, auth behavior, retry semantics, or other
-externally visible contracts unless explicitly required. Validate with `pnpm test tests/api` and `pnpm build`;
-do not satisfy them by deleting, weakening, or skipping tests. Use
-available read-only subagents for migration-doc research and validation
-discovery; before claiming Done, have a fresh-context subagent verify the
-evidence. Maintain visible progress with a concise checklist and
-checkpoint updates; audit each progress claim against a tool result first
-— unverified work is reported as unverified, never as done. When you have
-enough information to act, act; never end a turn on a plan or a promise.
-Done when every v1 ApiClient import under src/api is gone, `pnpm test
-tests/api` and `pnpm build` exit 0, and the final diff review confirms no
-public API or auth changes. If two approaches fail to improve evidence,
-review strategy and pivot within constraints; do not silently change the
-objective, Done, evidence, or constraints. Stop only if v1/v2 behavior
-differences cannot be safely inferred from docs or tests, or a required
-credential or service blocks validation. Write the final report for a
-reader who watched none of the run: outcome first, plain words, in the
-user's language.
+externally visible contracts unless explicitly required. Validate with
+`pnpm test tests/api` and `pnpm build`; do not satisfy them by deleting,
+weakening, or skipping tests. Use available read-only subagents for
+migration-doc research and validation discovery; before claiming Done,
+have a fresh-context subagent verify the evidence. Maintain visible
+progress with a concise checklist and checkpoint updates; audit each
+progress claim against a tool result first — unverified work is reported
+as unverified, never as done. When you have enough information to act,
+act; never end a turn on a plan or a promise. Done when every v1
+ApiClient import under src/api is gone, `pnpm test tests/api` and `pnpm
+build` exit 0, and the final diff review confirms no public API or auth
+changes. If two approaches fail to improve evidence, review strategy and
+pivot within constraints; do not silently change the objective, Done,
+evidence, or constraints. Stop only if v1/v2 behavior differences cannot
+be safely inferred from docs or tests, or a required credential or
+service blocks validation. Write the final report for a reader who
+watched none of the run: outcome first, plain words, in the user's
+language.
 ```
 
-Compare that to what most of us actually type after `/goal` — that delta is the product.
+The one line you typed is the entire input. Everything else came from the repo and the reconstructed outcome.
 
 ## How activation works
 
-goal-setter only uses the runtime's **native** goal mechanism — it never spawns child sessions or side processes to activate a goal.
+goal-setter only uses the runtime's own goal mechanism. It never spawns child sessions or side processes to activate a goal.
 
-| Runtime | Path | Status |
-|---|---|---|
-| Codex | native `set_goal` tool — fully autonomous activation | ✅ |
-| Claude Code | emits the exact `/goal …` line for you to send | ✅ |
+| Runtime | Path |
+|---|---|
+| Codex | sets the goal itself via the native `set_goal` tool |
+| Claude Code | hands you the exact `/goal …` line to send |
 
-Why the table looks like this: as of Claude Code v2.1.170 there is **no model-callable tool to set a goal on the current session** — `/goal` is a user command wrapping a session-scoped Stop hook. So on Claude Code, goal-setter prepares the contract and hands you the exact line; activation stays a deliberate, native, one-keystroke act.
+The difference exists because Claude Code (as of v2.1.170) has no tool a model can call to set a goal on the current session — `/goal` is a user command. So on Claude Code the skill prepares everything and activation is one keystroke by you.
 
-## What a contract covers
+## What a goal covers
 
-Every non-trivial goal includes: a one-line context note (what the outcome serves and for whom) · one objective · evidence surface · context to read first · task-specific constraints + anti-gaming rule · validation (or a discovery rule for it) · subagent policy with fresh-context verification before Done · progress reporting audited against tool results (in your language) · a persistence rule (act on sufficient information; never end a turn on a promise) · progress/pivot rules · binary Done · explicit block conditions · a final report rule (outcome first, plain words, your language).
+Every non-trivial goal includes: a one-line note on what the outcome serves and for whom · one objective · how success is verified · what to read first · the few hard boundaries this task could break, plus the rule against passing checks by weakening them · validation commands (or how to discover them) · subagent permission, including an independent check before Done · progress reported against tool results, in your language · a rule to keep acting instead of ending on a promise · pivot rules for stalled approaches · a binary Done condition · explicit stop conditions · a final report written for someone who did not watch the run.
 
 Full reference: [`skills/goal-setter/references/goal-contract.md`](skills/goal-setter/references/goal-contract.md)
 
@@ -148,7 +147,7 @@ Full reference: [`skills/goal-setter/references/goal-contract.md`](skills/goal-s
 skills/goal-setter/
 ├── SKILL.md                      # routing, modes, gates
 ├── references/
-│   ├── goal-contract.md          # the contract spec + readiness audit
+│   ├── goal-contract.md          # the contract spec + pre-activation audit
 │   ├── runtime-capabilities.md   # subagents, tools, sandbox posture
 │   ├── sidecars-and-notes.md     # GOAL.md / execution-notes.md policy
 │   ├── GOAL.template.md
@@ -159,7 +158,7 @@ skills/goal-setter/
 └── agents/openai.yaml            # Codex surface metadata
 ```
 
-Plugin packaging lives at the repo root: `.claude-plugin/` (plugin.json + marketplace.json) for Claude Code, `.codex-plugin/plugin.json` + `.agents/plugins/marketplace.json` for Codex — both point at the same `skills/goal-setter/` folder.
+Plugin packaging lives at the repo root: `.codex-plugin/plugin.json` + `.agents/plugins/marketplace.json` for Codex, `.claude-plugin/` (plugin.json + marketplace.json) for Claude Code — both point at the same `skills/goal-setter/` folder.
 
 ## License
 
