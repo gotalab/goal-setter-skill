@@ -6,7 +6,7 @@ Built for **Codex**, and works with **Claude Code**. One skill, both runtimes.
 
 [日本語](README.ja.md)
 
-![Loose pieces of work converging into a single goal contract](assets/goal-setter-concept.png)
+<img src="assets/goal-setter-concept.png" alt="Loose pieces of work converging into a single goal contract" width="33%">
 
 ---
 
