@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.1 — 2026-06-11
+
+Execution-freedom pass and verified distribution setup for the public release.
+
+- **Flexibility**: the compact shape is documented as a shape, not a template — reword, reorder, and drop inapplicable clauses per task; numeric triggers (stalled-approach pivot) are tunable defaults; checklist status taxonomy is an example; readiness-audit items that don't apply score n/a instead of forcing padding
+- **Subagent authorization hardened with its reason**: some runtimes (Codex) will not use subagents during a goal run unless the goal text grants it — the clause must never be compressed away
+- **Codex install corrected against official docs**: `$skill-installer install <repo tree URL>` one-liner; manual path is `~/.agents/skills/` (symlinks supported; `~/.codex/skills/` deprecated); explicit invocation via `$goal-setter`
+- **Claude Code plugin fixes**: removed `commands/goal-setter.md` (collided with the skill's `/goal-setter:goal-setter` invocation name; `commands/` is legacy — skills are the canonical form), added marketplace `description` and plugin `repository`; `claude plugin validate . --strict` passes
+
 ## 0.2.0 — 2026-06-11
 
 Contract shape refined against the GPT-5.5 and Claude Fable 5 prompting guides. Goals get thicker success/evidence discipline and thinner procedure.

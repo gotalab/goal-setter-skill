@@ -35,6 +35,8 @@ goal-setter is the missing intake step. It takes your rough, minimal ask and tur
 /plugin install goal-setter@goal-setter
 ```
 
+After install, the skill triggers from your request automatically, or invoke it explicitly with `/goal-setter:goal-setter`.
+
 Or manually:
 
 ```bash
@@ -44,10 +46,20 @@ ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" ~/.claude/skills/goal-setter
 
 ### Codex
 
+Inside Codex, use the bundled installer (works with any public GitHub repo):
+
+```text
+$skill-installer install https://github.com/gotalab/goal-setter-skill/tree/main/skills/goal-setter
+```
+
+Or manually — Codex discovers skills in `~/.agents/skills/` (symlinks are supported; `~/.codex/skills/` still works but is deprecated):
+
 ```bash
 git clone https://github.com/gotalab/goal-setter-skill.git
-ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" ~/.codex/skills/goal-setter
+ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" ~/.agents/skills/goal-setter
 ```
+
+Restart Codex to pick up the skill, then invoke it explicitly with `$goal-setter` or let it trigger from your request.
 
 ## Usage
 

@@ -28,7 +28,7 @@ Every inline Goal or `GOAL.md` must cover:
 - block condition
 - final report rule (outcome first, plain words, user's language)
 
-Every non-trivial Goal should explicitly allow available governed subagents for separable investigation, source-backed research, validation discovery, test-failure triage, strategy review when progress stalls, and final fresh-context review. Prefer read-only subagents unless an external side effect is required, allowed by policy, and part of end-to-end completion. Do not rely on implicit agent autonomy or generic "use tools" wording for this permission; keep the authorization short but present.
+Every non-trivial Goal should explicitly allow available governed subagents for separable investigation, source-backed research, validation discovery, test-failure triage, strategy review when progress stalls, and final fresh-context review. Prefer read-only subagents unless an external side effect is required, allowed by policy, and part of end-to-end completion. Keep the authorization short but present, and never compress it away: some runtimes (Codex in particular) will not use subagents during a goal run unless the goal text grants it, so implicit agent autonomy or generic "use tools" wording is not enough.
 
 Use measurable targets where they are meaningful. Use observable evidence when strict measurement would be brittle or would distort the work.
 
@@ -100,7 +100,7 @@ When reporting exploration, keep it short: facts found, remaining unknowns that 
 
 ## Inline Goal Condition
 
-Default to an inline goal condition.
+Default to an inline goal condition. The must-cover elements are the contract, not any fixed sentence order or stock phrasing: write the condition in the task's own terms, drop clauses that genuinely do not apply, and treat numeric defaults (stalled-approach triggers, retry counts) as defaults to tune, not rules to copy.
 
 Length budget:
 
@@ -204,7 +204,7 @@ For source-backed research or investigation Goals, add two rules that do not bel
 
 ## Progress and Pivot
 
-Start with a concise checklist for reaching Done. Track each item as not started, in progress, complete, or blocked. At meaningful checkpoints, update the checklist and report in the user's language (match the language of the request):
+Keep progress visible in whatever form fits the run — a concise checklist with per-item status (e.g. not started / in progress / complete / blocked) is the usual default. At meaningful checkpoints, report in the user's language (match the language of the request):
 
 - progress made
 - evidence confirmed
@@ -221,7 +221,7 @@ The final report addresses a reader who watched none of the run: outcome first, 
 
 Compare progress against the Done condition using evidence, not effort spent.
 
-If two distinct approaches fail to improve the evidence surface, use read-only strategy review when available: diagnose why progress is stalled, and recommend whether to continue, narrow, change approach, improve validation, or stop.
+When distinct approaches stop improving the evidence surface (two failed approaches is the default trigger; tune it to the task's cost of iteration), use read-only strategy review when available: diagnose why progress is stalled, and recommend whether to continue, narrow, change approach, improve validation, or stop.
 
 Apply the smallest bounded pivot that preserves the Goal constraints. The executor may change tactics, sequencing, validation discovery, implementation approach, or a reversible low-risk assumption when that makes the same Done condition more achievable. Small self-improvements are expected when they protect the real user outcome: tighten or replace a weak validation method with a better discovered one, refine an observable Done criterion, add a better evidence artifact, or clarify a low-risk assumption, as long as the objective and requested outcome are not narrowed or changed.
 
@@ -278,7 +278,7 @@ When blocked, report:
 
 ## Goal Readiness Audit
 
-Before activation, score each item 0, 1, or 2:
+Before activation, score each applicable item 0, 1, or 2. Items that genuinely do not apply to this Goal (e.g. measurable targets for evidence-only work, sidecar items for inline goals) are n/a — do not pad the Goal with clauses just to satisfy the audit.
 
 - One objective
 - Intended outcome image formed; objective, evidence, and Done derived from it; image mirrored back for one-pass correction when the prompt was minimal

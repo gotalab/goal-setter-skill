@@ -1,5 +1,6 @@
 {
   "name": "goal-setter",
+  "description": "Single-plugin marketplace for goal-setter: compact, evidence-backed /goal completion contracts for long autonomous runs.",
   "owner": {
     "name": "gotalab"
   },

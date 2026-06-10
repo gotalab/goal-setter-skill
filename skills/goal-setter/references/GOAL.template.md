@@ -68,7 +68,7 @@ For broad review, audit, research, migration, or bug-finding work, state the int
 
 ## Progress and pivot
 
-Start with a concise checklist for reaching Done. Track each item as not started, in progress, complete, or blocked. At meaningful checkpoints, update the checklist and report in the user's language (match the language of the request): progress made, evidence confirmed, remaining work, and next step. Before reporting progress, audit each claim against a tool result from this run; unverified work is reported as unverified, never as done. Do not update so often that reporting displaces execution.
+Keep progress visible in whatever form fits the run — a concise checklist with per-item status (e.g. not started / in progress / complete / blocked) is the usual default. At meaningful checkpoints, report in the user's language (match the language of the request): progress made, evidence confirmed, remaining work, and next step. Before reporting progress, audit each claim against a tool result from this run; unverified work is reported as unverified, never as done. Do not update so often that reporting displaces execution.
 
 When you have enough information to act, act: do not ask permission for reversible in-scope actions, and never end a turn on a plan, a self-answerable question, or a promise about work not yet done — do that work now. On block rules define the only legitimate stops. If a design judgment is needed, record the adopted option and reason instead of leaving ambiguity hidden. If commits are explicitly in scope, summarize implemented changes, validation, and next actions before and after committing.
 
