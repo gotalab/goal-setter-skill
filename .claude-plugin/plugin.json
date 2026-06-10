@@ -5,7 +5,7 @@
   "author": {
     "name": "gotalab"
   },
-  "homepage": "https://github.com/gotalab/goal-setter",
+  "homepage": "https://github.com/gotalab/goal-setter-skill",
   "license": "MIT",
   "keywords": ["goal", "autonomous", "long-running", "completion-contract", "meta-prompting", "claude-code", "codex"]
 }

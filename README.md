@@ -4,6 +4,8 @@
 
 Works with **Claude Code** and **Codex**. One skill, both runtimes.
 
+[日本語](README.ja.md)
+
 ---
 
 ## Why
@@ -29,22 +31,22 @@ goal-setter is the missing intake step. It takes your rough, minimal ask and tur
 ### Claude Code (plugin)
 
 ```text
-/plugin marketplace add gotalab/goal-setter
+/plugin marketplace add gotalab/goal-setter-skill
 /plugin install goal-setter@goal-setter
 ```
 
 Or manually:
 
 ```bash
-git clone https://github.com/gotalab/goal-setter.git
-ln -s "$(pwd)/goal-setter/skills/goal-setter" ~/.claude/skills/goal-setter
+git clone https://github.com/gotalab/goal-setter-skill.git
+ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" ~/.claude/skills/goal-setter
 ```
 
 ### Codex
 
 ```bash
-git clone https://github.com/gotalab/goal-setter.git
-ln -s "$(pwd)/goal-setter/skills/goal-setter" ~/.codex/skills/goal-setter
+git clone https://github.com/gotalab/goal-setter-skill.git
+ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" ~/.codex/skills/goal-setter
 ```
 
 ## Usage
@@ -59,17 +61,51 @@ ln -s "$(pwd)/goal-setter/skills/goal-setter" ~/.codex/skills/goal-setter
 
 goal-setter forms the outcome image, runs its gates, drafts the compact condition, audits it, and activates it through whatever path the runtime offers (see below). If your request is too small or too vague to be an honest goal, it says so and suggests a normal prompt instead.
 
+## Example
+
+What you type:
+
+> set a goal: migrate src/api to the v2 client
+
+What goal-setter does first — explores the repo, then mirrors the outcome image back:
+
+> **Image:** Replace every v1 `ApiClient` usage under `src/api` with the v2 SDK so behavior is unchanged — existing integration tests stay green, no public interface or auth changes. Correct me if this is off, otherwise I'll activate.
+
+What gets activated:
+
+```text
+/goal Migrate src/api from the v1 ApiClient to the v2 SDK with behavior
+unchanged. Verify success through the existing integration tests in
+tests/api and a final diff review. Read src/api/client.ts and
+docs/v2-migration.md first; discover adjacent tests/docs as needed. Keep
+changes scoped to src/api and directly related tests; do not change public
+API, auth behavior, retry semantics, or other modules unless explicitly
+required. Validate with `pnpm test tests/api` and `pnpm build`; do not
+satisfy them by deleting, weakening, or skipping tests. Maintain visible
+progress with a concise checklist and checkpoint updates (progress,
+evidence, remaining work, next step). Use available read-only subagents
+when materially useful for migration-doc research, validation discovery,
+or final review. Done when every v1 ApiClient import under src/api is
+gone, `pnpm test tests/api` and `pnpm build` exit 0, and the final diff
+review confirms no public API or auth changes. If two approaches fail to
+improve evidence, review strategy and pivot within constraints; do not
+silently change the objective, Done, evidence, or constraints. Stop only
+if v1/v2 behavior differences cannot be safely inferred from docs or
+tests, or a required credential or service blocks validation.
+```
+
+Compare that to what most of us actually type after `/goal` — that delta is the product.
+
 ## How activation works
 
 goal-setter only uses the runtime's **native** goal mechanism — it never spawns child sessions or side processes to activate a goal.
 
 | Runtime | Path | Status |
 |---|---|---|
-| Codex | native `set_goal` tool — fully autonomous activation | ✅ works |
-| Claude Code | emits the exact `/goal …` line for you to send | ✅ works |
-| Claude Code (in-session, autonomous) | Stop-hook based goal armer shipped with this plugin | 🚧 roadmap |
+| Codex | native `set_goal` tool — fully autonomous activation | ✅ |
+| Claude Code | emits the exact `/goal …` line for you to send | ✅ |
 
-Why the table looks like this: as of Claude Code v2.1.170 there is **no model-callable tool to set a goal on the current session** — `/goal` is a user command wrapping a session-scoped Stop hook. So on Claude Code, goal-setter prepares the contract and hands you the exact line; activation stays a deliberate, native, one-keystroke act. (If you want unattended runs, `/goal` also works in headless `-p` mode — that's a native Claude Code feature you can use yourself; goal-setter doesn't do it for you.)
+Why the table looks like this: as of Claude Code v2.1.170 there is **no model-callable tool to set a goal on the current session** — `/goal` is a user command wrapping a session-scoped Stop hook. So on Claude Code, goal-setter prepares the contract and hands you the exact line; activation stays a deliberate, native, one-keystroke act.
 
 ## What a contract covers
 
@@ -93,11 +129,6 @@ skills/goal-setter/
 │   └── check_python_syntax.py
 └── agents/openai.yaml            # Codex surface metadata
 ```
-
-## Roadmap
-
-- **Goal armer for Claude Code** — a plugin-shipped Stop hook + model-writable condition file that replicates `/goal` inside the current session, so the agent can arm a goal for itself without a child process.
-- Marketplace listings and examples gallery.
 
 ## License
 
