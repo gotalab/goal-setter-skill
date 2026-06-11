@@ -7,7 +7,7 @@
 [English](README.md)
 
 <p align="center">
-  <img src="assets/goal-setter-concept.png" alt="ばらばらの作業が1つのgoal契約へ収束するイメージ" width="50%">
+  <img src="assets/goal-setter-icon.png" alt="Goal Setter のアイコン: ばらばらの依頼がチェック済みの goal 契約へ収束するイメージ" width="180">
 </p>
 
 ---

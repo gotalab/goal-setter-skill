@@ -7,7 +7,7 @@ Built for **Codex**. Works on **Claude Code** too.
 [日本語](README.ja.md)
 
 <p align="center">
-  <img src="assets/goal-setter-concept.png" alt="Loose pieces of work converging into a single goal contract" width="50%">
+  <img src="assets/goal-setter-icon.png" alt="Goal Setter icon: loose requests converging into a checked goal contract" width="180">
 </p>
 
 ---

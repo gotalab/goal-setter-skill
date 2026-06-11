@@ -28,8 +28,12 @@
       "Set a goal: shape this request into a completion contract.",
       "Draft a goal contract for this task without activating it."
     ],
+    "brandColor": "#6F5BFF",
+    "composerIcon": "./assets/goal-setter-composer-icon.png",
+    "logo": "./assets/goal-setter-icon.png",
     "capabilities": [
       "Interactive"
-    ]
+    ],
+    "screenshots": []
   }
 }
