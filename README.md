@@ -14,11 +14,11 @@ Built for **Codex**. Works on **Claude Code** too.
 
 ## Why
 
-A goal keeps the agent working until a completion condition is true ([Using goals in Codex](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex)). Writing that condition well is real work: you have to state the outcome, how success is verified, what must not change, and when to stop. Skip any of it and the run drifts — a goal runs unattended, so a weak starting condition is amplified for hours.
+A goal keeps the agent working until a completion condition is true (official guides: [Codex](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex) / [Claude Code](https://code.claude.com/docs/en/goal)). Writing that condition well is real work: you have to state the outcome, how success is verified, what must not change, and when to stop. Skip any of it and the run drifts — a goal runs unattended, so a weak starting condition is amplified for hours.
 
-goal-setter exists because writing that condition is exactly the part people skip. You already have the finished picture in your head; what you actually type is one short line. This skill takes that line, rebuilds the picture, and checks with you until no outcome-changing ambiguity remains; questions come bundled, so it is usually one round trip. Then it carries the goal all the way to activation.
+goal-setter exists for a simple reason: writing the goal instruction at all is a chore. You already have the finished picture in your head; what you actually type is one short line. This skill takes that line, rebuilds the picture, and checks with you until no outcome-changing ambiguity remains; questions come bundled, so it is usually one round trip. Then it carries the goal all the way to activation.
 
-This is not a shortcut for the lazy. Even if you write goals carefully, folding in the evaluator's mechanics (Claude Code's judge only sees the conversation; Codex won't use subagents unless the goal text grants it), the stop conditions, and the no-weakening-tests rule by hand, every time, is not realistic. The gap between this and your hand-written goal is the value.
+It pays off even if you are not lazy. Folding in the stop conditions, the no-weakening-tests rule, and the evaluator's quirks — Claude Code's judge only sees the conversation; Codex won't use subagents unless the goal text grants it — by hand, every time, is a lot of work, and hand-written goals drift from one run to the next. The gap between this skill's output and your hand-written goal is the value.
 
 ## What it does
 
