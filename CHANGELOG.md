@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- **Fix — parallel-spawn grant now actually lands in the emitted goal.** The earlier self-gating conditional ("may fan out if useful") was dropped by the bloat pass and read as optional execution advice, so goals shipped with only the read-only subagent clause and Codex never spawned parallel agents. Decomposition is now drafter-gated: when the work splits into independent, separately verifiable, share-no-state pieces, the goal carries an explicit, affirmative spawn instruction (Codex: one `create_goal` child contract per piece; Claude Code: a dynamic workflow), enforced by a readiness-audit item; non-decomposable work omits it. The read gate also widened so multi-module/multi-item/multi-target work consults the runtime guidance instead of skipping it.
+
 ## 0.2.0
 
 Initial release.

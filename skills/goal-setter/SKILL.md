@@ -19,7 +19,7 @@ Do not treat these references as optional background. Read the relevant file bef
 
 - Before drafting, activating, improving, or auditing any non-trivial Goal, read `references/goal-contract.md`.
 - Before creating, updating, auditing, or choosing a location for `GOAL.md` / `execution-notes.md`, read `references/sidecars-and-notes.md`.
-- Before writing a Goal that depends on subagents, service agents, MCP/tools, network access, browser/computer use, app-backed actions, approvals, enterprise-managed policy, broad fan-out, or broad coverage claims, read `references/runtime-capabilities.md`.
+- Before writing a Goal that depends on subagents, service agents, MCP/tools, network access, browser/computer use, app-backed actions, approvals, enterprise-managed policy, broad fan-out, or broad coverage claims — or whose work may split into independent parallel pieces (multi-module, multi-item, multi-target builds, migrations, or audits) — read `references/runtime-capabilities.md`.
 - Before using the helper script or modifying its generated output, read `scripts/init_goal_run.py` and the templates it loads from `references/`.
 - Before editing this skill's policy, check `SKILL.md`, relevant `references/*.md`, `references/GOAL.template.md`, `references/execution-notes.template.md`, and `scripts/init_goal_run.py` for drift.
 
