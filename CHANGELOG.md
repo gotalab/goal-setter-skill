@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0
+
+- **Codex parallelism is goal-driven via `create_thread` — re-verified and corrected.** 0.3.0 concluded that Goal text cannot trigger Codex parallelism; that was tested only with a permissive `spawn`-subagent clause. Re-tested in the Codex App: an **imperative `create_thread` directive in the Goal body launches parallel threads autonomously** (no user prompt). So:
+  - For decomposable work — a multi-module build, a multi-aspect review, or multi-topic research — the Goal carries the structure (discovery rule, per-unit owned surface and evidence/deliverable, integration/synthesis check) **plus** a runtime-sized launch directive.
+  - **Codex default is now `create_thread`** (the analog of Claude Code's dynamic workflow): an imperative "for each unit, open a separate thread in its own worktree, set it a goal scoped to its unit, run in parallel, then integrate in the main thread, autonomously." The `spawn` subagent tool is gated by the environment to explicit user requests, so it is demoted to a user-prompt-only fallback.
+  - **Claude Code** continues to fan out via a dynamic workflow on its own judgment.
+  - Corrected the now-false claims (added in 0.3.0) that Goal text cannot trigger Codex parallelism — across `SKILL.md`, goal-contract, runtime-capabilities, GOAL.template, and README (en/ja).
+- Added a parallel/decomposition starter example to the plugin default prompts (Codex plugin manifest and `agents/openai.yaml`).
+
 ## 0.3.0
 
 - **Corrected the Codex parallel model from real-run verification.** Earlier versions tried to make Codex spawn parallel agents by writing the grant into the goal text (0.2.0 self-gating, 0.2.1 affirmative). Verified against the Codex App and OpenAI's docs, that does not work: a Codex goal is sequential and thread-scoped, and subagents and `create_thread` launch **only on an explicit user request in the prompt**, never from goal text. Accordingly:

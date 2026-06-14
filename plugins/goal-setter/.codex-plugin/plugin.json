@@ -1,6 +1,6 @@
 {
   "name": "goal-setter",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Shape rough requests into compact, evidence-backed /goal completion contracts before long autonomous runs.",
   "author": {
     "name": "gotalab",
@@ -26,7 +26,8 @@
     "category": "Productivity",
     "defaultPrompt": [
       "Set a goal: shape this request into a completion contract.",
-      "Draft a goal contract for this task without activating it."
+      "Draft a goal contract for this task without activating it.",
+      "Shape this splittable work into a goal that structures the independent pieces for parallel execution."
     ],
     "brandColor": "#6F5BFF",
     "composerIcon": "./assets/goal-setter-composer-icon.png",
