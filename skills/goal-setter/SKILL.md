@@ -69,7 +69,7 @@ Use when the user asks to set, run, execute, activate, or start a Goal.
 The contract elements, reference shape, length budget, scale-with-run rule, and bloat pass live in `references/goal-contract.md` (covered by the Draft/Activate read gate). Two rules bear repeating here:
 
 - Shorter is better — a long Goal crowds out the model's own judgment. Most goals land around 800-1,800 characters; 2,500 is the ordinary ceiling, not a target.
-- Keep the subagent authorization explicit and never compress it away: some runtimes (Codex in particular) will not use subagents during a goal run unless the goal text grants it.
+- State intended delegation in the Goal, but the trigger differs by runtime: Claude Code fans out subagents/workflows on its own judgment; Codex launches subagents and threads only on an explicit user request in the prompt (verified), never from Goal text. So put the decomposition structure (discovery rule, per-unit surface/evidence, integration check) in the Goal, and on Codex hand the user a short spawn/`create_thread` paste-line separately (see Output Style).
 - Before activating, check the final condition once with `python3 -B scripts/validate_goal_length.py <file>` (stdin also works). Validate once: pass means activate; fail means restructure per the contract reference, not iterative trimming. If `python3` or shell execution is unavailable, estimate the length once yourself and move on.
 
 ## Sidecars
@@ -87,3 +87,5 @@ Read `references/runtime-capabilities.md` before depending on subagents, service
 ## Output Style
 
 After activating (or emitting the command), report: whether the goal was set or only a `/goal` command was emitted, the approximate condition character count, the compact objective, and assumptions or decisions needing user review. With sidecars, add the run ID and the paths to the two files; do not paste the full `GOAL.md` unless asked. If bounded exploration ran, summarize only the facts that changed Goal readiness.
+
+When the work is decomposable and the target runtime is Codex, also output a short paste-line the user can send as their own prompt to launch parallelism — Codex does not parallelize from Goal text, only on an explicit user request. Offer the fitting form: `spawn one agent per <unit>` for orchestrated subagents (results collected by the main agent, no separate goals), or `create a separate thread per <unit>, each in its own worktree with its own goal` for `create_thread` (genuinely separate goal-threads). On Claude Code this is unnecessary — the model fans out on its own judgment via a dynamic workflow.

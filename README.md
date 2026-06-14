@@ -18,7 +18,7 @@ A goal keeps the agent working until a completion condition is true (official gu
 
 goal-setter exists for a simple reason: writing the goal instruction at all is a chore. You already have the finished picture in your head; what you actually type is one short line. This skill takes that line, rebuilds the picture, and checks with you until no outcome-changing ambiguity remains; questions come bundled, so it is usually one round trip. Then it carries the goal all the way to activation.
 
-It pays off even if you are not lazy. Folding in the stop conditions, the no-weakening-tests rule, and the evaluator's quirks — Claude Code's judge only sees the conversation; Codex won't use subagents unless the goal text grants it — by hand, every time, is a lot of work, and hand-written goals drift from one run to the next. The gap between this skill's output and your hand-written goal is the value.
+It pays off even if you are not lazy. Folding in the stop conditions, the no-weakening-tests rule, and the evaluator's quirks — Claude Code's judge only sees the conversation; Codex launches subagents only when you ask for them in the prompt, not from goal text — by hand, every time, is a lot of work, and hand-written goals drift from one run to the next. The gap between this skill's output and your hand-written goal is the value.
 
 ## What it does
 
@@ -26,7 +26,8 @@ It pays off even if you are not lazy. Folding in the stop conditions, the no-wea
 - **Asks only what changes the outcome.** Scope, verification, safety boundaries. Everything discoverable in the repo gets explored instead of asked; low-risk details become stated assumptions.
 - **Writes a compact condition.** The goal text fixes *what* and *why* and leaves *how* to the agent. No step-by-step recipes.
 - **Builds in stop and honesty rules.** Checks may not be passed by weakening them; stalled approaches trigger a strategy review, then a hard stop; the objective and Done condition cannot be quietly rewritten mid-run; progress may only be reported against actual tool results.
-- **Grants subagent use explicitly.** Codex will not use subagents during a goal run unless the goal text permits it, so the permission is always written in.
+- **States delegation and independent verification.** The goal names what may be delegated to subagents and requires a fresh-context check (an independent subagent or equivalent) before Done. Claude Code fans out on its own judgment; Codex launches subagents and threads only when you ask in the prompt — never from goal text — so the goal documents intent and the trigger stays with you.
+- **Structures splittable work for parallelism.** When the outcome breaks into independent, separately verifiable units, the goal carries the decomposition structure — a discovery rule, an owned surface and its own checks per unit, and an integration check over the merged result — so the work stays clean run serially or in parallel. Claude Code fans out via a dynamic workflow; on Codex the skill hands you a short paste-line to launch parallel subagents or separate per-unit threads (Codex parallelism is triggered from your prompt, not the goal text).
 - **Audits before activating.** Every goal is checked against the contract checklist before it is set. Anything missing gets fixed first. Length is verified once with a bundled validator that counts the way each runtime actually does — Codex counts Unicode codepoints, Claude Code counts UTF-16 code units, both allow exactly 4,000 — so a passing goal activates on either; a failing one gets restructured, never trimmed in loops.
 - **Sidecar files for day-scale work.** `GOAL.md` + `execution-notes.md` when you need a durable record and resume state.
 
@@ -154,9 +155,20 @@ goal-setter only uses the runtime's own goal mechanism. It never spawns child se
 
 The difference exists because Claude Code (as of v2.1.170) has no tool a model can call to set a goal on the current session — `/goal` is a user command. So on Claude Code the skill prepares everything and you activate by sending that one line.
 
+## Running it in parallel
+
+When the outcome splits into independent, separately verifiable units (multi-module builds, multi-target migrations, broad audits), the goal carries the decomposition structure — a discovery rule, an owned surface and its own checks per unit, and an integration check over the merged result. Whether that runs in parallel depends on the runtime:
+
+- **Claude Code** fans out on its own judgment — typically a dynamic workflow that discovers the units, dispatches them in parallel, and synthesizes the results. No extra instruction needed.
+- **Codex** parallelizes only when *you* ask in the prompt — goal text alone will not trigger it. After the goal is set, send one short line:
+  - `Spawn one agent per <unit> and run them in parallel` — orchestrated subagents: the main agent splits the work and collects the results (no separate goals).
+  - `Create a separate thread per <unit>, each in its own worktree with its own goal` — genuinely separate goal-threads via `create_thread`, orchestrated by the main thread.
+
+  goal-setter prints the fitting line for you when it sets a decomposable goal on Codex.
+
 ## What a goal covers
 
-Every non-trivial goal includes: a one-line note on what the outcome serves and for whom · one objective · how success is verified · what to read first · the few hard boundaries this task could break, plus the rule against passing checks by weakening them · validation commands (or how to discover them) · subagent permission, including an independent check before Done · progress reported against tool results, in your language · a rule to keep acting instead of ending on a promise · pivot rules for stalled approaches · a binary Done condition · explicit stop conditions · a final report written for someone who did not watch the run.
+Every non-trivial goal includes: a one-line note on what the outcome serves and for whom · one objective · how success is verified · what to read first · the few hard boundaries this task could break, plus the rule against passing checks by weakening them · validation commands (or how to discover them) · what may be delegated to subagents, with an independent check before Done · progress reported against tool results, in your language · a rule to keep acting instead of ending on a promise · pivot rules for stalled approaches · a binary Done condition · explicit stop conditions · a final report written for someone who did not watch the run.
 
 The contract scales with the run: short low-risk tasks get short contracts, and clauses that would not change the run are dropped — a long goal crowds out the model's own judgment.
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0
+
+- **Corrected the Codex parallel model from real-run verification.** Earlier versions tried to make Codex spawn parallel agents by writing the grant into the goal text (0.2.0 self-gating, 0.2.1 affirmative). Verified against the Codex App and OpenAI's docs, that does not work: a Codex goal is sequential and thread-scoped, and subagents and `create_thread` launch **only on an explicit user request in the prompt**, never from goal text. Accordingly:
+  - The goal now carries decomposition **structure** only — a discovery rule for the independent units (state the rule, do not enumerate pieces unknown at draft time), an owned surface and its own Done evidence per unit, item-by-item progress, and a parent integration check over the merged result. This is runtime-agnostic and valuable even with no parallelism.
+  - Parallel **execution** is a separate, runtime-specific layer: Claude Code fans out via a dynamic workflow on its own judgment; on Codex, goal-setter hands the user a short paste-line to send as their own prompt — `spawn` subagents (orchestrated workers, results collected by the main agent, no separate goals) or `create_thread` (genuinely separate threads, each with its own goal and optional worktree).
+  - Removed the false claims that goal text grants or triggers Codex subagents (README, `SKILL.md`, goal-contract, runtime-capabilities, GOAL.template). The goal documents intended delegation, but on Codex the user triggers it.
+
 ## 0.2.1
 
 - **Fix — parallel-spawn grant now actually lands in the emitted goal.** The earlier self-gating conditional ("may fan out if useful") was dropped by the bloat pass and read as optional execution advice, so goals shipped with only the read-only subagent clause and Codex never spawned parallel agents. Decomposition is now drafter-gated: when the work splits into independent, separately verifiable, share-no-state pieces, the goal carries an explicit, affirmative spawn instruction (Codex: one `create_goal` child contract per piece; Claude Code: a dynamic workflow), enforced by a readiness-audit item; non-decomposable work omits it. The read gate also widened so multi-module/multi-item/multi-target work consults the runtime guidance instead of skipping it.
