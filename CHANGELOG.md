@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 — Unreleased
+## 0.2.0
 
 Initial release.
 
@@ -15,7 +15,7 @@ Initial release.
   - Goal readiness audit (0/1/2 scoring, n/a allowed) before activation
   - Verification-findings disposition (blocking findings fix, the rest fix-or-record at the executor's discretion), discriminating-evidence rule (each outcome class fires; a check that could not have failed proves nothing), and final-report disclosure of decisions the goal left undefined — all framed as delegated discretion and evidence bars, not implementation constraints, from real-run feedback
   - Deterministic length validator (`scripts/validate_goal_length.py`) matching the real runtime limits — Codex counts Unicode codepoints, Claude Code counts UTF-16 code units (verified against Codex source and Claude Code 2.1.173); validate-once discipline: pass means activate, fail means restructure, never iterative trimming loops
-  - Parallel decomposition (runtime-aware): when the work splits into independent, separately verifiable sub-outcomes that share no state, the goal grants bounded fan-out with owned surfaces, a parallel cap, and a parent integration gate — Claude Code defaults to a dynamic workflow, Codex gives each parallel agent its own `create_goal` contract; the grant self-gates so it stays harmless on interlocking work (refactors, single-cause bugs, serially tuned metrics)
+  - Parallel decomposition (runtime-aware): a goal can now spawn separate parallel agents, each driven by its own child goal — on Codex each parallel agent gets its own `create_goal` contract, on Claude Code the run fans out through a dynamic workflow. Fires only when the work splits into independent, separately verifiable sub-outcomes that share no state, with owned surfaces, a parallel cap, and a parent integration gate; the grant self-gates so it stays harmless on interlocking work (refactors, single-cause bugs, serially tuned metrics)
   - Sidecar mode (`GOAL.md` + `execution-notes.md`) for day-scale runs with durable audit/resume
   - Checkpoint reporting and final report in the user's language
   - SKILL.md kept to routing, modes, and gates (88 lines); contract detail lives in gated references (progressive disclosure per skill-creator practice)
