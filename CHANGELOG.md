@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1
+
+- **Forbid hedging the Codex `create_thread` directive — it was the reason parallelism still didn't fire.** A real run on 0.4.0 produced a goal that *did* contain a `create_thread` directive, but hedged: "decomposable by system only when file ownership is separable … use create_thread per independent system unit **when useful**." Codex reads "when useful" / "only when …" as an out and runs serially — the same failure as the original permissive `spawn` clause. Decomposability is now explicitly the drafter's *draft-time* judgment, not a runtime condition: once goal-setter judges the work decomposable, the goal must command the fan-out as a **flat imperative** with no "when useful" / "if appropriate" / "only when …" qualifiers. The "decompose only when …" conditions are a pre-draft checklist, not text for the goal. Enforced in SKILL.md, goal-contract, runtime-capabilities, and the readiness audit. Flexibility stays where it belongs — game/algorithm/implementation design — while the orchestration directive itself is unconditional.
+
 ## 0.4.0
 
 - **Codex parallelism is goal-driven via `create_thread` — re-verified and corrected.** 0.3.0 concluded that Goal text cannot trigger Codex parallelism; that was tested only with a permissive `spawn`-subagent clause. Re-tested in the Codex App: an **imperative `create_thread` directive in the Goal body launches parallel threads autonomously** (no user prompt). So:
