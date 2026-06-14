@@ -28,7 +28,7 @@ Every inline Goal or `GOAL.md` must cover:
 - block condition
 - final report rule (outcome first, plain words, user's language)
 
-Every non-trivial Goal should explicitly allow available governed subagents for separable investigation, source-backed research, validation discovery, test-failure triage, strategy review when progress stalls, and final fresh-context review. Prefer read-only subagents unless an external side effect is required, allowed by policy, and part of end-to-end completion. Keep the authorization short but present, and never compress it away: some runtimes (Codex in particular) will not use subagents during a goal run unless the goal text grants it, so implicit agent autonomy or generic "use tools" wording is not enough.
+Every non-trivial Goal should explicitly allow available governed subagents for separable investigation, source-backed research, validation discovery, test-failure triage, strategy review when progress stalls, and final fresh-context review. Prefer read-only subagents unless an external side effect is required, allowed by policy, and part of end-to-end completion. Keep the authorization short but present, and never compress it away: some runtimes (Codex in particular) will not use subagents during a goal run unless the goal text grants it, so implicit agent autonomy or generic "use tools" wording is not enough. The same holds for parallel decomposition: when the work qualifies (independent, separately verifiable sub-outcomes that share no state), grant the fan-out in the Goal text by default — phrased to self-gate so it stays harmless otherwise — and let the executor pick the runtime's real primitive (a dynamic workflow or worktree-isolated subagents in Claude Code; parallel subagents each granted their own `create_goal` contract in Codex), since a single `/goal` does not by itself spawn parallel child runs. See `references/runtime-capabilities.md`.
 
 Cover does not mean spell out. Objective, verification, the boundaries that matter, Done, and stop rules belong in every Goal. The governance clauses — checkpoint reporting, evidence-audited progress claims, persistence, fresh-context verification, the final report rule — earn their characters on long or high-risk autonomous runs; on short low-risk goals, drop the ones whose absence would not change the run. Current models already do much of this well by default, so write a rule only where a violation would be costly.
 
@@ -107,7 +107,7 @@ Default to an inline goal condition. The must-cover elements are the contract, n
 Reference shape for a full-governance goal (adapt freely; on short low-risk runs most governance clauses drop out):
 
 ```text
-Context: this serves <who/what> by <why the outcome matters>. <objective>. Verify success through <evidence surface>. Read <minimal context> and discover adjacent tests/docs as needed. Keep changes scoped to the objective and do the simplest thing that meets it — no refactors, features, or abstractions beyond it; do not alter <the 1-3 boundaries that matter for this task> or other externally visible contracts or destructive boundaries unless the objective explicitly requires it. Validate with <known checks> or discover and run relevant checks. Use available governed subagents when materially useful for separable research, validation discovery, triage, or strategy review; before claiming Done, verify the evidence with a fresh-context check (independent subagent or equivalent), not self-review. Maintain visible progress with checkpoint updates in the user's language; before reporting progress, audit each claim against a tool result from this run — unverified work is reported as unverified, never as done. When you have enough information to act, act; do not ask permission for reversible in-scope actions, and never end a turn on a plan or a promise. Done when <binary evidence-backed condition>. If approaches stop improving evidence, review strategy and pivot within constraints; do not silently change the objective, Done, evidence, constraints, or coverage claim. Stop only if <block rules>. The final report is for a reader who watched none of the run: outcome first, plain words, in the user's language.
+Context: this serves <who/what> by <why the outcome matters>. <objective>. Verify success through <evidence surface>. Read <minimal context> and discover adjacent tests/docs as needed. Keep changes scoped to the objective and do the simplest thing that meets it — no refactors, features, or abstractions beyond it; do not alter <the 1-3 boundaries that matter for this task> or other externally visible contracts or destructive boundaries unless the objective explicitly requires it. Validate with <known checks> or discover and run relevant checks. Use available governed subagents when materially useful for separable research, validation discovery, triage, or strategy review; if the work splits into independent, separately verifiable sub-outcomes that share no state, you may fan out (a dynamic workflow or worktree-isolated subagents, or one goal per parallel agent where supported), each with a scoped contract and owned surface, the parallel count capped and Done gated on every piece's evidence plus an integration check; before claiming Done, verify the evidence with a fresh-context check (independent subagent or equivalent), not self-review; fix findings that block Done, and fix or keep-with-recorded-reason the rest. Maintain visible progress with checkpoint updates in the user's language; before reporting progress, audit each claim against a tool result from this run — unverified work is reported as unverified, never as done. When you have enough information to act, act; do not ask permission for reversible in-scope actions, and never end a turn on a plan or a promise. Done when <binary evidence-backed condition>. If approaches stop improving evidence, review strategy and pivot within constraints; do not silently change the objective, Done, evidence, constraints, or coverage claim. Stop only if <block rules>. The final report is for a reader who watched none of the run: outcome first, plain words, in the user's language, naming any decisions this Goal left undefined.
 ```
 
 Instantiate every placeholder in the task's own terms: the context line comes from the intended outcome image, and the constraint boundaries name only what this task could actually break.
@@ -116,7 +116,8 @@ Length budget:
 
 - Shorter is better. The right length is the shortest contract in which every sentence can change the executor's behavior; most goals should land around 800-1,800 characters. Treat 2,500 as the ordinary ceiling, not a target.
 - A long Goal does not just cost tokens — it crowds out the model's own judgment. When the text reads like it is steering every move, cut until only outcome, verification, boundaries, and stops remain.
-- <= 3,500 characters for portable Codex/Claude Code goals. Hard cap <= 4,000.
+- <= 3,500 characters for portable Codex/Claude Code goals. Hard cap <= 4,000 — the actual runtime limit in both; exactly 4,000 passes. The runtimes count differently: Codex counts Unicode codepoints of the trimmed objective, Claude Code counts UTF-16 code units, so emoji and other astral characters count as 2 there. Japanese and other BMP text counts 1 per character in both.
+- Check the final condition once with the skill's `scripts/validate_goal_length.py`; it reports both counts and enforces the stricter one. Validate once: if it passes, activate without further shortening; if it fails, restructure — cut clauses or move durable detail to sidecars — instead of looping on small trims. More than one failed validation means the draft shape failed, not the counter.
 - If too long, compress examples, context lists, and optional operations before weakening objective, evidence, constraints, validation, subagent policy, progress/pivot, done, or block conditions.
 - If still too long, ask whether to use sidecar files plus a compact launcher objective for durable audit/resume or plan/spec ownership, or split/narrow the Goal.
 
@@ -131,7 +132,7 @@ Before activation, run a bloat pass:
 - Replace long file lists with mandatory anchors plus a discovery rule unless every listed file is part of the evidence surface.
 - Replace step-by-step implementation instructions with constraints, validation, and pivot rules. Preserve "what must be true", not "how to build it", unless the user explicitly requires a specific method.
 - Keep optional operations such as commits, PRs, sidecars, broad fan-out, notifications, or external writes out unless they are requested or required for honest Done evidence.
-- Keep subagent/delegation authorization explicit for non-trivial Goals even when compressing; omission changes runtime behavior.
+- Keep subagent/delegation authorization — including any parallel-decomposition grant when the work qualifies — explicit for non-trivial Goals even when compressing; omission changes runtime behavior.
 - If the Goal still reads like a project plan, produce an inline objective plus optional sidecar content instead of stuffing the plan into the native Goal text.
 
 Preserve execution freedom:
@@ -211,6 +212,8 @@ Make targets concrete by domain — numbers that represent real success, not dec
 - migrations/batch work: counts verified by query or grep (records migrated, references removed), with the coverage bound stated
 - operations: healthy state, monitoring window, failure threshold, and rollback trigger
 
+Prefer discriminating evidence: a check that could not have failed proves nothing. When Done depends on behavior with distinct outcome classes (success, failure, unreachable, timeout), require evidence that each relevant class actually fired, constructing a case when one does not occur naturally — an unreachable URL for the failure path, a fixture for the edge case. How to construct it stays the executor's choice. Drop this clause when the behavior has only one outcome class.
+
 If validation is unknown, require the agent to discover relevant validation commands from repo docs, scripts, package metadata, nearby CI config, or the evidence surface, then record what was run when notes are used.
 
 For visual Goals, convert references into checklist or design-system criteria where possible. Do not chase pixel-perfect asset recreation unless the user explicitly requires it.
@@ -239,7 +242,7 @@ Include a persistence rule: when the executor has enough information to act, it 
 
 Do not update so often that reporting displaces execution. If a design judgment is needed, record the adopted option and reason instead of leaving ambiguity hidden. If commits are explicitly in scope, summarize implemented changes, validation, and next actions before and after committing.
 
-The final report addresses a reader who watched none of the run: outcome first, then supporting detail, in complete sentences and plain words in the user's language — no working shorthand, arrow chains, or labels invented mid-run.
+The final report addresses a reader who watched none of the run: outcome first, then supporting detail, in complete sentences and plain words in the user's language — no working shorthand, arrow chains, or labels invented mid-run. It also names any decision the Goal text left undefined and the executor settled by judgment, so contract gaps surface for the next Goal instead of staying invisible. This disclosure rule is what keeps Goals short: the executor improvises freely inside the constraints and discloses, rather than the contract trying to anticipate every gap.
 
 Compare progress against the Done condition using evidence, not effort spent.
 
@@ -266,6 +269,8 @@ Make completion binary and evidence-bounded. Done should require the whole reque
 - notes are current and reviewable when sidecars are used
 - final diff is scoped to intended code/tests/docs plus any run files
 - final response summarizes implementation, evidence, and user-review-needed decisions
+
+When verification or review produces findings, the contract should say who decides their fate — otherwise the executor's disposition is an unauthorized improvisation, however sensible. Default: findings that touch correctness, safety, or the Done condition block Done until fixed; everything else is the executor's call — fix it, or keep it and record the reason in the final report (execution-notes when sidecars are used). This is a delegation of discretion, not a constraint; do not expand it into a severity taxonomy.
 
 Avoid Done clauses like "all possible issues are resolved" unless there is an explicit coverage rule. Prefer "requested behavior, affected docs/skill/help/tests, stale-surface scans, and required validation are complete" or another bounded evidence statement.
 
@@ -318,8 +323,10 @@ Before activation, score each applicable item 0, 1, or 2. Items that genuinely d
 - Progress claims are required to be audited against tool results; unverified work reported as unverified
 - Persistence rule present: act on sufficient information, never end a turn on a plan or promise
 - Fresh-context verification (independent subagent or equivalent) required before Done is claimed
-- Final report rule present: outcome first, plain words, user's language, written for a reader who watched none of the run
-- Inline condition length checked: ordinary target <= 2,500 characters, portable target <= 3,500 characters, hard cap <= 4,000 characters
+- Verification-findings disposition stated: blocking findings fix, the rest fix-or-record at the executor's discretion
+- Evidence is discriminating where outcome classes exist: each relevant class fires, with constructed cases when natural occurrence is luck-dependent
+- Final report rule present: outcome first, plain words, user's language, written for a reader who watched none of the run, naming decisions the Goal left undefined
+- Inline condition length checked once with `scripts/validate_goal_length.py` when shell is available: ordinary target <= 2,500 characters, portable target <= 3,500 characters, hard cap <= 4,000 characters
 - Bloat pass completed: no repeated rationale, long examples, avoidable file lists, or optional operations that weaken the main objective
 - Execution freedom preserved: the Goal states outcome, evidence, constraints, validation, pivot, Done, and block rules without unnecessary implementation sequencing
 - Autonomous continuation path covers investigation, implementation, validation, and review

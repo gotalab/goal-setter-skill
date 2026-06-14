@@ -27,7 +27,7 @@ It pays off even if you are not lazy. Folding in the stop conditions, the no-wea
 - **Writes a compact condition.** The goal text fixes *what* and *why* and leaves *how* to the agent. No step-by-step recipes.
 - **Builds in stop and honesty rules.** Checks may not be passed by weakening them; stalled approaches trigger a strategy review, then a hard stop; the objective and Done condition cannot be quietly rewritten mid-run; progress may only be reported against actual tool results.
 - **Grants subagent use explicitly.** Codex will not use subagents during a goal run unless the goal text permits it, so the permission is always written in.
-- **Audits before activating.** Every goal is checked against the contract checklist before it is set. Anything missing gets fixed first.
+- **Audits before activating.** Every goal is checked against the contract checklist before it is set. Anything missing gets fixed first. Length is verified once with a bundled validator that counts the way each runtime actually does — Codex counts Unicode codepoints, Claude Code counts UTF-16 code units, both allow exactly 4,000 — so a passing goal activates on either; a failing one gets restructured, never trimmed in loops.
 - **Sidecar files for day-scale work.** `GOAL.md` + `execution-notes.md` when you need a durable record and resume state.
 
 ## Install
@@ -116,27 +116,32 @@ What gets activated (1,352 characters — the skill judged this a short, low-ris
 
 ```text
 /goal Context: this keeps shop-backend on the supported @acme/sdk v2 client
-so the API layer stays current and maintainable. Migrate src/api (client.ts,
-users.ts, orders.ts) from @acme/api-client v1 to @acme/sdk v2 per
-docs/v2-migration.md: createClient replaces new ApiClient, the authToken
-callback becomes auth.tokenProvider, and retries: 3 becomes retry: {
-attempts: 3 } — keep attempts explicit since the v2 default changed. Update
-the exported makeScopedClient return type to the v2 client type, switch any
-ApiError handling to SdkError, and remove @acme/api-client from package.json
-once unused. Read docs/v2-migration.md first. Keep changes scoped to the
-migration: the functions exported from src/api keep their current signatures
-and request behavior (paths, query shapes, retry count); no refactors or
-features beyond it. Validate with npm test, npm run build, and npm run lint,
-all green; do not weaken, skip, or delete tests to make them pass. Use
-read-only subagents where useful, and before claiming Done have a
+so the API layer stays current and maintainable.
+Migrate src/api (client.ts, users.ts, orders.ts) from @acme/api-client v1
+to @acme/sdk v2 per docs/v2-migration.md: createClient replaces new
+ApiClient, the authToken callback becomes auth.tokenProvider, and
+retries: 3 becomes retry: { attempts: 3 } — keep attempts explicit since
+the v2 default changed. Update the exported makeScopedClient return type
+to the v2 client type, switch any ApiError handling to SdkError, and
+remove @acme/api-client from package.json once unused.
+Read docs/v2-migration.md first.
+Keep changes scoped to the migration: the functions exported from src/api
+keep their current signatures and request behavior (paths, query shapes,
+retry count); no refactors or features beyond it.
+Validate with npm test, npm run build, and npm run lint, all green; do
+not weaken, skip, or delete tests to make them pass.
+Use read-only subagents where useful, and before claiming Done have a
 fresh-context check (independent subagent or equivalent) confirm the diff
-against the migration doc. Done when grep finds zero @acme/api-client
-references in src/ and tests/ and all three checks pass. If a v1 behavior
-has no v2 equivalent, stop and ask rather than approximate. Final report:
-outcome first, plain words, in English.
+against the migration doc.
+Done when grep finds zero @acme/api-client references in src/ and tests/
+and all three checks pass.
+If a v1 behavior has no v2 equivalent, stop and ask rather than approximate.
+Final report: outcome first, plain words, in English.
 ```
 
 The one line you typed is the entire input. Every file path, command, and boundary above came from exploring the repo and the migration doc.
+
+The shape is deliberate. `Context:` is the only label — it marks the opening line as background, not a requirement to verify. Everything after it is plain prose where each contract element starts its own sentence with a fixed marker: `Read … first` (context), `Keep changes scoped` (constraints), `Validate with` (checks), `Done when` (the binary condition — on Claude Code the separate evaluator keys on this sentence), `… stop and ask` (the only legitimate exit), `Final report:`. Prose rather than labeled fields, because prose keeps the causal connections — *keep attempts explicit **since** the v2 default changed* — that a `Constraints:` list would flatten.
 
 ## How activation works
 
@@ -171,6 +176,7 @@ skills/goal-setter/
 │   └── execution-notes.template.md
 ├── scripts/
 │   ├── init_goal_run.py          # sidecar scaffolding helper
+│   ├── validate_goal_length.py   # runtime-accurate length check (codepoints + UTF-16 units)
 │   └── check_python_syntax.py
 └── agents/openai.yaml            # Codex surface metadata
 plugins/goal-setter/

@@ -70,6 +70,7 @@ The contract elements, reference shape, length budget, scale-with-run rule, and 
 
 - Shorter is better — a long Goal crowds out the model's own judgment. Most goals land around 800-1,800 characters; 2,500 is the ordinary ceiling, not a target.
 - Keep the subagent authorization explicit and never compress it away: some runtimes (Codex in particular) will not use subagents during a goal run unless the goal text grants it.
+- Before activating, check the final condition once with `python3 -B scripts/validate_goal_length.py <file>` (stdin also works). Validate once: pass means activate; fail means restructure per the contract reference, not iterative trimming. If `python3` or shell execution is unavailable, estimate the length once yourself and move on.
 
 ## Sidecars
 
@@ -81,7 +82,7 @@ Read `references/runtime-capabilities.md` before depending on subagents, service
 
 ## Helper Script
 
-`scripts/init_goal_run.py` creates the two sidecar files with the right run ID format. It is a convenience, not a requirement: skip it when `python3` is unavailable, shell execution is blocked, or direct file creation is simpler. In sandboxed environments pass `--plan-dir` or `--run-root` pointing to a writable location. For syntax checks in read-only skill locations, prefer `python3 -B scripts/check_python_syntax.py <file.py>` over `py_compile` (which writes `__pycache__`).
+`scripts/init_goal_run.py` creates the two sidecar files with the right run ID format. `scripts/validate_goal_length.py` checks a final condition against the real runtime limits (it strips a code fence and the `/goal ` prefix before counting). Both are conveniences, not requirements: skip them when `python3` is unavailable, shell execution is blocked, or direct file creation is simpler. In sandboxed environments pass `--plan-dir` or `--run-root` pointing to a writable location. For syntax checks in read-only skill locations, prefer `python3 -B scripts/check_python_syntax.py <file.py>` over `py_compile` (which writes `__pycache__`).
 
 ## Output Style
 

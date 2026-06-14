@@ -40,7 +40,7 @@ Add concrete files here when known:
 
 {{validation}}
 
-Use measurable checks when they are meaningful, and use observable evidence when a brittle metric would distort the work.
+Use measurable checks when they are meaningful, and use observable evidence when a brittle metric would distort the work. When a verified behavior has distinct outcome classes (success, failure, unreachable, timeout), exercise each relevant class, constructing a case when one does not occur naturally; a check that could not have failed proves nothing.
 
 Known required checks:
 
@@ -63,6 +63,8 @@ Use service agents, MCP tools, network access, browser/computer use, and app-bac
 External side-effecting actions such as PR creation, issue comments, deployments, CRM updates, document edits, or emails may be part of this Goal when end-to-end completion requires them. Let the runtime's approval and managed-policy system decide whether they can proceed. If approval is denied or unavailable, preserve the completed internal work and report the exact remaining external action.
 
 For separable multi-item work, prefer item-by-item progress: act on and verify each discovered item as soon as it is ready. Wait for the full set only when all prior results are needed for deduplication, cross-item comparison, zero-result early exit, or a prompt that explicitly depends on the full set. Do not use large fan-out, dynamic workflows, or many agents unless this Goal or the user explicitly opts into that scale with a bounded surface, ownership split or routing rule, merge/review evidence, and any cap on parallel agents or retries.
+
+If this work splits into independent, separately verifiable sub-outcomes that share no state, you are authorized to fan out using the runtime's parallel primitive — a dynamic workflow or worktree-isolated subagents, or one goal per parallel agent where the runtime supports it — giving each piece a scoped contract and owned surface, with the parallel count and retries capped and Done gated on every piece's evidence plus an integration check that confirms the merged result. If the pieces interlock (shared files, a single-cause investigation, or a serially tuned metric), do not decompose; keep one write contract and use read-only subagents for separable investigation.
 
 For broad review, audit, research, migration, or bug-finding work, state the intended coverage bound. If scope is sampled, capped, skipped, retried only a fixed number of times, or narrowed during execution, record the limit and why it is acceptable in `execution-notes.md` and the final response.
 
@@ -91,10 +93,10 @@ When completeness matters, continue discovery until the explicit coverage bound 
 - Measurable targets are met where defined.
 - Required validation passes, or any remaining failure is proven unrelated and documented with evidence.
 - Broad or sampled work records the coverage bound and any omitted areas.
-- The evidence is verified by a fresh-context check before Done is claimed: an independent read-only subagent or equivalent independent verification, not self-review.
+- The evidence is verified by a fresh-context check before Done is claimed: an independent read-only subagent or equivalent independent verification, not self-review. Findings that touch correctness, safety, or this Done condition are fixed; other findings are either fixed or kept with the reason recorded in `execution-notes.md` — the executor's call.
 - `execution-notes.md` is current and reviewable.
 - The final diff is scoped to intended code/tests/docs plus this run's two files.
-- The final response is written for a reader who watched none of the run — outcome first, plain words, in the user's language — and summarizes implementation, evidence, and decisions needing user review.
+- The final response is written for a reader who watched none of the run — outcome first, plain words, in the user's language — and summarizes implementation, evidence, decisions needing user review, and any decisions this Goal left undefined that were settled by judgment.
 
 ## On block
 
