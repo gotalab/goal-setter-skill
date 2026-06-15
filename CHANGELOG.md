@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0
+
+- **New companion skill: `goal-setter-lean`** (`plugins/goal-setter/skills/goal-setter-lean/`). A single-file, reference-free compression of goal-setter — ~9.5K vs the full skill's ~79.5K (about 1/8). It keeps the parts that change behavior beyond a model's defaults: the intended-outcome image gate, the contract elements with the domain-specific validation heuristics, binary evidence-bounded Done with fresh-context verification, the verified Codex/Claude Code parallel mechanics (user-sent `/goal` line, subagents as default worker, `create_thread` only with a resolvable `projectId`, bootstrap before write fan-out), length discipline, and a compressed readiness check. It drops sidecar mode and the 30-item rubric — for durable audit/resume and the full reference set, the original `goal-setter` skill remains. Ships with the Codex plugin (the manifest's `skills: ./skills/` auto-loads it).
+
 ## 0.6.5
 
 - **AI-slop sweep.** Ran a machine sweep for filler clichés, decorative intensifiers, rhetorical tells, and duplicated evidence tags across all skill files. After the 0.6.3 debloat there was little left: no clichés ("delve / realm / tapestry / it's worth noting" → none), no decorative triplets. Removed a duplicated "(verified: the executor reported it needs a projectId…)" parenthetical in runtime-capabilities (the same evidence sat ten lines above) and one filler "actually" in SKILL.md. Deliberately kept the "genuinely / actually" usages that distinguish real-vs-nominal ("genuinely not discoverable", "the boundaries this task could actually break") — those carry meaning; cutting them to hit a quota would weaken the rule, not remove slop.
