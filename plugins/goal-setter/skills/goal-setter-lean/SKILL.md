@@ -48,6 +48,8 @@ Write it in the task's own terms as plain prose, no labeled fields. Open with on
 
 ## Parallel (decomposable work)
 
+Subagents (`spawn_agent`) are the worker for read-only investigation, review, and verification on any goal — decomposable or not — and also for write units whose files are cleanly partitioned (read-only is the main use, not the only one). On Codex you must name subagent use explicitly and imperatively in the goal text; a goal that is silent, or grants only abstractly ("use subagents"), runs everything in-context.
+
 When the outcome splits into independent, separately verifiable units that share no state, put the structure in the Goal: a discovery rule for the units, a per-unit owned surface with its own evidence, item-by-item progress, and a parent integration check. Large work often stages as a phased pipeline: bootstrap → parallel research → parallel implementation → integrate → parallel adversarial/final verification.
 
 - **Claude Code** fans out on its own judgment — a dynamic workflow, subagents for read-only stages and worktree isolation for write stages. No extra trigger.

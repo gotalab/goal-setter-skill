@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.6
+
+- **Two subagent-framing fixes.** (1) **Subagents aren't read-only only.** Read-only is the main use, but `spawn_agent` is also the write worker for units with cleanly partitioned files (and the write fan-out path whenever `create_thread` is unavailable). The runtime-capabilities §Subagents section and goal-contract had narrowed it to read-only; corrected both. (2) **The goal must explicitly instruct subagent use, or Codex runs in-context.** This "don't omit the authorization" rule existed in runtime-capabilities and the bloat-pass item, but goal-contract framed it as "mainly shapes Claude Code" (which underplays it — it's *required* on Codex), and the 0.6.3 debloat had dropped it from SKILL.md entirely. Restored an explicit SKILL.md bullet, fixed the goal-contract framing, and added the principle to goal-setter-lean: a goal silent on subagents — or granting only abstractly ("use subagents") — runs everything in-context; name the tool and action imperatively.
+
 ## 0.7.5
 
 - **Make the `create_thread` write directive as explicit as the subagent one.** The read-only verification clause names the tool imperatively and pairs it with "do not self-review"; the write fan-out clause named `create_thread` (with worktree + per-thread goal) but lacked the matching anti-fallback, so Codex could quietly build the units serially in the main thread. Added the explicit imperative "for each write unit, open a separate thread with `create_thread` (own worktree, a goal scoped to that unit) and run them in parallel" plus the anti-serial clause "do not implement the units one-by-one in the main thread" — across runtime-capabilities (the principle), the goal-contract reference shape, GOAL.template, and goal-setter-lean.

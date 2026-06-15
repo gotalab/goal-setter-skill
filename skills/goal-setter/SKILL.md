@@ -66,9 +66,10 @@ Use when the user asks to set, run, execute, activate, or start a Goal.
 
 ## Inline Goal Condition
 
-The contract elements, reference shape, length budget, bloat pass, and readiness audit live in `references/goal-contract.md`; the parallel/runtime mechanics live in `references/runtime-capabilities.md` (both covered by the read gates). Three things to hold onto:
+The contract elements, reference shape, length budget, bloat pass, and readiness audit live in `references/goal-contract.md`; the parallel/runtime mechanics live in `references/runtime-capabilities.md` (both covered by the read gates). A few things to hold onto:
 
 - Shorter is better — a long Goal crowds out the model's own judgment. Most goals land around 800-1,800 characters; 2,500 is the ordinary ceiling, not a target.
+- Keep subagent/delegation authorization explicit in any non-trivial goal that intends delegation or fresh-context verification — never compress it away. On Codex an implicit or abstract grant ("use subagents") means it runs in-context, so name the tool and action imperatively (`spawn a read-only subagent to …`). Subagents cover read-only work and partitioned write units alike.
 - For decomposable work, state the decomposition structure and a runtime-sized launch directive. Claude Code fans out on its own judgment; on Codex the parallel tools fire only from a `/goal` line the user *sends*, so deliver the goal as a `/goal …` line rather than auto-setting it via `create_goal` (the subagent / `create_thread` / bootstrap rules are in `references/runtime-capabilities.md`).
 - Before activating, check the final condition once with `python3 -B scripts/validate_goal_length.py <file>` (stdin also works). Pass means activate; fail means restructure per the contract reference, not iterative trimming. If `python3` or shell execution is unavailable, estimate the length once yourself and move on.
 
