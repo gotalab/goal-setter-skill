@@ -31,7 +31,7 @@ Bad fits: one small edit, loose unrelated backlog lists, "make this better" with
 
 ## Intended Outcome Image
 
-Before clarifying, exploring, or drafting, reconstruct what the user is actually trying to create and why, in 2-4 sentences. The image fixes what and why, not how; the rest of the contract is derived from it, and a one-line compression of it opens the Goal text. Because a wrong starting image is amplified across the whole autonomous run, this is the highest-leverage step. When the prompt is minimal or rough, mirror the image back compactly for one-pass correction, bundling any critical clarification questions into the same message. Derivation chain: `references/goal-contract.md`.
+Before clarifying, exploring, or drafting, reconstruct what the user is trying to create and why, in 2-4 sentences. The image fixes what and why, not how; the rest of the contract is derived from it, and a one-line compression of it opens the Goal text. Because a wrong starting image is amplified across the whole autonomous run, this is the highest-leverage step. When the prompt is minimal or rough, mirror the image back compactly for one-pass correction, bundling any critical clarification questions into the same message. Derivation chain: `references/goal-contract.md`.
 
 ## Gates
 

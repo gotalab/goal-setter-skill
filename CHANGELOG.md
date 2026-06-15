@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.5
+
+- **AI-slop sweep.** Ran a machine sweep for filler clichés, decorative intensifiers, rhetorical tells, and duplicated evidence tags across all skill files. After the 0.6.3 debloat there was little left: no clichés ("delve / realm / tapestry / it's worth noting" → none), no decorative triplets. Removed a duplicated "(verified: the executor reported it needs a projectId…)" parenthetical in runtime-capabilities (the same evidence sat ten lines above) and one filler "actually" in SKILL.md. Deliberately kept the "genuinely / actually" usages that distinguish real-vs-nominal ("genuinely not discoverable", "the boundaries this task could actually break") — those carry meaning; cutting them to hit a quota would weaken the rule, not remove slop.
+
 ## 0.6.4
 
 - **Less over-specified goals: paths earn their place, and the `Context:` label is now optional.** Two refinements to the emitted goal's style:
