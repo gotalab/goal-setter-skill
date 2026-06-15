@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1
+
+- **`goal-setter-lean`: make the Codex parallel directive demonstrably land in the goal text.** The 0.7.0 lean skill stated the subagent/`create_thread`/bootstrap rules as prose, which could be read as background about how Codex works rather than text to embed in the emitted `/goal` line. Restated them as "text to embed, not background," broke them into a list, and added a concrete worked example of the line the goal carries — matching how the full skill's reference shape proves the directive is embedded. No behavior intended beyond removing that ambiguity.
+
 ## 0.7.0
 
 - **New companion skill: `goal-setter-lean`** (`plugins/goal-setter/skills/goal-setter-lean/`). A single-file, reference-free compression of goal-setter — ~9.5K vs the full skill's ~79.5K (about 1/8). It keeps the parts that change behavior beyond a model's defaults: the intended-outcome image gate, the contract elements with the domain-specific validation heuristics, binary evidence-bounded Done with fresh-context verification, the verified Codex/Claude Code parallel mechanics (user-sent `/goal` line, subagents as default worker, `create_thread` only with a resolvable `projectId`, bootstrap before write fan-out), length discipline, and a compressed readiness check. It drops sidecar mode and the 30-item rubric — for durable audit/resume and the full reference set, the original `goal-setter` skill remains. Ships with the Codex plugin (the manifest's `skills: ./skills/` auto-loads it).
