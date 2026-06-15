@@ -11,7 +11,7 @@ Turn a rough request into a compact Goal condition that can be set directly with
 
 A Goal is a completion contract for the user's requested outcome, not an implementation recipe. Never shrink or reinterpret the requested outcome; minimize only the surrounding prompt. Default to an inline goal condition; create sidecar files only for durable audit, resume, or plan/spec ownership.
 
-When the user asks to run or activate a Goal, set it through the runtime's native mechanism. Codex and Claude Code both expose a `/goal` command; Codex also exposes native goal tools (`create_goal`, `get_goal`, `update_goal`). Prefer the visible native tool; if none is visible, emit the exact `/goal ...` command instead. Do not claim the goal was set unless it was actually set.
+When the user asks to run or activate a Goal, set it through the runtime's native mechanism. Codex and Claude Code both expose a `/goal` command; Codex also exposes native goal tools (`create_goal`, `get_goal`, `update_goal`). Prefer the visible native tool; if none is visible, emit the exact `/goal ...` command instead. Do not claim the goal was set unless it was actually set. **Exception — decomposable work on Codex where parallel execution is wanted: do not auto-set via `create_goal`; emit the `/goal ...` line for the user to send.** Codex's `create_thread`/`spawn` fire only on the user's own typed request, not on a tool-set goal, so the human sending the `/goal` line is what authorizes the parallel cascade (see `references/runtime-capabilities.md`).
 
 ## Reference Read Gates
 
@@ -60,8 +60,8 @@ Use when the user asks to set, run, execute, activate, or start a Goal.
 
 1. Determine the current project root, then run Draft Mode steps 1-3 (read gates, image, gates, draft, bloat pass, readiness audit).
 2. Create sidecars only when warranted: read `references/sidecars-and-notes.md`, resolve the run-file location, create exactly `GOAL.md` and `execution-notes.md`, and no extra run-management files unless the user explicitly asks.
-3. If a native goal-setting tool is visible, use it. When `get_goal` is also visible, check the active goal first: reuse one that already matches the intent instead of creating a duplicate, and ask before replacing one that conflicts.
-4. If no native tool is visible, output the exact `/goal ...` command instead.
+3. If a native goal-setting tool is visible, use it. When `get_goal` is also visible, check the active goal first: reuse one that already matches the intent instead of creating a duplicate, and ask before replacing one that conflicts. **For decomposable Codex work where parallelism is wanted, do not auto-set: go to step 4 and emit the `/goal ...` line for the user to send** (a tool-set goal does not satisfy Codex's user-request gate for `create_thread`/`spawn`).
+4. If no native tool is visible — or the Codex parallel exception above applies — output the exact `/goal ...` command for the user to send instead.
 5. Do not claim the goal was set unless it was actually set.
 
 ## Inline Goal Condition
@@ -69,7 +69,7 @@ Use when the user asks to set, run, execute, activate, or start a Goal.
 The contract elements, reference shape, length budget, scale-with-run rule, and bloat pass live in `references/goal-contract.md` (covered by the Draft/Activate read gate). Two rules bear repeating here:
 
 - Shorter is better — a long Goal crowds out the model's own judgment. Most goals land around 800-1,800 characters; 2,500 is the ordinary ceiling, not a target.
-- State intended delegation in the Goal, sized to the runtime. Claude Code fans out subagents/workflows on its own judgment. On Codex, `create_thread` fires from an imperative Goal instruction (verified) — so for decomposable work (build, review, or research) write a `create_thread` directive into the Goal itself: per-unit thread, own worktree and goal, run in parallel, integrate in the main thread, autonomously. Write it as a flat command: judge decomposability here at draft time, and once judged, never hedge the directive with "when useful" / "if appropriate" / "only when separable" — those qualifiers make Codex skip it and run serially (verified). The `spawn` subagent tool is gated to explicit user requests, so it stays a user-prompt-only fallback (see Output Style).
+- State intended delegation in the Goal, sized to the runtime. Claude Code fans out subagents/workflows on its own judgment. On Codex, `create_thread`/`spawn` are gated to the user's own typed request, so for decomposable work (build, review, or research) author the `create_thread` directive into the Goal — per-unit thread, own worktree and goal, run in parallel, integrate in the main thread, autonomously — and **deliver it as a `/goal ...` line for the user to send, not via `create_goal` auto-set** (a tool-set goal does not satisfy the gate, so nothing parallelizes). The user sending that one line authorizes the whole cascade (threads, per-thread goals, subagents). Write the directive as a flat command: judge decomposability at draft time, and never hedge it with "when useful" / "if appropriate" / "only when separable" — those qualifiers make Codex skip it and run serially (verified).
 - Before activating, check the final condition once with `python3 -B scripts/validate_goal_length.py <file>` (stdin also works). Validate once: pass means activate; fail means restructure per the contract reference, not iterative trimming. If `python3` or shell execution is unavailable, estimate the length once yourself and move on.
 
 ## Sidecars

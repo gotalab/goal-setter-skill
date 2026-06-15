@@ -150,17 +150,18 @@ goal-setter only uses the runtime's own goal mechanism. It never spawns child se
 
 | Runtime | Path |
 |---|---|
-| Codex | sets the goal itself via the native goal tool (`create_goal`) |
+| Codex (ordinary) | sets the goal itself via the native goal tool (`create_goal`) |
+| Codex (decomposable / parallel) | hands you the `/goal …` line to send — see below |
 | Claude Code | hands you the exact `/goal …` line to send |
 
-The difference exists because Claude Code (as of v2.1.170) has no tool a model can call to set a goal on the current session — `/goal` is a user command. So on Claude Code the skill prepares everything and you activate by sending that one line.
+On Claude Code, `/goal` is a user command (no tool can set a goal on the current session as of v2.1.170), so the skill prepares everything and you send the one line. On Codex the skill normally sets the goal itself — **except for decomposable work where you want parallelism**: Codex's `create_thread`/`spawn` fire only on *your* typed request, not on a tool-set goal, so the skill hands you the `/goal …` line and your sending it is what authorizes the parallel cascade.
 
 ## Running it in parallel
 
 When the outcome splits into independent, separately verifiable units — a multi-module build, a multi-aspect review, multi-topic research — the goal carries the decomposition structure: a discovery rule, an owned surface and its own checks per unit, and an integration/synthesis check over the merged result. How it runs in parallel depends on the runtime:
 
 - **Claude Code** fans out on its own judgment — typically a dynamic workflow that discovers the units, dispatches them in parallel, and synthesizes the results. No extra instruction needed.
-- **Codex** uses `create_thread` as the default, and it is driven by the goal itself: for decomposable work the goal carries an imperative directive — open a separate thread per unit, each in its own worktree with its own goal, run them in parallel, then integrate in the main thread, autonomously. This fires straight from the goal, no extra prompt needed. The lighter `spawn` subagent tool is gated to an explicit request, so to use that instead, send `Spawn one agent per <unit> and run them in parallel` as your prompt.
+- **Codex** uses `create_thread` as the default. Its `create_thread`/`spawn` tools fire only on *your* own typed request, not on a goal the skill sets behind the scenes — so for decomposable work the skill hands you a `/goal …` line carrying an imperative directive (open a separate thread per unit, each in its own worktree with its own goal, run them in parallel, then integrate in the main thread, autonomously). You send that one line; that single action authorizes the whole cascade — threads, their per-unit goals, and subagents. `spawn` subagents are the lighter alternative (`Spawn one agent per <unit> and run them in parallel`).
 
 This covers not just builds but multi-aspect reviews and multi-topic research — the same split-and-integrate structure.
 
