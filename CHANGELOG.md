@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.7
+
+- **`goal-setter-lean`: add lightweight execution-notes guidance and bundle the length helper.** Two things the lean skill had dropped that earn their keep: (1) on long autonomous runs, a concise `execution-notes.md` (progress checkpoints + the mid-run decisions made and why, for resume and audit) is genuinely useful — added as a Run-rules clause, without the full sidecar machinery (no `GOAL.md`, run IDs, or init script; the active `/goal` is the contract). (2) Bundled `scripts/validate_goal_length.py` into the lean skill so length is checked deterministically (codepoints vs UTF-16) rather than estimated. Updated the description and length clause accordingly; the full `goal-setter` still owns the readiness rubric and `GOAL.md` run scaffolding.
+
 ## 0.7.6
 
 - **Two subagent-framing fixes.** (1) **Subagents aren't read-only only.** Read-only is the main use, but `spawn_agent` is also the write worker for units with cleanly partitioned files (and the write fan-out path whenever `create_thread` is unavailable). The runtime-capabilities §Subagents section and goal-contract had narrowed it to read-only; corrected both. (2) **The goal must explicitly instruct subagent use, or Codex runs in-context.** This "don't omit the authorization" rule existed in runtime-capabilities and the bloat-pass item, but goal-contract framed it as "mainly shapes Claude Code" (which underplays it — it's *required* on Codex), and the 0.6.3 debloat had dropped it from SKILL.md entirely. Restored an explicit SKILL.md bullet, fixed the goal-contract framing, and added the principle to goal-setter-lean: a goal silent on subagents — or granting only abstractly ("use subagents") — runs everything in-context; name the tool and action imperatively.
