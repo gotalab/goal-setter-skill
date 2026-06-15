@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.5
+
+- **Make the `create_thread` write directive as explicit as the subagent one.** The read-only verification clause names the tool imperatively and pairs it with "do not self-review"; the write fan-out clause named `create_thread` (with worktree + per-thread goal) but lacked the matching anti-fallback, so Codex could quietly build the units serially in the main thread. Added the explicit imperative "for each write unit, open a separate thread with `create_thread` (own worktree, a goal scoped to that unit) and run them in parallel" plus the anti-serial clause "do not implement the units one-by-one in the main thread" — across runtime-capabilities (the principle), the goal-contract reference shape, GOAL.template, and goal-setter-lean.
+
 ## 0.7.4
 
 - **The final-verification clause now names the subagent on Codex, instead of saying "fresh-context check."** The skill already knew (runtime-capabilities) that on Codex the words "fresh-context check" / "independent review" read as in-context self-work and launch no subagent — yet several Done clauses still used exactly that soft phrasing: GOAL.template's goal body, the goal-contract Done-When item, the Coverage note, and goal-setter-lean's Done + readiness check. Only the reference shape had the concrete form. Aligned them all: on Codex, the verification is written as the imperative "spawn a read-only subagent (`spawn_agent`) to verify the evidence; do not self-review," with a note that the bare phrase launches nothing. The concept label "fresh-context verification" stays where it names a contract element; the *emitted* verification directive is now concrete.

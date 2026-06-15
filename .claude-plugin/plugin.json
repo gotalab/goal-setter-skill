@@ -1,6 +1,6 @@
 {
   "name": "goal-setter",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "Shape rough requests into compact, evidence-backed /goal completion contracts before long autonomous runs. Image-first intake, clarification gates, anti-gaming constraints, and a readiness audit — for Codex and Claude Code.",
   "author": {
     "name": "gotalab"

@@ -57,7 +57,7 @@ When the outcome splits into independent, separately verifiable units that share
   - name the tool, not its arguments (no `projectId`/`target.type` — a non-visible id stalls it into serial);
   - on an empty or non-git workspace, bootstrap (git init, build/test scaffold, committed interface contracts) before any write fan-out.
 
-  So the emitted goal carries a line like: *"Treat each <unit> as a separately verifiable piece owning only its <files>; if the workspace is empty, first bootstrap git + scaffold + interface contracts in the main thread, then spawn read-only subagents to research/review and fan out write units over partitioned files (use `create_thread` per unit — each in its own worktree with a goal scoped to that unit — only if an established project exists); integrate in the main thread and gate Done on every unit's evidence plus an integration check."*
+  So the emitted goal carries a line like: *"Treat each <unit> as a separately verifiable piece owning only its <files>; if the workspace is empty, first bootstrap git + scaffold + interface contracts in the main thread, then spawn read-only subagents to research/review and fan out write units over partitioned files (or open a separate thread with `create_thread` per unit — each in its own worktree with a goal scoped to that unit — only if an established project exists), running them in parallel rather than one-by-one in the main thread; integrate in the main thread and gate Done on every unit's evidence plus an integration check."*
 
 When those conditions do not hold — an interlocking refactor, a single-cause bug, a serially tuned metric — do not fan out writes; keep one write contract. A read-only investigation can still use subagents.
 
