@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.3
+
+- **Debloat pass — remove duplication, keep behavior.** The parallel/Codex guidance accumulated across 0.6.0–0.6.2 had the same fan-out rules spelled out in full across all of SKILL.md, goal-contract, runtime-capabilities, and GOAL.template. A fresh-eyes audit found ~5 full copies of one idea. Fixes, all behavior-preserving (canonical copy kept intact):
+  - **`references/runtime-capabilities.md` §Parallel Fan-out is now the single home** for the Codex subagent/`create_thread`/bootstrap mechanics. goal-contract's §Core Shape and SKILL.md's Inline-Goal bullet collapse to short pointers; the giant readiness-audit decomposition item shrinks to one line.
+  - **goal-contract.md −12%** (38.8K→34K): removed the internal triple-statement of the decomposition structure, stripped meta-justification tails ("measurably suppresses…", "Long-horizon models occasionally…", "fresh-context verifiers outperform…"), trimmed the reference-shape placeholder, and merged duplicate audit items.
+  - **SKILL.md −1.3K**: dropped the "Two rules bear repeating" duplication and the 700-char Codex paragraph (now a pointer); trimmed the read-gate trigger list.
+  - Fixed a wording inconsistency: the length budget is an "ordinary ceiling" of 2,500, not a "target" (one audit line still said "target").
+- No rule changed — only restatements were cut. `GOAL.template.md` (the self-contained goal body) and the canonical reference keep their full text by design.
+
 ## 0.6.2
 
 - **Correct the Codex parallel model from a real from-scratch run, and simplify it.** Running 0.6.1 on an empty workspace surfaced two things. The Phase 0 bootstrap rule worked — the executor grounded itself (empty dir, git uninitialized, Node/pnpm available) and built the baseline in the main thread before fanning out, exactly as intended. But it also showed that **`create_thread` genuinely requires a resolvable `projectId`** and cannot be cut on a fresh/empty workspace (the executor reported "create_thread needs a projectId"), which **reverses the 0.6.1 line that said a non-visible `projectId` is not a reason to skip `create_thread`** — that guidance was wrong. The corrected, simpler model:

@@ -19,7 +19,7 @@ Do not treat these references as optional background. Read the relevant file bef
 
 - Before drafting, activating, improving, or auditing any non-trivial Goal, read `references/goal-contract.md`.
 - Before creating, updating, auditing, or choosing a location for `GOAL.md` / `execution-notes.md`, read `references/sidecars-and-notes.md`.
-- Before writing a Goal that depends on subagents, service agents, MCP/tools, network access, browser/computer use, app-backed actions, approvals, enterprise-managed policy, broad fan-out, or broad coverage claims — or whose work may split into independent parallel pieces (multi-module, multi-item, multi-target builds, migrations, or audits) — read `references/runtime-capabilities.md`.
+- Before writing a Goal that depends on subagents, service agents, MCP/tools, network access, browser/computer use, app-backed actions, approvals, enterprise-managed policy, broad coverage claims, or work that may split into independent parallel pieces, read `references/runtime-capabilities.md`.
 - Before using the helper script or modifying its generated output, read `scripts/init_goal_run.py` and the templates it loads from `references/`.
 - Before editing this skill's policy, check `SKILL.md`, relevant `references/*.md`, `references/GOAL.template.md`, `references/execution-notes.template.md`, and `scripts/init_goal_run.py` for drift.
 
@@ -66,11 +66,11 @@ Use when the user asks to set, run, execute, activate, or start a Goal.
 
 ## Inline Goal Condition
 
-The contract elements, reference shape, length budget, scale-with-run rule, and bloat pass live in `references/goal-contract.md` (covered by the Draft/Activate read gate). Two rules bear repeating here:
+The contract elements, reference shape, length budget, bloat pass, and readiness audit live in `references/goal-contract.md`; the parallel/runtime mechanics live in `references/runtime-capabilities.md` (both covered by the read gates). Three things to hold onto:
 
 - Shorter is better — a long Goal crowds out the model's own judgment. Most goals land around 800-1,800 characters; 2,500 is the ordinary ceiling, not a target.
-- State intended delegation in the Goal, sized to the runtime. Large work often stages as a phased pipeline — bootstrap → parallel research → parallel implementation → integrate → parallel adversarial/final verification. Claude Code fans out on its own judgment (a dynamic workflow: subagents for read-only stages, worktree isolation for write stages). On Codex, parallel tools fire only from a `/goal` line the user *sends*, not from a `create_goal` auto-set — so for decomposable work, **deliver the goal as a `/goal …` line for the user to send**, with flat-imperative directives naming the tool (hedges like "when useful" make Codex run serially — verified). Three Codex rules, all from real runs: **(1) subagents are the default** — `spawn_agent` for read-only work and for write units with cleanly partitioned files; `create_thread` (worktree) only when an established project exists, since it needs a resolvable `projectId`. **(2) Name the tool, not its arguments** — never write `projectId`/`target.type`/schema fields (a non-visible `projectId` reads as "cannot create a thread" → serial fallback); say "in the current project/workspace". **(3) Bootstrap first** — on an empty/non-git workspace the main thread does git init + scaffold + committed interface contracts (phase 0) before any write fan-out. See `references/runtime-capabilities.md`.
-- Before activating, check the final condition once with `python3 -B scripts/validate_goal_length.py <file>` (stdin also works). Validate once: pass means activate; fail means restructure per the contract reference, not iterative trimming. If `python3` or shell execution is unavailable, estimate the length once yourself and move on.
+- For decomposable work, state the decomposition structure and a runtime-sized launch directive. Claude Code fans out on its own judgment; on Codex the parallel tools fire only from a `/goal` line the user *sends*, so deliver the goal as a `/goal …` line rather than auto-setting it via `create_goal` (the subagent / `create_thread` / bootstrap rules are in `references/runtime-capabilities.md`).
+- Before activating, check the final condition once with `python3 -B scripts/validate_goal_length.py <file>` (stdin also works). Pass means activate; fail means restructure per the contract reference, not iterative trimming. If `python3` or shell execution is unavailable, estimate the length once yourself and move on.
 
 ## Sidecars
 
@@ -88,4 +88,4 @@ Read `references/runtime-capabilities.md` before depending on subagents, service
 
 After activating (or emitting the command), report: whether the goal was set or only a `/goal` command was emitted, the approximate condition character count, the compact objective, and assumptions or decisions needing user review. With sidecars, add the run ID and the paths to the two files; do not paste the full `GOAL.md` unless asked. If bounded exploration ran, summarize only the facts that changed Goal readiness.
 
-When the work is decomposable, the Goal itself carries the parallel-launch directives, often staged as a phased pipeline (bootstrap → research → implement → integrate → adversarial/final verification). On Claude Code the run fans out via a dynamic workflow with no extra step. On Codex, because the parallel tools are gated to the user's typed request, the Goal is delivered as a `/goal ...` line for the user to send — that one send authorizes the whole cascade; flag this to the user so they send the line rather than expecting an auto-set goal to parallelize.
+When the work is decomposable, the Goal carries the parallel-launch directive. On Claude Code it fans out via a dynamic workflow with no extra step; on Codex, flag to the user that they must send the `/goal …` line themselves — an auto-set goal does not parallelize.
