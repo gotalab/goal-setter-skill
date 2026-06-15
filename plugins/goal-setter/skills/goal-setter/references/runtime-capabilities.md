@@ -126,4 +126,4 @@ When completeness matters, continue discovery until the explicit coverage bound 
 
 "Do everything" should mean every item in the bounded requested surface, not every theoretically related item. Define the bounded surface from the spec, touched interfaces, evidence surface, affected docs/help/tests, source maps, or discoverable stale-surface scans. If discovery reveals a materially adjacent surface, include it when it is required for honest end-to-end completion; otherwise record it as out-of-scope or follow-up instead of expanding indefinitely.
 
-Before claiming Done on high-confidence completion, verify the evidence with a fresh-context check — an independent read-only subagent or equivalent — not self-review; add completeness criticism when coverage claims are broad.
+Before claiming Done on high-confidence completion, verify the evidence with an independent read-only subagent or equivalent — not self-review (on Codex, the imperative "spawn a read-only subagent to verify…", since the bare phrase "fresh-context check" launches nothing); add completeness criticism when coverage claims are broad.

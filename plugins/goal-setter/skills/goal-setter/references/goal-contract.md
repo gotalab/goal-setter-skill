@@ -267,7 +267,7 @@ Make completion binary and evidence-bounded. Done should require the whole reque
 - measurable targets are met where defined
 - required validation passes, or any remaining failure is proven unrelated and documented with evidence
 - broad or sampled work records coverage bounds and omitted areas
-- the evidence is verified by a fresh-context check before Done is claimed — an independent read-only subagent or equivalent independent verification, not self-review
+- the evidence is verified before Done by an independent read-only subagent or equivalent, not self-review — on Codex written as the imperative "spawn a read-only subagent to verify the evidence; do not self-review" (the bare phrase "fresh-context check" launches nothing there)
 - notes are current and reviewable when sidecars are used
 - final diff is scoped to intended code/tests/docs plus any run files
 - final response summarizes implementation, evidence, and user-review-needed decisions

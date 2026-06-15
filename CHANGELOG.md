@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.4
+
+- **The final-verification clause now names the subagent on Codex, instead of saying "fresh-context check."** The skill already knew (runtime-capabilities) that on Codex the words "fresh-context check" / "independent review" read as in-context self-work and launch no subagent — yet several Done clauses still used exactly that soft phrasing: GOAL.template's goal body, the goal-contract Done-When item, the Coverage note, and goal-setter-lean's Done + readiness check. Only the reference shape had the concrete form. Aligned them all: on Codex, the verification is written as the imperative "spawn a read-only subagent (`spawn_agent`) to verify the evidence; do not self-review," with a note that the bare phrase launches nothing. The concept label "fresh-context verification" stays where it names a contract element; the *emitted* verification directive is now concrete.
+
 ## 0.7.3
 
 - **Restore the per-thread goal — each `create_thread` gets its own unit-scoped goal.** The debloat (0.6.3) accidentally dropped "its own goal scoped to the unit" from every skill — `create_thread` directives only said "own worktree." But a spawned thread needs a goal to run autonomously, and the orchestration model is precisely: the human sends the top-level `/goal`, the main thread (orchestrator) sets each parallel thread its own goal scoped to that unit and integrates the results. Restored this in runtime-capabilities, the goal-contract reference shape, GOAL.template, and goal-setter-lean. This is a load-bearing part of the Codex parallel pattern, not a detail.

@@ -93,7 +93,7 @@ When completeness matters, continue discovery until the explicit coverage bound 
 - Measurable targets are met where defined.
 - Required validation passes, or any remaining failure is proven unrelated and documented with evidence.
 - Broad or sampled work records the coverage bound and any omitted areas.
-- The evidence is verified by a fresh-context check before Done is claimed: an independent read-only subagent or equivalent independent verification, not self-review. Findings that touch correctness, safety, or this Done condition are fixed; other findings are either fixed or kept with the reason recorded in `execution-notes.md` — the executor's call.
+- Before Done is claimed, an independent read-only pass verifies the evidence — not self-review. On Codex, spawn a read-only subagent (`spawn_agent`) to do this and do not self-review (the bare phrase "fresh-context check" launches nothing there); elsewhere, an independent subagent or equivalent. Findings that touch correctness, safety, or this Done condition are fixed; other findings are either fixed or kept with the reason recorded in `execution-notes.md` — the executor's call.
 - `execution-notes.md` is current and reviewable.
 - The final diff is scoped to intended code/tests/docs plus this run's two files.
 - The final response is written for a reader who watched none of the run — outcome first, plain words, in the user's language — and summarizes implementation, evidence, decisions needing user review, and any decisions this Goal left undefined that were settled by judgment.
