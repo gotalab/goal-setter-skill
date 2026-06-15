@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.2
+
+- **Correct the Codex parallel model from a real from-scratch run, and simplify it.** Running 0.6.1 on an empty workspace surfaced two things. The Phase 0 bootstrap rule worked — the executor grounded itself (empty dir, git uninitialized, Node/pnpm available) and built the baseline in the main thread before fanning out, exactly as intended. But it also showed that **`create_thread` genuinely requires a resolvable `projectId`** and cannot be cut on a fresh/empty workspace (the executor reported "create_thread needs a projectId"), which **reverses the 0.6.1 line that said a non-visible `projectId` is not a reason to skip `create_thread`** — that guidance was wrong. The corrected, simpler model:
+  - **Subagents (`spawn_agent`) are the default parallel worker** on Codex — always available, used for read-only work *and* for write units whose files are cleanly partitioned. The earlier rigid "read-only → subagent / write → create_thread" split is gone.
+  - **`create_thread` is a worktree upgrade, only when an established project exists** (it needs a `projectId`). Reserve it for write units that must touch shared files; otherwise partition the files and use subagents.
+  - **Name the tool, not its arguments** (kept from 0.6.1): never write `projectId`/`target.type`/schema fields — a non-visible `projectId` reads as "cannot create a thread" and the run silently falls back to serial.
+  - **Bootstrap first / phase 0** (kept from 0.6.1): on an empty or non-git workspace the main thread does git init + build/test scaffold + committed cross-module interface contracts before any write fan-out.
+- Collapsed the now-overlapping parallel guidance into one set of three Codex rules across SKILL.md, goal-contract, runtime-capabilities, GOAL.template, and README (en/ja); trimmed the duplication that had accumulated across 0.6.0–0.6.1. No unverified mechanism claims (whether `create_thread` becomes available after phase-0 commit is left for the runtime to resolve, not asserted).
+
 ## 0.6.1
 
 - **Fix the Codex parallel-avoidance failure: write fan-out silently fell back to serial.** A real from-scratch game build produced a correct `create_thread` directive, but the executor still ran serially. Two causes, both now addressed in the Goal text the skill emits:
