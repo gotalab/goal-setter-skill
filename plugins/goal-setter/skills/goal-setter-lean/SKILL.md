@@ -53,11 +53,11 @@ When the outcome splits into independent, separately verifiable units that share
 - **Claude Code** fans out on its own judgment — a dynamic workflow, subagents for read-only stages and worktree isolation for write stages. No extra trigger.
 - **Codex** — both parallel tools fire only from a `/goal` line the *user sends*, not from an auto-set goal, so deliver decomposable goals as a `/goal …` line for the user to send. The launch directive must be written *into the goal text* as flat imperatives — the four rules below are text to embed, not background, and hedges like "when useful" make Codex run serially:
   - subagents (`spawn_agent`) are the default worker — read-only work, and write units with cleanly partitioned files;
-  - `create_thread` (own worktree) only when an established project exists, since it needs a resolvable `projectId`;
+  - `create_thread` (own worktree) only when an established project exists, since it needs a resolvable `projectId` — each thread carries its own worktree **and a goal scoped to its unit**, set by the orchestrator (the human sends only the top-level `/goal`);
   - name the tool, not its arguments (no `projectId`/`target.type` — a non-visible id stalls it into serial);
   - on an empty or non-git workspace, bootstrap (git init, build/test scaffold, committed interface contracts) before any write fan-out.
 
-  So the emitted goal carries a line like: *"Treat each <unit> as a separately verifiable piece owning only its <files>; if the workspace is empty, first bootstrap git + scaffold + interface contracts in the main thread, then spawn read-only subagents to research/review and fan out write units over partitioned files (use `create_thread` per unit only if an established project exists); integrate in the main thread and gate Done on every unit's evidence plus an integration check."*
+  So the emitted goal carries a line like: *"Treat each <unit> as a separately verifiable piece owning only its <files>; if the workspace is empty, first bootstrap git + scaffold + interface contracts in the main thread, then spawn read-only subagents to research/review and fan out write units over partitioned files (use `create_thread` per unit — each in its own worktree with a goal scoped to that unit — only if an established project exists); integrate in the main thread and gate Done on every unit's evidence plus an integration check."*
 
 When those conditions do not hold — an interlocking refactor, a single-cause bug, a serially tuned metric — do not fan out writes; keep one write contract. A read-only investigation can still use subagents.
 

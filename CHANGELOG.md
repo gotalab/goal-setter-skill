@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.3
+
+- **Restore the per-thread goal — each `create_thread` gets its own unit-scoped goal.** The debloat (0.6.3) accidentally dropped "its own goal scoped to the unit" from every skill — `create_thread` directives only said "own worktree." But a spawned thread needs a goal to run autonomously, and the orchestration model is precisely: the human sends the top-level `/goal`, the main thread (orchestrator) sets each parallel thread its own goal scoped to that unit and integrates the results. Restored this in runtime-capabilities, the goal-contract reference shape, GOAL.template, and goal-setter-lean. This is a load-bearing part of the Codex parallel pattern, not a detail.
+
 ## 0.7.2
 
 - **`goal-setter-lean`: tell the user that *their* sending the `/goal` line is what fires Codex parallelism.** The lean skill instructed emitting the `/goal` line for the user to send but did not, like the full skill's Output Style, instruct the assistant to flag *why* the human must send it. Since Codex's `spawn_agent`/`create_thread` start only from the user's own typed request, an auto-set goal — or one the user reads but never sends — runs fully serial. Marked this the linchpin and made the assistant tell the user plainly. This is the most common real-world failure point, so it earns the explicit line.
