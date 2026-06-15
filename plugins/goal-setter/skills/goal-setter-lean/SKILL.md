@@ -63,7 +63,7 @@ When those conditions do not hold — an interlocking refactor, a single-cause b
 
 ## Activate
 
-Use the runtime's native goal tool when visible (Codex `create_goal`; check `get_goal` first and reuse a matching active goal instead of duplicating). Otherwise emit the exact `/goal …` line. **Exception:** for decomposable Codex work, do not auto-set — emit the `/goal …` line for the user to send (an auto-set goal does not parallelize). Never claim the goal was set unless it was.
+Use the runtime's native goal tool when visible (Codex `create_goal`; check `get_goal` first and reuse a matching active goal instead of duplicating). Otherwise emit the exact `/goal …` line. **Exception — the linchpin for Codex parallelism:** for decomposable Codex work, do not auto-set. Emit the `/goal …` line for the user to send, and tell them plainly that *their* sending it is what fires the parallel cascade — Codex's `spawn_agent`/`create_thread` start only from the user's own typed request, so an auto-set goal (or one the user never sends) runs fully serial. Never claim the goal was set unless it was.
 
 ## Readiness check (before activating)
 

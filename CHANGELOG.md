@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.2
+
+- **`goal-setter-lean`: tell the user that *their* sending the `/goal` line is what fires Codex parallelism.** The lean skill instructed emitting the `/goal` line for the user to send but did not, like the full skill's Output Style, instruct the assistant to flag *why* the human must send it. Since Codex's `spawn_agent`/`create_thread` start only from the user's own typed request, an auto-set goal — or one the user reads but never sends — runs fully serial. Marked this the linchpin and made the assistant tell the user plainly. This is the most common real-world failure point, so it earns the explicit line.
+
 ## 0.7.1
 
 - **`goal-setter-lean`: make the Codex parallel directive demonstrably land in the goal text.** The 0.7.0 lean skill stated the subagent/`create_thread`/bootstrap rules as prose, which could be read as background about how Codex works rather than text to embed in the emitted `/goal` line. Restated them as "text to embed, not background," broke them into a list, and added a concrete worked example of the line the goal carries — matching how the full skill's reference shape proves the directive is embedded. No behavior intended beyond removing that ambiguity.
