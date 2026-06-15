@@ -5,7 +5,7 @@ Created: {{created_at}}
 
 ## Objective
 
-Context (one line — what this outcome serves and for whom, from the intended outcome image): ...
+Opening line (what this outcome serves and for whom, from the intended outcome image — plain prose; a `Context:` label is optional): ...
 
 {{objective}}
 

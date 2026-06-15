@@ -142,7 +142,7 @@ Final report: outcome first, plain words, in English.
 
 The one line you typed is the entire input. Every file path, command, and boundary above came from exploring the repo and the migration doc.
 
-The shape is deliberate. `Context:` is the only label — it marks the opening line as background, not a requirement to verify. Everything after it is plain prose where each contract element starts its own sentence with a fixed marker: `Read … first` (context), `Keep changes scoped` (constraints), `Validate with` (checks), `Done when` (the binary condition — on Claude Code the separate evaluator keys on this sentence), `… stop and ask` (the only legitimate exit), `Final report:`. Prose rather than labeled fields, because prose keeps the causal connections — *keep attempts explicit **since** the v2 default changed* — that a `Constraints:` list would flatten.
+The shape is deliberate. The opening line states the intent — what the outcome serves and for whom; here it carries an optional `Context:` label to mark it as background rather than a requirement, but it can equally be plain prose, since the goal needs no labeled fields. Everything after it is plain prose where each contract element starts its own sentence with a fixed marker: `Read … first` (context), `Keep changes scoped` (constraints), `Validate with` (checks), `Done when` (the binary condition — on Claude Code the separate evaluator keys on this sentence), `… stop and ask` (the only legitimate exit), `Final report:`. Prose rather than labeled fields, because prose keeps the causal connections — *keep attempts explicit **since** the v2 default changed* — that a `Constraints:` list would flatten.
 
 ## How activation works
 

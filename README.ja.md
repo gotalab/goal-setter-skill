@@ -141,7 +141,7 @@ Final report: outcome first, plain words, in English.
 
 打ったのは一行だけ。上のファイルパス・コマンド・境界はすべて、リポジトリと移行ドキュメントの探索から導かれたもの。
 
-この形は意図的なもの。ラベルは `Context:` の1つだけ — 冒頭の行が「検証対象の要件ではなく背景」であることを示す境界線になる。それ以降は普通の散文だが、契約の各要素は決まった文頭マーカーで始まる：`Read … first`（先に読むもの）、`Keep changes scoped`（制約）、`Validate with`（検証コマンド）、`Done when`（二値の完了条件 — Claude Code では独立した評価器がこの文を手がかりに判定する）、`… stop and ask`（唯一の正当な停止）、`Final report:`。ラベル付きフィールドではなく散文にしているのは、*keep attempts explicit **since** the v2 default changed* のような因果のつながり — `Constraints:` のリストに切り刻むと消えてしまうもの — を残すため。
+この形は意図的なもの。冒頭の行は「その成果が誰の何のためか」という意図を述べる — ここでは任意の `Context:` ラベルを付けて「検証対象の要件ではなく背景」だと示しているが、ラベルは必須ではなく普通の散文でもよい（goal にラベル付きフィールドは要らない）。それ以降は普通の散文だが、契約の各要素は決まった文頭マーカーで始まる：`Read … first`（先に読むもの）、`Keep changes scoped`（制約）、`Validate with`（検証コマンド）、`Done when`（二値の完了条件 — Claude Code では独立した評価器がこの文を手がかりに判定する）、`… stop and ask`（唯一の正当な停止）、`Final report:`。ラベル付きフィールドではなく散文にしているのは、*keep attempts explicit **since** the v2 default changed* のような因果のつながり — `Constraints:` のリストに切り刻むと消えてしまうもの — を残すため。
 
 ## 発動の仕組み
 

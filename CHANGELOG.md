@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.4
+
+- **Less over-specified goals: paths earn their place, and the `Context:` label is now optional.** Two refinements to the emitted goal's style:
+  - **Paths/identifiers.** Sharpened the §Context to Read First rule: a path earns a place in the Goal only when it is the scope boundary or evidence surface, or is genuinely not discoverable — the executor can find files, so pre-loading them is "how" leaking into a "what" contract, and enumerated paths go stale when files move. Otherwise name one or two anchors plus a discovery rule. (Scope-boundary paths still stay — the rule trims decorative enumeration, not load-bearing scope.)
+  - **`Context:` label optional.** The one-line opener (what the outcome serves and for whom) still opens every goal — it measurably helps long runs tie tradeoffs to intent — but the literal `Context:` label is no longer mandated. Lead with the intent in plain prose; add the label only if the opener might be misread as a requirement (rare, since the evaluator keys on the Done clause). This aligns the opener with the skill's own "prose, not labeled fields" principle. Updated goal-contract (must-cover, Intended Outcome Image, reference shape), GOAL.template, and the README (en/ja) design note; the README's real-run example keeps its `Context:` label, now framed as the optional case.
+- Verified the SKILL.md reference graph: all eight cited files exist and every reference/script is reachable from SKILL.md (no orphans, no dangling cites).
+
 ## 0.6.3
 
 - **Debloat pass — remove duplication, keep behavior.** The parallel/Codex guidance accumulated across 0.6.0–0.6.2 had the same fan-out rules spelled out in full across all of SKILL.md, goal-contract, runtime-capabilities, and GOAL.template. A fresh-eyes audit found ~5 full copies of one idea. Fixes, all behavior-preserving (canonical copy kept intact):
