@@ -29,7 +29,7 @@ It pays off even if you are not lazy. Folding in the stop conditions, the no-wea
 - **States delegation and independent verification.** The goal names what may be delegated and requires a fresh-context check (an independent subagent or equivalent) before Done. Claude Code fans out on its own judgment; on Codex the parallel tools fire only from a `/goal` line you send, so the goal is written for you to send rather than auto-set.
 - **Structures splittable work for parallelism.** When the outcome breaks into independent, separately verifiable units — a multi-module build, a multi-aspect review, multi-topic research — the goal carries the decomposition structure (a discovery rule, an owned surface and its own checks per unit, an integration check) plus a runtime-sized launch directive, often staged as a phased pipeline: bootstrap → parallel research → parallel implementation → integrate → parallel adversarial/final verification. Claude Code fans this out via a dynamic workflow on its own judgment. On Codex the goal follows what real runs taught us — subagents are the default worker (and `create_thread` worktrees only when the project supports them), bootstrap comes before fan-out, and you send the `/goal …` line to authorize the whole cascade.
 - **Audits before activating.** Every goal is checked against the contract checklist before it is set. Anything missing gets fixed first. Length is verified once with a bundled validator that counts the way each runtime actually does — Codex counts Unicode codepoints, Claude Code counts UTF-16 code units, both allow exactly 4,000 — so a passing goal activates on either; a failing one gets restructured, never trimmed in loops.
-- **Sidecar files for day-scale work.** `GOAL.md` + `execution-notes.md` when you need a durable record and resume state.
+- **Lightweight notes for day-scale work.** On long autonomous runs it keeps a concise `execution-notes.md` — progress checkpoints and the mid-run decisions made and why, for resume and audit. No `GOAL.md` scaffolding; the active `/goal` is the contract.
 
 ## Install
 
@@ -171,29 +171,23 @@ Every non-trivial goal includes: a one-line note on what the outcome serves and 
 
 The contract scales with the run: short low-risk tasks get short contracts, and clauses that would not change the run are dropped — a long goal crowds out the model's own judgment.
 
-Full reference: [`skills/goal-setter/references/goal-contract.md`](skills/goal-setter/references/goal-contract.md)
+It all lives in one file: [`skills/goal-setter/SKILL.md`](skills/goal-setter/SKILL.md).
 
 ## Structure
 
 ```text
 .agents/plugins/marketplace.json   # Codex marketplace; points at ./plugins/goal-setter
 skills/goal-setter/
-├── SKILL.md                      # routing, modes, gates
-├── references/
-│   ├── goal-contract.md          # the contract spec + pre-activation audit
-│   ├── runtime-capabilities.md   # subagents, tools, sandbox posture
-│   ├── sidecars-and-notes.md     # GOAL.md / execution-notes.md policy
-│   ├── GOAL.template.md
-│   └── execution-notes.template.md
+├── SKILL.md                      # the whole skill — one self-contained file
 ├── scripts/
-│   ├── init_goal_run.py          # sidecar scaffolding helper
-│   ├── validate_goal_length.py   # runtime-accurate length check (codepoints + UTF-16 units)
-│   └── check_python_syntax.py
+│   └── validate_goal_length.py   # runtime-accurate length check (codepoints + UTF-16 units)
 └── agents/openai.yaml            # Codex surface metadata
 plugins/goal-setter/
 ├── .codex-plugin/plugin.json      # Codex plugin manifest
 └── skills/goal-setter/            # vendored copy for Codex plugin installs
 ```
+
+The skill is a single `SKILL.md` (plus the length helper) — no reference set, no progressive disclosure.
 
 Codex marketplace packaging uses the standard `./plugins/goal-setter` layout.
 The root `skills/goal-setter/` folder remains for skill-only installs. Claude
