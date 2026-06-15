@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.3
+
+- **README audit: remove stale terminology after the 0.8.0 consolidation (en/ja).** Swept both READMEs for descriptions that no longer match the skill. Fixes: "drafts and audits the condition" → "runs a readiness check" (the scored audit was retired in 0.8.0); `create_thread`/`spawn` → `create_thread`/`spawn_agent` (the actual tool name); the Codex parallel description now states that each `create_thread` carries its own unit-scoped goal set by the orchestrator (the per-thread goal that real runs proved matters); and the "fresh-context check" framing — which the skill dropped because Codex ignores it — is replaced by an explicit "spawn a read-only subagent to verify; do not self-review" in both the example goal and the feature bullets. The example goal's stated length was recomputed (1,352 → 1,343 characters) to match the refreshed verification line. No skill or manifest behavior change; docs only, plus version bump.
+
 ## 0.8.2
 
 - **Make Claude Code's parallel fan-out explicit in the goal, not assumed.** The skill said Claude Code "fans out on its own judgment — no extra trigger," so the emitted goal carried only the decomposition structure and relied on the model spontaneously launching a dynamic workflow — asymmetric with Codex, which gets explicit tool imperatives, and a real risk of going serial. The goal now carries a runtime-agnostic instruction to "fan the units out in parallel and then synthesize": Claude Code realizes it as a dynamic workflow, Codex via its tools, and neither is left implicit. The mechanism is still left to the run (the goal describes structure + fan-out, not how). Updated SKILL.md and README (en/ja).

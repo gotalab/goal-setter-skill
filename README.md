@@ -26,7 +26,7 @@ It pays off even if you are not lazy. Folding in the stop conditions, the no-wea
 - **Asks only what changes the outcome.** Scope, verification, safety boundaries. Everything discoverable in the repo gets explored instead of asked; low-risk details become stated assumptions.
 - **Writes a compact condition.** The goal text fixes *what* and *why* and leaves *how* to the agent. No step-by-step recipes.
 - **Builds in stop and honesty rules.** Checks may not be passed by weakening them; stalled approaches trigger a strategy review, then a hard stop; the objective and Done condition cannot be quietly rewritten mid-run; progress may only be reported against actual tool results.
-- **States delegation and independent verification.** The goal names what may be delegated and requires a fresh-context check (an independent subagent or equivalent) before Done. Claude Code fans out on its own judgment; on Codex the parallel tools fire only from a `/goal` line you send, so the goal is written for you to send rather than auto-set.
+- **States delegation and independent verification.** The goal names what may be delegated and requires an independent read-only pass (a separate subagent or equivalent) before Done. Claude Code fans out on its own judgment; on Codex the parallel tools fire only from a `/goal` line you send, so the goal is written for you to send rather than auto-set.
 - **Structures splittable work for parallelism.** When the outcome breaks into independent, separately verifiable units — a multi-module build, a multi-aspect review, multi-topic research — the goal carries the decomposition structure (a discovery rule, an owned surface and its own checks per unit, an integration check) plus a runtime-sized launch directive, often staged as a phased pipeline: bootstrap → parallel research → parallel implementation → integrate → parallel adversarial/final verification. Claude Code fans this out via a dynamic workflow on its own judgment. On Codex the goal follows what real runs taught us — subagents are the default worker (and `create_thread` worktrees only when the project supports them), bootstrap comes before fan-out, and you send the `/goal …` line to authorize the whole cascade.
 - **Audits before activating.** Every goal is checked against the contract checklist before it is set. Anything missing gets fixed first. Length is verified once with a bundled validator that counts the way each runtime actually does — Codex counts Unicode codepoints, Claude Code counts UTF-16 code units, both allow exactly 4,000 — so a passing goal activates on either; a failing one gets restructured, never trimmed in loops.
 - **Lightweight notes for day-scale work.** On long autonomous runs it keeps a concise `execution-notes.md` — progress checkpoints and the mid-run decisions made and why, for resume and audit. No `GOAL.md` scaffolding; the active `/goal` is the contract.
@@ -99,7 +99,7 @@ It discovers `skills/goal-setter/` from the repo and links it into each agent's 
 
 > set a goal: all checkout tests pass after the refactor
 
-goal-setter rebuilds the outcome, asks anything critical, drafts and audits the condition, then activates it through the runtime's own goal mechanism (see below). If the request is too small or too vague to make an honest goal, it says so and suggests a normal prompt instead.
+goal-setter rebuilds the outcome, asks anything critical, drafts and runs a readiness check on the condition, then activates it through the runtime's own goal mechanism (see below). If the request is too small or too vague to make an honest goal, it says so and suggests a normal prompt instead.
 
 ## Example
 
@@ -113,7 +113,7 @@ goal-setter explores the repo, then shows you the outcome it reconstructed — n
 
 > Here's the outcome I understand you want, so the run starts aimed right: move the API layer of shop-backend (src/api/client.ts, users.ts, orders.ts) off the legacy `@acme/api-client` v1 onto the `@acme/sdk` v2 client, following docs/v2-migration.md — `createClient` instead of `new ApiClient`, `auth.tokenProvider` instead of the `authToken` callback, and `retry: { attempts: 3 }` kept explicit since v2's default changed. The exported functions (getUser, listUsers, createOrder, makeScopedClient) keep their current signatures and request behavior, so callers and the existing vitest tests are unaffected; `makeScopedClient`'s return type moves to the v2 client type. I'll assume removing the now-unused `@acme/api-client` from package.json is in scope, and success is verified by `npm test`, `npm run build`, and `npm run lint` all green with zero v1 references left in src/ and tests/. Correct anything here before I set the goal.
 
-What gets activated (1,352 characters — the skill judged this a short, low-risk run and left out the operating rules that would not change it, such as step-by-step progress reporting, while keeping subagent permission, the no-weakening-tests rule, independent verification, and the stop rule):
+What gets activated (1,343 characters — the skill judged this a short, low-risk run and left out the operating rules that would not change it, such as step-by-step progress reporting, while keeping subagent permission, the no-weakening-tests rule, independent verification, and the stop rule):
 
 ```text
 /goal Context: this keeps shop-backend on the supported @acme/sdk v2 client
@@ -131,9 +131,9 @@ keep their current signatures and request behavior (paths, query shapes,
 retry count); no refactors or features beyond it.
 Validate with npm test, npm run build, and npm run lint, all green; do
 not weaken, skip, or delete tests to make them pass.
-Use read-only subagents where useful, and before claiming Done have a
-fresh-context check (independent subagent or equivalent) confirm the diff
-against the migration doc.
+Use read-only subagents where useful, and before claiming Done spawn a
+read-only subagent to verify the diff against the migration doc; do not
+self-review.
 Done when grep finds zero @acme/api-client references in src/ and tests/
 and all three checks pass.
 If a v1 behavior has no v2 equivalent, stop and ask rather than approximate.
@@ -154,14 +154,14 @@ goal-setter only uses the runtime's own goal mechanism. It never spawns child se
 | Codex (decomposable / parallel) | hands you the `/goal …` line to send — see below |
 | Claude Code | hands you the exact `/goal …` line to send |
 
-On Claude Code, `/goal` is a user command (no tool can set a goal on the current session as of v2.1.170), so the skill prepares everything and you send the one line. On Codex the skill normally sets the goal itself — **except for decomposable work where you want parallelism**: Codex's `create_thread`/`spawn` fire only on *your* typed request, not on a tool-set goal, so the skill hands you the `/goal …` line and your sending it is what authorizes the parallel cascade.
+On Claude Code, `/goal` is a user command (no tool can set a goal on the current session as of v2.1.170), so the skill prepares everything and you send the one line. On Codex the skill normally sets the goal itself — **except for decomposable work where you want parallelism**: Codex's `create_thread`/`spawn_agent` fire only on *your* typed request, not on a tool-set goal, so the skill hands you the `/goal …` line and your sending it is what authorizes the parallel cascade.
 
 ## Running it in parallel
 
 When the outcome splits into independent, separately verifiable units — a multi-module build, a multi-aspect review, multi-topic research — the goal carries the decomposition structure: a discovery rule, an owned surface and its own checks per unit, and an integration/synthesis check over the merged result. Large work often stages as a **phased pipeline**: (0) the main thread bootstraps a shared baseline, (1) parallel read-only research to clarify scope, (2) parallel write implementation, (3) integrate, (4) parallel adversarial/final verification. How it runs depends on the runtime:
 
 - **Claude Code** realizes the goal's explicit fan-out invitation as a dynamic workflow on its own judgment — it discovers the units, dispatches them in parallel (subagents for read-only stages, worktree isolation for write stages), and synthesizes. The goal describes the structure and says "fan out in parallel"; it leaves the mechanism to the run.
-- **Codex** has its parallel tools gated to *your* own typed request, not to a goal the skill sets behind the scenes — so for decomposable work the skill hands you a `/goal …` line, and your sending it authorizes the whole cascade. The directives encode three things real runs taught us: **subagents (`spawn_agent`) are the default worker** for read-only work and for write units with cleanly partitioned files — `create_thread` (a real git worktree per unit) is only available when an established project exists, since it needs a resolvable `projectId`; **bootstrap comes first** — on an empty or non-git workspace the main thread does git init + scaffold + committed interface contracts before any write fan-out; and the goal **names the tool, not its arguments** (spelling out a `projectId` the executor cannot see makes it give up and run serially).
+- **Codex** has its parallel tools gated to *your* own typed request, not to a goal the skill sets behind the scenes — so for decomposable work the skill hands you a `/goal …` line, and your sending it authorizes the whole cascade. The directives encode three things real runs taught us: **subagents (`spawn_agent`) are the default worker** for read-only work and for write units with cleanly partitioned files — `create_thread` (a real git worktree per unit, each carrying its own unit-scoped goal set by the orchestrator) is only available when an established project exists, since it needs a resolvable `projectId`; **bootstrap comes first** — on an empty or non-git workspace the main thread does git init + scaffold + committed interface contracts before any write fan-out; and the goal **names the tool, not its arguments** (spelling out a `projectId` the executor cannot see makes it give up and run serially).
 
 This covers not just builds but multi-aspect reviews and multi-topic research — the same split-and-integrate structure.
 
