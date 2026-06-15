@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.2
+
+- **Make Claude Code's parallel fan-out explicit in the goal, not assumed.** The skill said Claude Code "fans out on its own judgment — no extra trigger," so the emitted goal carried only the decomposition structure and relied on the model spontaneously launching a dynamic workflow — asymmetric with Codex, which gets explicit tool imperatives, and a real risk of going serial. The goal now carries a runtime-agnostic instruction to "fan the units out in parallel and then synthesize": Claude Code realizes it as a dynamic workflow, Codex via its tools, and neither is left implicit. The mechanism is still left to the run (the goal describes structure + fan-out, not how). Updated SKILL.md and README (en/ja).
+
 ## 0.8.1
 
 - **Align plugin manifests with the 0.8.0 consolidation (Claude Code + Codex).** Both `plugin.json` descriptions still said "a readiness audit" — stale after the 30-item scored audit became an inline readiness check. Updated both to "a readiness check" and added "fresh-context verification" to the listed features. No structural change: the Claude Code plugin (`.claude-plugin/`) already serves the consolidated single-file skill from root `skills/goal-setter/`, and both marketplace manifests were already clean.
