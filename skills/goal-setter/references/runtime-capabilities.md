@@ -25,6 +25,8 @@ Subagents are allowed for separable investigation, source-backed research, revie
 
 When subagents are intended, encode that in the Goal text as explicit authorization for bounded subagent/delegation use. Runtime policy may still restrict actual spawning, but the Goal should not leave intended delegation implicit. This clause should survive Goal compression; make it short, not absent.
 
+On Codex, name the tool concretely — abstract phrasing does not fire. "Fresh-context verification" and "independent review" are read as in-context self-work, not as launching a separate context (verified: Codex frequently does not interpret "fresh context" as an explicit subagent launch). Read-only separate contexts — review, research, final/adversarial verification — are **subagents** (lightweight, no worktree); write work is `create_thread` (own worktree). To get a real separate read-only context, write an imperative subagent directive: "spawn a read-only subagent to review/research/verify <X>; do not self-review." This rides the user-sent `/goal`: both `spawn` and `create_thread` are gated to an explicit user request, so they fire when the human sends the `/goal` line and do not fire from a goal the skill auto-sets via `create_goal`. Where a separate context genuinely cannot be guaranteed, "or an equivalent independent pass" is the honest fallback — but say plainly it is an in-context pass, not a fresh context.
+
 Prefer read-only subagents for:
 
 - repo reconnaissance
@@ -89,27 +91,28 @@ Wait for the full set only when all prior results are needed for:
 
 Do not request large fan-out, dynamic workflows, or many agents unless the user or Goal explicitly opts into that scale. When opting in, state the bounded surface, ownership split or routing rule, merge/review evidence, and any cap on parallel agents or retries.
 
-## Parallel Decomposition
+## Parallel Fan-out
 
-Spawning many agents because more feels faster is not the default; for most Goals it duplicates work and creates merge conflicts that quietly erode the Done evidence. Decomposition earns its cost only when the requested outcome splits into independent, separately verifiable sub-outcomes that share no state — and it pays off most on otherwise serial work. The same fan-out covers multi-aspect review and multi-topic research, not just implementation: split into independent read-only units, run them in parallel, and synthesize the results.
+Spawning many agents because more feels faster is not the default; for most Goals it duplicates work and creates merge conflicts that quietly erode the Done evidence. Fan-out earns its cost only when the work splits into independent, separately verifiable units that share no state — and it pays off most on otherwise serial work. It covers more than implementation: parallel read-only research, multi-aspect review, and adversarial verification fan out the same way — split into independent units, run in parallel, synthesize.
 
-Decompose only when all three hold:
+Fan out only when all three hold:
 
-- the pieces do not touch the same files or interlocking state
-- each piece carries its own Done evidence, checkable on its own
-- a parent integration check confirms the merged result, not just the pieces
+- the units do not touch the same files or interlocking state
+- each unit carries its own evidence or deliverable, checkable on its own
+- a parent integration/synthesis step confirms the merged result, not just the units
 
-Separate two layers: the decomposition **structure** goes in the Goal; the **parallel execution** is triggered differently on each runtime.
+**Structure (always in the Goal, runtime-agnostic).** Write a discovery rule for finding the independent units (state the rule, do not enumerate units you cannot yet name), an owned surface and its own evidence/deliverable per unit, item-by-item progress, a cap on parallel count and retries, and a parent integration/synthesis gate. This works on both runtimes and even when units are discovered at runtime; it gives the contract value even with no parallelism.
 
-In the Goal text, always write the structure: a discovery rule for finding the independent units, an owned surface and its own Done evidence per unit, item-by-item progress, and a parent integration check over the merged result. State the rule rather than enumerating units you cannot yet name; name owned surfaces, cap the parallel count and retries, and gate parent Done on every unit's evidence plus the integration check. The structure works on both runtimes and even when the units are discovered at runtime. Whether the Goal also carries an explicit parallel-launch instruction depends on the runtime and the mechanism below — a `/goal` does not parallelize on its own.
+**Tool by work type.** Read-only work — research, multi-aspect review, adversarial/final verification — uses **subagents** (lightweight, no worktree). Write work — parallel implementation — uses **`create_thread`** (each unit in its own git worktree, so concurrent writes do not collide); worktrees are heavyweight, so reserve `create_thread` for genuine parallel write units and do not overuse it.
 
-How parallel execution is triggered, per runtime:
+**Phased pipeline.** Large work often stages cleanly: (1) parallel read-only research to clarify scope and open questions, (2) parallel write implementation, (3) integrate, (4) parallel adversarial/final verification. This is a common shape, not a mandate — use the phases that fit, and keep each phase's units independent with their own evidence.
 
-- **Claude Code**: the model fans out on its own judgment, so the Goal may encourage it. Default to a dynamic workflow — the runtime's purpose-built primitive for discovering the work-list, dispatching scoped contracts in parallel, and synthesizing results; fall back to parallel subagents under git worktree isolation for a small fixed set of independent write tasks. The active run owns orchestration: dispatch per unit, merge, run the integration check.
-- **Codex** — `create_thread` and `spawn` are both gated by this environment to an explicit user request. The distinction that matters is **who typed the directive**, not Goal-text-vs-prompt: when the *human* sends it — by typing `/goal <…for each unit, use create_thread…>` themselves, or a prompt asking to spawn — the gate is satisfied and threads/subagents launch (verified). When goal-setter auto-sets the goal via the `create_goal` tool, the user did not ask, so the very same directive is ignored and the run stays serial (verified: the directive that fired when the human typed `/goal` was declined when tool-set, the runtime stating create_thread is "only when the user explicitly asks"). Therefore, for decomposable work on Codex, **do not auto-set the goal — emit the full `/goal …` line for the human to send.** That single human action authorizes the whole cascade: the main thread then uses `create_thread` per unit (own worktree, its own goal set by the orchestrator, run in parallel), uses subagents where useful, and integrates. Write the directive flat and unconditional — a hedged "when useful" / "only when separable" makes Codex skip it (verified). `create_thread` is the default; `spawn` subagents are the lighter alternative. (Whether the orchestrator's per-thread goal-set fully sticks is not 100% confirmed; instruct it anyway — the instruction drives the behavior.)
-- Either way the Goal stays a sequential contract that the main thread honors while it orchestrates the threads and runs the integration check.
+**How it runs, per runtime:**
 
-When the three conditions do not all hold — interlocking refactors, single-cause bug or flaky-test investigation, a metric tuned by one serial loop — do not decompose: parallel writes against shared state make "independent" a lie and break the merge. Use read-only subagents for the separable investigation instead and keep one write contract.
+- **Claude Code**: the model fans out on its own judgment, so the Goal just describes the structure and phases. The natural form is a dynamic workflow — discover the work-list, dispatch scoped units in parallel (subagents for read-only stages, worktree-isolated for write stages), and synthesize; the active run owns orchestration end to end. No extra trigger needed.
+- **Codex**: `create_thread` and `spawn` are both gated by this environment to an **explicit user request** — what matters is that the *human sends* the directive (types the `/goal …` line or a prompt), not whether it lives in Goal-text vs prompt. A goal the skill auto-sets via `create_goal` does **not** satisfy the gate, so it runs serially (verified: the same directive fired when the human typed `/goal` and was declined when tool-set, the runtime stating these tools are "only when the user explicitly asks"). Therefore, for fan-out work on Codex, **do not auto-set — emit the full `/goal …` line for the human to send.** That one send authorizes the whole cascade: the main thread runs read-only phases with **subagents**, write phases with **`create_thread`** per unit (own worktree, its own goal scoped to the unit), and integrates. Name the tools concretely and imperatively — abstract phrasing ("fresh-context verification", "use subagents") is read as in-context self-work and launches nothing (verified). Write the directives flat and unconditional; a hedged "when useful" / "only when separable" makes Codex skip them and run serially (verified). (Whether the orchestrator's per-thread goal-set fully sticks is not 100% confirmed; instruct it anyway — the instruction drives the behavior.)
+
+When the three conditions do not all hold — interlocking refactors, a single-cause bug or flaky-test investigation, a metric tuned by one serial loop — do not fan out the writes: parallel writes against shared state make "independent" a lie and break the merge. A read-only investigation can still fan out with subagents; keep one write contract.
 
 ## Coverage and Completeness
 
