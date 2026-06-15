@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.1
+
+- **Align plugin manifests with the 0.8.0 consolidation (Claude Code + Codex).** Both `plugin.json` descriptions still said "a readiness audit" — stale after the 30-item scored audit became an inline readiness check. Updated both to "a readiness check" and added "fresh-context verification" to the listed features. No structural change: the Claude Code plugin (`.claude-plugin/`) already serves the consolidated single-file skill from root `skills/goal-setter/`, and both marketplace manifests were already clean.
+
 ## 0.8.0
 
 - **Consolidated to a single skill.** `goal-setter` is now one self-contained `SKILL.md` (plus the `validate_goal_length.py` helper and `agents/openai.yaml`). The lean rewrite became the skill: the `goal-setter-lean` companion is removed, and the heavy reference set is retired — `references/goal-contract.md`, `runtime-capabilities.md`, `sidecars-and-notes.md`, `GOAL.template.md`, `execution-notes.template.md`, and the `init_goal_run.py` / `check_python_syntax.py` scripts are all gone. Why: the lean rewrite already carried every behavior-changing rule (intended-outcome image, anti-gaming, discriminating evidence, fresh-context verification with the Codex-concrete subagent imperative, the full verified Codex/Claude Code parallel mechanics, length discipline, lightweight execution-notes); the reference set was mostly elaboration and the sidecar apparatus, and maintaining two parallel skills (each mirrored) was a real cost — it had already caused a regression. One skill also ends the trigger ambiguity of two goal-setters matching the same request.
