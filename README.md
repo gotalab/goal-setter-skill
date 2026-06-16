@@ -1,6 +1,6 @@
 # goal-setter
 
-**Turn one short request into a Codex-native `/goal` contract that can launch the right threads, subagents, and verification before a long autonomous run drifts.**
+**Turn one short request into a Codex-native `/goal` contract that tells the run when to use threads, subagents, and verification before a long autonomous run drifts.**
 
 Built for **Codex**. Works on **Claude Code** too.
 
@@ -16,7 +16,7 @@ Built for **Codex**. Works on **Claude Code** too.
 
 A goal keeps the agent working until a completion condition is true (official guides: [Codex](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex) / [Claude Code](https://code.claude.com/docs/en/goal)). Writing that condition well is real work: you have to state the outcome, how success is verified, what must not change, and when to stop. For Codex, you also have to say when work should stay in the main thread, when read-only subagents should verify or research, and when separate `create_thread` worktrees should own write units. Skip any of it and the run drifts — or worse, a parallel job quietly runs serially.
 
-goal-setter exists for a simple reason: writing the goal instruction at all is a chore. You already have the finished picture in your head; what you actually type is one short line. This skill takes that line, rebuilds the picture, and checks with you until no outcome-changing ambiguity remains; questions come bundled, so it is usually one round trip. Then it carries the goal all the way to activation.
+goal-setter exists for a simple reason: writing the goal instruction at all is a chore. You already have the finished picture in your head; what you actually type is one short line. This skill takes that line, rebuilds the picture, and checks with you until no outcome-changing ambiguity remains; questions come bundled, so it is usually one round trip. Then it either activates the goal through the runtime's native mechanism, or gives you the exact `/goal …` line to send when the runtime requires your message to authorize parallel work.
 
 It pays off even if you are not lazy. Most goal helpers stop at a sharper completion sentence. goal-setter goes further: it turns the intended outcome into a runtime contract for the agent that will execute it. That contract includes stop conditions, the no-weakening-tests rule, independent verification, and the evaluator's quirks — Claude Code's judge only sees the conversation; Codex parallelism has to be spelled out the right way (subagents for read-only work, mandatory `create_thread` worktrees for non-trivial write units when the project supports them, bootstrap before fan-out, tool names not tool arguments), and it fires only from a `/goal` line *you* send. Writing that by hand every time is a lot of work, and hand-written goals drift from one run to the next. The gap between this skill's output and your hand-written goal is the value.
 
@@ -28,7 +28,7 @@ It pays off even if you are not lazy. Most goal helpers stop at a sharper comple
 - **Builds in stop and honesty rules.** Checks may not be passed by weakening them; stalled approaches trigger a strategy review, then a hard stop; the objective and Done condition cannot be quietly rewritten mid-run; progress may only be reported against actual tool results.
 - **Turns parallel intent into executable Codex orchestration.** If the work should split, the goal says so in the form Codex actually responds to: read-only research/review/final verification goes to `spawn_agent`; non-trivial write units become mandatory `create_thread` worktrees when the project supports them; each child thread gets exactly one unit, owned files, evidence, an integration contract, and an instruction to set its own unit-scoped goal before editing.
 - **Structures splittable work for parallelism.** When the outcome breaks into independent, separately verifiable units — a multi-module build, a multi-aspect review, multi-topic research — the goal carries the decomposition structure (a discovery rule, an owned surface and its own checks per unit, an integration check) plus a runtime-sized launch directive, often staged as a phased pipeline: bootstrap → parallel research → parallel implementation → integrate → parallel adversarial/final verification. Claude Code fans this out via a dynamic workflow on its own judgment. On Codex, the skill writes a user-sent `/goal …` line because that is what authorizes `spawn_agent` and `create_thread`.
-- **Audits before activating.** Every goal is checked against the contract checklist before it is set. Anything missing gets fixed first. Length is verified once with a bundled validator that counts the way each runtime actually does — Codex counts Unicode codepoints, Claude Code counts UTF-16 code units, both allow exactly 4,000 — so a passing goal activates on either; a failing one gets restructured, never trimmed in loops.
+- **Audits before activation or handoff.** Every goal is checked against the contract checklist before it is set or handed to you. Anything missing gets fixed first. Length is verified once with a bundled validator that counts the way each runtime actually does — Codex counts Unicode codepoints, Claude Code counts UTF-16 code units, both allow exactly 4,000 — so a passing goal can be activated or sent; a failing one gets restructured, never trimmed in loops.
 - **Lightweight notes for day-scale work.** On long autonomous runs it keeps a concise `execution-notes.md` — progress checkpoints and the mid-run decisions made and why, for resume and audit. No `GOAL.md` scaffolding; the active `/goal` is the contract.
 
 ## Why this is different
@@ -106,11 +106,11 @@ It discovers `skills/goal-setter/` from the repo and links it into each agent's 
 
 > draft a goal for migrating our API client to v2
 
-**Activate** — shape and launch in one motion:
+**Activate** — shape and launch in one motion when the runtime can set it directly:
 
 > set a goal: all checkout tests pass after the refactor
 
-goal-setter rebuilds the outcome, asks anything critical, drafts and runs a readiness check on the condition, then activates it through the runtime's own goal mechanism (see below). If the request is too small or too vague to make an honest goal, it says so and suggests a normal prompt instead.
+goal-setter rebuilds the outcome, asks anything critical, drafts and runs a readiness check on the condition, then either activates it through the runtime's own goal mechanism or gives you the exact `/goal …` line to send (see below). If the request is too small or too vague to make an honest goal, it says so and suggests a normal prompt instead.
 
 ## Before / after
 
