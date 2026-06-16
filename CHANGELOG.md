@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.4
+
+- **Make Codex `create_thread` write fan-out a chosen mechanism, not a parenthesized fallback.** The consolidated skill still produced goals that put `create_thread` behind an `or` clause after `spawn_agent`, so Codex could read thread fan-out as optional and run serially or use subagents for write work. The Codex parallel section now makes the drafter choose the write mechanism before emitting the goal: non-trivial separable write units in an established Codex project must be `create_thread` worktree units, one thread per unit, each child prompt carrying owned files, evidence, integration contract, and a unit-scoped goal instruction. `spawn_agent` stays the default for read-only research/review/final verification, and write fallback is allowed only when explicitly justified. Updated SKILL.md and README (en/ja).
+
 ## 0.8.3
 
 - **README audit: remove stale terminology after the 0.8.0 consolidation (en/ja).** Swept both READMEs for descriptions that no longer match the skill. Fixes: "drafts and audits the condition" → "runs a readiness check" (the scored audit was retired in 0.8.0); `create_thread`/`spawn` → `create_thread`/`spawn_agent` (the actual tool name); the Codex parallel description now states that each `create_thread` carries its own unit-scoped goal set by the orchestrator (the per-thread goal that real runs proved matters); and the "fresh-context check" framing — which the skill dropped because Codex ignores it — is replaced by an explicit "spawn a read-only subagent to verify; do not self-review" in both the example goal and the feature bullets. The example goal's stated length was recomputed (1,352 → 1,343 characters) to match the refreshed verification line. No skill or manifest behavior change; docs only, plus version bump.
