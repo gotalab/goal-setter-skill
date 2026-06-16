@@ -24,7 +24,7 @@ It pays off even if you are not lazy. Most goal helpers stop at a sharper comple
 
 - **Rebuilds the intended outcome first.** Before drafting anything, it reconstructs what you are trying to build and why, in a few sentences. When your request is minimal, it shows you that reconstruction to correct, bundling any critical questions into the same message; if ambiguity remains, it keeps asking until the outcome is safe. Success criteria, constraints, and the Done condition are all derived from it.
 - **Asks only what changes the outcome.** Scope, verification, safety boundaries. Everything discoverable in the repo gets explored instead of asked; low-risk details become stated assumptions.
-- **Writes a compact condition.** The goal text fixes *what* and *why* and leaves *how* to the agent. No step-by-step recipes.
+- **Writes a compact condition without stealing the model's judgment.** The goal text fixes *what*, *why*, evidence, and safety boundaries, then leaves *how* to the agent. No step-by-step recipes unless the steps are themselves the requirement.
 - **Builds in stop and honesty rules.** Checks may not be passed by weakening them; stalled approaches trigger a strategy review, then a hard stop; the objective and Done condition cannot be quietly rewritten mid-run; progress may only be reported against actual tool results.
 - **Turns parallel intent into executable Codex orchestration.** If the work should split, the goal says so in the form Codex actually responds to: read-only research/review/final verification goes to `spawn_agent`; non-trivial write units become mandatory `create_thread` worktrees when the project supports them; each child thread gets exactly one unit, owned files, evidence, an integration contract, and an instruction to set its own unit-scoped goal before editing.
 - **Structures splittable work for parallelism.** When the outcome breaks into independent, separately verifiable units — a multi-module build, a multi-aspect review, multi-topic research — the goal carries the decomposition structure (a discovery rule, an owned surface and its own checks per unit, an integration check) plus a runtime-sized launch directive, often staged as a phased pipeline: bootstrap → parallel research → parallel implementation → integrate → parallel adversarial/final verification. Claude Code fans this out via a dynamic workflow on its own judgment. On Codex, the skill writes a user-sent `/goal …` line because that is what authorizes `spawn_agent` and `create_thread`.
@@ -111,6 +111,119 @@ It discovers `skills/goal-setter/` from the repo and links it into each agent's 
 > set a goal: all checkout tests pass after the refactor
 
 goal-setter rebuilds the outcome, asks anything critical, drafts and runs a readiness check on the condition, then activates it through the runtime's own goal mechanism (see below). If the request is too small or too vague to make an honest goal, it says so and suggests a normal prompt instead.
+
+## Before / after
+
+These examples are shortened to show the shape. In a real run, goal-setter reads the repo or source material first, fills in the actual files and checks, and drops any clause that would not change the outcome.
+
+### Small refactor
+
+Before:
+
+> set a goal: clean up checkout settings after the refactor
+
+After:
+
+```text
+/goal Keep the checkout settings page behavior unchanged while removing
+the duplicated loading/error-state branch introduced by the refactor.
+Read the settings page component, adjacent tests, and the existing settings
+UI patterns first. Keep the public props, billing copy, Stripe/webhook
+behavior, and pricing logic unchanged; do not broaden the refactor.
+Validate with the focused checkout settings tests and the repo's type/lint
+check, all green; do not weaken or delete tests. Before Done, spawn a
+read-only subagent to verify the diff against the preserved behavior and
+checks; do not self-review. Done when the duplicate branch is gone, the UI
+states still render, and all checks pass.
+```
+
+### Long implementation
+
+Before:
+
+> set a goal: build invoice export end to end
+
+After:
+
+```text
+/goal Build an invoice CSV export that billing admins can run from the
+existing admin surface without changing invoice calculation semantics.
+Reconstruct the current billing data path, permissions, and export
+conventions before editing. Choose the smallest design that fits the
+existing admin patterns; do not rewrite billing models, payment flows, or
+unrelated admin UI. Add focused tests for permissions, filters, empty
+exports, and CSV escaping, plus an operator-visible success/failure path.
+Keep concise execution-notes.md checkpoints for decisions and evidence.
+Validate with the relevant unit/integration tests, typecheck, and a manual
+or smoke path that downloads a representative CSV. Done only when tests
+pass, the CSV matches the documented columns, and independent read-only
+verification finds no billing behavior drift.
+```
+
+### Parallel implementation with `create_thread`
+
+Before:
+
+> set a goal: make the game factions affect events, enemies, bosses, rewards, HUD, save-load, and smoke evidence
+
+After:
+
+```text
+/goal Make the faction ecosystem observable in one run: pressure and
+player history change faction power, which changes room events, enemy
+mutations, bosses, rewards, HUD, persistence, and browser smoke evidence.
+Treat faction simulation, event generation, enemy/boss mutation,
+rewards/relics, and HUD/smoke evidence as five separately verifiable write
+units. In Codex, do not implement those units serially in the main thread.
+First verify the repo is an established git project with a usable HEAD; if
+not, bootstrap git + scaffold + shared interfaces in the main thread. Then
+create one separate thread with create_thread per write unit, each in its
+own worktree. In each child thread's initial prompt, assign exactly one
+unit, owned files, validation evidence, integration contract, and instruct
+it to set a unit-scoped goal before editing. Run child threads in parallel,
+integrate in the main thread, and gate Done on every unit's evidence plus
+build, tests, browser smoke, and a read-only subagent final verification.
+```
+
+### Business task
+
+Before:
+
+> set a goal: turn the messy QBR notes into something leadership can use
+
+After:
+
+```text
+/goal Produce a leadership-ready QBR brief that turns the supplied notes
+and source files into a decision document: current performance, risks,
+decisions needed, and next actions. Read the notes, source sheets/docs, and
+prior QBR format first. Separate confirmed facts from assumptions; do not
+invent numbers, owners, customer quotes, or commitments. Preserve
+uncertainty as "unconfirmed" when evidence is missing. Validate by mapping
+every metric and material claim back to a named source, checking the brief
+against the prior format, and spawning a read-only subagent to review for
+unsupported claims. Done when the brief is ready to share and all open
+questions are explicitly listed.
+```
+
+### Daily task
+
+Before:
+
+> set a goal: help me get the apartment application done
+
+After:
+
+```text
+/goal Get the apartment application package ready for the user to submit,
+without sending, signing, paying, or sharing private information without
+explicit approval. Inventory the required documents, compare them with the
+user's available files or notes, draft any missing message/checklist items,
+and produce a clear submit-ready packet plus remaining blockers. Keep
+sensitive data local and do not fabricate documents or dates. Done when
+every required item is marked ready, missing, or needs user action, and the
+final checklist says exactly what the user must review before submission.
+```
 
 ## Example
 
