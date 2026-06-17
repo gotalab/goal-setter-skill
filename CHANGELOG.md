@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.6
+
+- **Let decomposition follow behavior before files.** The 0.8.5 pass changed child prompts from "owned files" to "owned surface," but one Codex fan-out gate still said "separable file ownership," which could push the model to partition by file layout too early. The parallel guidance now says to judge separability by behavioral coupling, shared state, and integration risk before file layout; file paths are clues to discover after reading the repo, not the deciding criterion. Updated SKILL.md and README (en/ja).
+
 ## 0.8.5
 
 - **Tune the contract shape for GPT-5.5-style outcome-first prompting.** The skill already avoided implementation recipes, but this release makes the rule explicit: start from the smallest prompt that preserves the task contract, add only behavior-changing clauses, and reserve hard imperatives for true invariants. Exploration now has a bounded evidence pass instead of an open-ended "be thorough" feel, validation asks for the most relevant honest check rather than every possible check, and multi-step intake starts with a short visible preamble before tools. The Codex `create_thread` child prompt wording now assigns an owned surface rather than prematurely fixing owned files, keeping parallel orchestration strong while preserving executor judgment. Updated SKILL.md, plugin metadata, and README (en/ja).

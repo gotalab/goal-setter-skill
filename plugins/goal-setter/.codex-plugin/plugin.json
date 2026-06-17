@@ -1,6 +1,6 @@
 {
   "name": "goal-setter",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "Shape rough requests into compact, outcome-first /goal completion contracts before long autonomous runs.",
   "author": {
     "name": "gotalab",
