@@ -84,6 +84,9 @@ Sparse paths: plugins/goal-setter
 /plugin install goal-setter@goal-setter
 ```
 
+この GitHub shorthand は repository の default branch を使います。branch や tag に
+固定したい場合だけ、marketplace source に `@ref` を付けます。
+
 明示的に呼ぶ場合は `/goal-setter:goal-setter` を使います。
 
 ### Skills CLI

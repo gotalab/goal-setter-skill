@@ -100,6 +100,9 @@ Then install **Goal Setter** from the Plugins screen.
 /plugin install goal-setter@goal-setter
 ```
 
+This GitHub shorthand tracks the repository default branch. To pin a branch or
+tag, append `@ref` to the marketplace source.
+
 Invoke with `/goal-setter:goal-setter`, or let the skill trigger from the
 request.
 

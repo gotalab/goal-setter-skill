@@ -9,7 +9,9 @@ below are historical and may describe behavior that was later corrected.
   `$skill-installer ...` example is a Codex chat command, not a shell command;
   replaced "image-first" metadata wording with "reconstructs the intended
   outcome first" to avoid confusion with visual image input; and added a
-  changelog note that older entries are historical.
+  changelog note that older entries are historical. Also clarified that the
+  Claude Code GitHub shorthand installs from the repository default branch by
+  default, with `@ref` available only when users want to pin a branch or tag.
 
 ## 0.8.6
 
