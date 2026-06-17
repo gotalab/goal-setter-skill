@@ -64,6 +64,8 @@ run choose the right execution structure.
 
 ### Codex Skill
 
+In Codex chat:
+
 ```text
 $skill-installer install https://github.com/gotalab/goal-setter-skill/tree/main/skills/goal-setter
 ```

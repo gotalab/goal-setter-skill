@@ -1,5 +1,16 @@
 # Changelog
 
+Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
+below are historical and may describe behavior that was later corrected.
+
+## 0.8.7
+
+- **Clean up public install and metadata wording.** Clarified that the
+  `$skill-installer ...` example is a Codex chat command, not a shell command;
+  replaced "image-first" metadata wording with "reconstructs the intended
+  outcome first" to avoid confusion with visual image input; and added a
+  changelog note that older entries are historical.
+
 ## 0.8.6
 
 - **Let decomposition follow behavior before files.** The 0.8.5 pass changed child prompts from "owned files" to "owned surface," but one Codex fan-out gate still said "separable file ownership," which could push the model to partition by file layout too early. The parallel guidance now says to judge separability by behavioral coupling, shared state, and integration risk before file layout; file paths are clues to discover after reading the repo, not the deciding criterion. Updated SKILL.md and README (en/ja).
