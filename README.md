@@ -79,13 +79,17 @@ mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
 ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" "${CODEX_HOME:-$HOME/.codex}/skills/goal-setter"
 ```
 
-### Codex Plugin Marketplace
+### Codex App Plugin
 
-```bash
-codex plugin marketplace add gotalab/goal-setter-skill
+In Codex, open `/plugins`, choose **Add plugin marketplace**, and enter:
+
+```text
+Source: gotalab/goal-setter-skill
+Git ref: main
+Sparse paths: plugins/goal-setter
 ```
 
-Then install **Goal Setter** from `/plugins` in Codex.
+Then install **Goal Setter** from the Plugins screen.
 
 ### Claude Code
 

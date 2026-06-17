@@ -63,13 +63,17 @@ mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
 ln -s "$(pwd)/goal-setter-skill/skills/goal-setter" "${CODEX_HOME:-$HOME/.codex}/skills/goal-setter"
 ```
 
-### Codex Plugin Marketplace
+### Codex App Plugin
 
-```bash
-codex plugin marketplace add gotalab/goal-setter-skill
+Codex で `/plugins` を開き、**Add plugin marketplace** に次を入れます。
+
+```text
+Source: gotalab/goal-setter-skill
+Git ref: main
+Sparse paths: plugins/goal-setter
 ```
 
-その後、Codex の `/plugins` から **Goal Setter** をインストールします。
+その後、Plugins 画面から **Goal Setter** をインストールします。
 
 ### Claude Code
 
