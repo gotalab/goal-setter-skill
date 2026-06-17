@@ -12,6 +12,8 @@ below are historical and may describe behavior that was later corrected.
   changelog note that older entries are historical. Also clarified that the
   Claude Code GitHub shorthand installs from the repository default branch by
   default, with `@ref` available only when users want to pin a branch or tag.
+  Added a first-time install chooser so Codex App users know to use the plugin
+  path and which invocation name to try after install.
 
 ## 0.8.6
 

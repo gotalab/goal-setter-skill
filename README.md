@@ -62,6 +62,18 @@ run choose the right execution structure.
 
 ## Install
 
+Pick one install path:
+
+| If you use | Install | Invoke with |
+| --- | --- | --- |
+| Codex App `/plugins` | Codex App Plugin | `$goal-setter:goal-setter ...` |
+| Codex local skills | Codex Skill | `$goal-setter ...` |
+| Claude Code | Claude Code marketplace | `/goal-setter:goal-setter ...` |
+| Another agent with Skills CLI support | Skills CLI | the agent's skill invocation syntax |
+
+Most Codex App users should use **Codex App Plugin**. You do not need to install
+both the Codex Skill and the Codex App Plugin.
+
 ### Codex Skill
 
 In Codex chat:
@@ -92,6 +104,9 @@ Sparse paths: plugins/goal-setter
 ```
 
 Then install **Goal Setter** from the Plugins screen.
+
+Invoke with `$goal-setter:goal-setter`, or select **Goal Setter** from the skill
+picker.
 
 ### Claude Code
 
