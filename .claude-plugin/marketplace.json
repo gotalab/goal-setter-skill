@@ -1,6 +1,6 @@
 {
   "name": "goal-setter",
-  "description": "Single-plugin marketplace for goal-setter: compact, evidence-backed /goal completion contracts for long autonomous runs.",
+  "description": "Single-plugin marketplace for goal-setter: compact, outcome-first /goal completion contracts for long autonomous runs.",
   "owner": {
     "name": "gotalab"
   },
@@ -8,7 +8,7 @@
     {
       "name": "goal-setter",
       "source": "./",
-      "description": "Shape rough requests into compact, evidence-backed /goal completion contracts before long autonomous runs.",
+      "description": "Shape rough requests into compact, outcome-first /goal completion contracts before long autonomous runs.",
       "category": "productivity"
     }
   ]

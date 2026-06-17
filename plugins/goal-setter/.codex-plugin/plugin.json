@@ -1,7 +1,7 @@
 {
   "name": "goal-setter",
-  "version": "0.8.4",
-  "description": "Shape rough requests into compact, evidence-backed /goal completion contracts before long autonomous runs.",
+  "version": "0.8.5",
+  "description": "Shape rough requests into compact, outcome-first /goal completion contracts before long autonomous runs.",
   "author": {
     "name": "gotalab",
     "url": "https://github.com/gotalab"
@@ -20,8 +20,8 @@
   ],
   "interface": {
     "displayName": "Goal Setter",
-    "shortDescription": "Evidence-backed goal contracts for long autonomous runs",
-    "longDescription": "Turns a rough request into a compact /goal completion contract: intended-outcome image first, clarification and bounded-exploration gates, anti-gaming constraints, evidence-audited progress rules, fresh-context verification, and a readiness check before activation. Works with Codex goal tools and Claude Code /goal.",
+    "shortDescription": "Outcome-first goal contracts for long autonomous runs",
+    "longDescription": "Turns a rough request into a compact /goal completion contract: intended-outcome image first, bounded evidence gathering, decision rules instead of process-heavy recipes, anti-gaming constraints, evidence-audited progress rules, independent verification, and a readiness check before activation or handoff. Works with Codex goal tools and Claude Code /goal.",
     "developerName": "gotalab",
     "category": "Productivity",
     "defaultPrompt": [

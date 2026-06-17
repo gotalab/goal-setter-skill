@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.5
+
+- **Tune the contract shape for GPT-5.5-style outcome-first prompting.** The skill already avoided implementation recipes, but this release makes the rule explicit: start from the smallest prompt that preserves the task contract, add only behavior-changing clauses, and reserve hard imperatives for true invariants. Exploration now has a bounded evidence pass instead of an open-ended "be thorough" feel, validation asks for the most relevant honest check rather than every possible check, and multi-step intake starts with a short visible preamble before tools. The Codex `create_thread` child prompt wording now assigns an owned surface rather than prematurely fixing owned files, keeping parallel orchestration strong while preserving executor judgment. Updated SKILL.md, plugin metadata, and README (en/ja).
+
 ## 0.8.4
 
 - **Make Codex `create_thread` write fan-out a chosen mechanism, not a parenthesized fallback.** The consolidated skill still produced goals that put `create_thread` behind an `or` clause after `spawn_agent`, so Codex could read thread fan-out as optional and run serially or use subagents for write work. The Codex parallel section now makes the drafter choose the write mechanism before emitting the goal: non-trivial separable write units in an established Codex project must be `create_thread` worktree units, one thread per unit, each child prompt carrying owned files, evidence, integration contract, and a unit-scoped goal instruction. `spawn_agent` stays the default for read-only research/review/final verification, and write fallback is allowed only when explicitly justified. Updated SKILL.md and README (en/ja).
