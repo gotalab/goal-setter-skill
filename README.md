@@ -40,6 +40,8 @@ A generated goal usually includes:
 - validation commands or evidence surfaces
 - the first files or sources to read, without over-enumerating paths
 - constraints and anti-gaming rules, such as not weakening tests
+- compatibility and quality rules that preserve only real boundaries while
+  favoring readable, changeable, low-complexity results
 - stop conditions for blocked, unsafe, or looping runs
 - independent verification before Done
 - parallelization rules for subagents, `create_thread`, worktrees, and child goals

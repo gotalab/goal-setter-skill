@@ -3,6 +3,20 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.8.8
+
+- **Pin only real invariants; leave executor judgment open.** The contract
+  guidance now says to pin only the outcome, evidence, safety boundaries, and
+  non-negotiable constraints, while leaving implementation order, internal
+  design, decomposition details, and replace-vs-adapt choices to the executor
+  after it reads the repo or source material. Compatibility is now a boundary
+  only when requested, externally required, safety-relevant, or relevant to
+  validation; when the user allows breaking compatibility, goals should prefer
+  a simpler replace-over-adapt design with cleanup or migration evidence instead
+  of speculative adapters and fallback paths. The quality validation bar now
+  also covers readable, local, low-branching code changes and clear,
+  non-duplicative, easy-to-revise non-code artifacts.
+
 ## 0.8.7
 
 - **Clean up public install and metadata wording.** Clarified that the
