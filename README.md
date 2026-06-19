@@ -36,10 +36,13 @@ its own unit-scoped goal; the main thread should integrate evidence before Done.
 A generated goal usually includes:
 
 - the intended outcome and why it matters
-- binary Done criteria
-- validation commands or evidence surfaces
+- pass/fail Done criteria
+- validation commands or evidence to check
+- the path from the user's request to the expected result, with pass/fail checks for software or output a user will directly use
+- what must be understood before execution
+- running hypotheses, counterevidence, and review that tries to disprove weak conclusions for uncertain research or strategy work
 - the first files or sources to read, without over-enumerating paths
-- constraints and anti-gaming rules, such as not weakening tests
+- constraints, including a rule that checks must not pass by weakening tests
 - compatibility and quality rules that preserve only real boundaries while
   favoring readable, changeable, low-complexity results
 - stop conditions for blocked, unsafe, or looping runs
@@ -167,7 +170,7 @@ Treat faction simulation, event generation, enemy/boss mutation, rewards/relics,
 and HUD/smoke evidence as separately verifiable write units. In Codex, do not
 implement those units serially in the main thread. Create one separate
 create_thread worktree per write unit when the repo supports it; each child
-thread gets one owned surface, evidence requirements, an integration contract,
+thread gets one owned area, evidence requirements, an integration contract,
 and a unit-scoped goal before editing. The main thread integrates and gates Done
 on each unit's evidence, build/tests/smoke, and read-only final verification.
 ```

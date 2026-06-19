@@ -71,7 +71,7 @@ units serially in the main thread. First verify the repo is an established git
 project with a usable HEAD; if not, bootstrap git + scaffold + shared
 interfaces in the main thread. Then create one separate thread with
 create_thread per write unit, each in its own worktree. In each child thread's
-initial prompt, assign exactly one unit, owned surface, validation evidence,
+initial prompt, assign exactly one unit, owned area, validation evidence,
 integration contract, and instruct it to set a unit-scoped goal before editing.
 Run child threads in parallel, integrate in the main thread, and gate Done on
 every unit's evidence plus build, tests, browser smoke, and a read-only subagent

@@ -22,7 +22,7 @@ When work splits into independent, separately verifiable units, the goal carries
 the decomposition structure:
 
 - a discovery rule for the units
-- an owned surface and evidence requirement for each unit
+- an owned area and evidence requirement for each unit
 - item-by-item progress expectations
 - a parent integration check
 - a final independent verification pass
@@ -37,7 +37,7 @@ For non-trivial write units in an established Codex project with a usable git
 HEAD, the goal makes `create_thread` worktree fan-out mandatory:
 
 - one separate thread per write unit
-- one owned surface per child thread
+- one owned area per child thread
 - evidence and an integration contract for each unit
 - a unit-scoped goal in each child before editing
 - main-thread integration after all child evidence returns
@@ -62,9 +62,9 @@ For non-trivial work, goal-setter considers:
 
 - outcome and why it matters
 - objective and Done condition
-- evidence surface and validation
+- evidence source and validation
 - read-first anchors
-- hard boundaries and anti-gaming rules
+- hard boundaries and rules against weakening required checks
 - progress rules for long runs
 - stop conditions
 - independent verification

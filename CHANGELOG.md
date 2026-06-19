@@ -3,6 +3,26 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.8.9
+
+- **Recover the real requested outcome before implementation starts.** Added
+  guidance for broad product/system requests to define what must actually run,
+  connect, persist, produce, or be inspectable before treating a mock,
+  screenshot, scaffold, static dashboard, isolated component, or demo-data loop
+  as Done. Working systems now require the smallest complete user path plus
+  observable pass/fail checks before optional breadth.
+- **Support research and strategy goals without turning the first hypothesis
+  into the conclusion.** Uncertain work now has to leave room for hypothesis
+  generation, evidence gathering, counterevidence, confidence, unresolved
+  questions, and updates before synthesis; parallel research/review units may
+  be hypotheses, source families, stakeholder perspectives, risk areas, or
+  attempts to disprove the conclusion.
+- **Replace jargon with plainer execution language.** The skill and README now
+  use phrases such as "what must be achieved," "what would prove it," "path from
+  the user's request to the expected result," "pass/fail checks," and "no
+  visible dead ends" instead of internal shorthand like real value path,
+  acceptance matrix, hypothesis ledger, or anti-gaming.
+
 ## 0.8.8
 
 - **Pin only real invariants; leave executor judgment open.** The contract
