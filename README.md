@@ -38,6 +38,8 @@ A generated goal usually includes:
 - the intended outcome and why it matters
 - pass/fail Done criteria
 - validation commands or evidence to check
+- concrete checks where possible: counts, named files, screens, cases, timings, error messages, or before/after states
+- separate checks for each named item, without treating demos or substitutes as Done
 - the path from the user's request to the expected result, with pass/fail checks for software or output a user will directly use
 - what must be understood before execution
 - a question-and-hypothesis loop for uncertain research: central question, competing hypotheses, rejection criteria, evidence updates, and review that tries to disprove weak conclusions

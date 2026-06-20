@@ -3,6 +3,21 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.8.11
+
+- **Make checks concrete when the work allows it.** Goals now ask for counts,
+  named files, screens, cases, timings, error messages, or before/after states
+  instead of vague "better" or "works" checks when a concrete check is
+  available.
+- **Keep named items tied to their own checks.** If the user names specific
+  files, models, APIs, pages, or cases, the goal now requires those exact things
+  to be checked separately. Samples, demos, or substitutes can support the run,
+  but they no longer complete a named requirement unless the user allowed that
+  substitution.
+- **Leave a rerun path when blocked.** When an outside asset, account, service,
+  or permission blocks the real check, the goal now asks for the smallest next
+  user action and a command or check to rerun when practical.
+
 ## 0.8.10
 
 - **Make hypothesis-driven research explicitly iterative.** Research goals now
