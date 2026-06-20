@@ -50,6 +50,7 @@ A generated goal usually includes:
 - stop conditions for blocked, unsafe, or looping runs
 - independent verification before Done
 - parallelization rules for subagents, `create_thread`, worktrees, and child goals
+- parent-chosen subagent waves for read-only investigation, review, debugging, and verification instead of fixed counts
 
 The goal stays short by default. Hard imperatives are reserved for real
 invariants; implementation order, internal design, and exact file boundaries stay
@@ -63,6 +64,7 @@ run choose the right Codex execution structure.
 - It reconstructs the intended outcome before drafting.
 - It asks only for ambiguity that changes the outcome, evidence, scope, or risk.
 - It separates read-only subagent work from write-thread work.
+- It leaves subagent count and waves to the parent agent, based on independence, risk, cost, and how much evidence it can integrate.
 - It tells child threads to set their own unit-scoped goals before editing.
 - It uses behavioral coupling, shared state, and integration risk before file
   layout when deciding whether work can split.

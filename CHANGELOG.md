@@ -3,6 +3,15 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## Unreleased
+
+- **Leave subagent fan-out size to the parent agent.** Goals now avoid fixed
+  subagent counts unless the user asks for one. The parent agent chooses the
+  number and waves of read-only subagents from independence, risk, cost, and how
+  much evidence it can integrate; it synthesizes each wave before launching
+  more. The rule applies beyond research to review, debugging, migration, and
+  development discovery.
+
 ## 0.8.11
 
 - **Make checks concrete when the work allows it.** Goals now ask for counts,

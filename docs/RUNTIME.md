@@ -29,7 +29,10 @@ the decomposition structure:
 
 Separability is judged by behavioral coupling, shared state, and integration
 risk before file layout. File paths are clues after reading the repo, not the
-first-principles boundary.
+first-principles boundary. Do not fix a subagent count unless the user requested
+one; the parent agent chooses the number and waves based on independence, risk,
+cost, and how much evidence it can integrate. It should synthesize each wave
+before launching more.
 
 ## Codex
 
@@ -43,7 +46,10 @@ HEAD, the goal makes `create_thread` worktree fan-out mandatory:
 - main-thread integration after all child evidence returns
 
 `spawn_agent` remains the default for read-only work: research, review, final
-verification, log analysis, and other noisy or parallelizable checks.
+verification, log analysis, existing-behavior discovery, and other noisy or
+parallelizable checks. Subagents return evidence, counterevidence, uncertainty,
+gaps, or read-only findings; the parent keeps synthesis, write decisions, and
+final judgment.
 
 If `create_thread` is unavailable, the workspace is not a usable git/worktree
 base, or the write unit is too small for worktree isolation, the goal says so
