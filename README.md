@@ -1,17 +1,17 @@
 # goal-setter
 
-**Turn a rough request into an outcome-first `/goal` contract for Codex.**
+**Turn a rough request into a Codex `/goal` that says what success means and how to run it.**
 
-goal-setter is a Codex skill that writes compact completion contracts for long
-agent runs: objective, Done criteria, verification, constraints, stop rules,
-and when to use subagents, `create_thread`, and worktrees.
+goal-setter is a Codex skill that turns rough work into compact goals for long
+agent runs: expected result, Done criteria, verification, constraints, stop
+rules, and when to use subagents, `create_thread`, and worktrees.
 
 Built for **Codex**. Works on **Claude Code** too.
 
 [日本語](README.ja.md)
 
 <p align="center">
-  <img src="assets/goal-setter-icon.png" alt="Goal Setter icon: loose requests converging into a checked goal contract" width="180">
+  <img src="assets/goal-setter-icon.png" alt="Goal Setter icon: loose requests converging into a checked goal" width="180">
 </p>
 
 ## Why
@@ -40,7 +40,7 @@ A generated goal usually includes:
 - validation commands or evidence to check
 - the path from the user's request to the expected result, with pass/fail checks for software or output a user will directly use
 - what must be understood before execution
-- running hypotheses, counterevidence, and review that tries to disprove weak conclusions for uncertain research or strategy work
+- a question-and-hypothesis loop for uncertain research: central question, competing hypotheses, rejection criteria, evidence updates, and review that tries to disprove weak conclusions
 - the first files or sources to read, without over-enumerating paths
 - constraints, including a rule that checks must not pass by weakening tests
 - compatibility and quality rules that preserve only real boundaries while
@@ -49,14 +49,14 @@ A generated goal usually includes:
 - independent verification before Done
 - parallelization rules for subagents, `create_thread`, worktrees, and child goals
 
-The contract stays short by default. Hard imperatives are reserved for real
+The goal stays short by default. Hard imperatives are reserved for real
 invariants; implementation order, internal design, and exact file boundaries stay
 open unless they are part of the requirement.
 
 ## What Is Different
 
 Most prompt helpers make a clearer instruction. goal-setter tries to make the
-run choose the right execution structure.
+run choose the right Codex execution structure.
 
 - It reconstructs the intended outcome before drafting.
 - It asks only for ambiguity that changes the outcome, evidence, scope, or risk.
@@ -170,7 +170,7 @@ Treat faction simulation, event generation, enemy/boss mutation, rewards/relics,
 and HUD/smoke evidence as separately verifiable write units. In Codex, do not
 implement those units serially in the main thread. Create one separate
 create_thread worktree per write unit when the repo supports it; each child
-thread gets one owned area, evidence requirements, an integration contract,
+thread gets one owned area, evidence requirements, an integration rule,
 and a unit-scoped goal before editing. The main thread integrates and gates Done
 on each unit's evidence, build/tests/smoke, and read-only final verification.
 ```

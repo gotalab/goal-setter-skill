@@ -38,7 +38,7 @@ HEAD, the goal makes `create_thread` worktree fan-out mandatory:
 
 - one separate thread per write unit
 - one owned area per child thread
-- evidence and an integration contract for each unit
+- evidence and an integration rule for each unit
 - a unit-scoped goal in each child before editing
 - main-thread integration after all child evidence returns
 
@@ -69,6 +69,7 @@ For non-trivial work, goal-setter considers:
 - stop conditions
 - independent verification
 - final report expectations
+- a question-and-hypothesis loop for uncertain research, including rejection criteria and stop rules
 
-Short tasks get short contracts. Clauses that would not change the run are
+Short tasks get short goals. Clauses that would not change the run are
 dropped.

@@ -3,6 +3,21 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.8.10
+
+- **Make hypothesis-driven research explicitly iterative.** Research goals now
+  require a central question, out-of-scope questions, competing hypotheses,
+  rejection criteria, evidence passes, confidence updates, reject/merge/split
+  decisions, new hypothesis generation, and a stop rule. At least one pass must
+  try to disprove the leading conclusion, and the final report must show
+  surviving and rejected hypotheses, unresolved questions, and next verification
+  steps.
+- **Make the public wording plainer.** README, skill metadata, and plugin UI
+  text now describe goal-setter as shaping rough requests into Codex goals with
+  expected results, Done checks, verification, constraints, stop rules, and
+  subagent/create_thread guidance, instead of leading with phrases like
+  outcome-first completion contract.
+
 ## 0.8.9
 
 - **Recover the real requested outcome before implementation starts.** Added

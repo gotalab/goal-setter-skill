@@ -1,7 +1,7 @@
 {
   "name": "goal-setter",
-  "version": "0.8.9",
-  "description": "Shape rough requests into compact, outcome-first /goal completion contracts before long autonomous runs. Reconstructs the intended outcome first, uses bounded evidence gathering, forbids weakening required checks, and requires independent verification plus a readiness check — for Codex and Claude Code.",
+  "version": "0.8.10",
+  "description": "Shape rough requests into Codex-ready goals for long autonomous runs. Defines the expected result, Done checks, verification, constraints, stop rules, and when to use subagents or create_thread; also works with Claude Code /goal.",
   "author": {
     "name": "gotalab"
   },
@@ -11,7 +11,6 @@
     "goal",
     "autonomous",
     "long-running",
-    "completion-contract",
     "meta-prompting",
     "claude-code",
     "codex"
