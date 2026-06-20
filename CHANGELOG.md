@@ -3,7 +3,7 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
-## Unreleased
+## 0.8.12
 
 - **Leave subagent fan-out size to the parent agent.** Goals now avoid fixed
   subagent counts unless the user asks for one. The parent agent chooses the
