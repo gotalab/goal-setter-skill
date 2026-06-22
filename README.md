@@ -4,7 +4,8 @@
 
 goal-setter is a Codex skill that turns rough work into compact goals for long
 agent runs: expected result, Done criteria, verification, constraints, stop
-rules, and when to use extra reviewers or separate threads.
+rules, when to clarify one question at a time, and when to use extra reviewers
+or separate threads.
 
 Built for **Codex**. Works on **Claude Code** too.
 
@@ -43,8 +44,10 @@ A generated goal usually includes:
 - concrete checks where possible: counts, named files, screens, cases, timings, error messages, or before/after states
 - separate checks for each named item, without treating demos or substitutes as Done
 - the path from the user's request to the expected result, with pass/fail checks for software or output a user will directly use
-- updates to an existing canonical artifact when one already exists, instead of
+- updates to an existing primary file when one already exists, instead of
   duplicating spreadsheets, reports, docs, dashboards, or tracking files
+- one-question-at-a-time clarification when the user asks for it or a missing
+  decision would change Done
 - what must be understood before execution
 - a question-and-hypothesis loop for uncertain research: central question, competing hypotheses, rejection criteria, evidence updates, and review that tries to disprove weak conclusions
 - the first files or sources to read, without over-enumerating paths
@@ -70,6 +73,8 @@ run choose the right Codex execution structure.
 
 - It reconstructs the intended outcome before drafting.
 - It asks only for ambiguity that changes the outcome, evidence, scope, or risk.
+- It uses one-question-at-a-time clarification only when the user asks for it or
+  a missing decision would change the goal.
 - It keeps small work light and separates read-only review from write-thread work.
 - It leaves subagent count and waves to the parent agent, based on independence, risk, cost, and how much evidence it can integrate.
 - It names `spawn_agent` for separate read-only review only when that review

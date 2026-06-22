@@ -3,6 +3,16 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.8.16
+
+- **Add bounded clarification mode.** When the user asks to be grilled or a
+  missing decision would change Done, the skill now asks one material question
+  at a time with a recommended answer. It reads code, docs, or sources instead
+  of asking when the answer is discoverable.
+- **Keep the contract leaner.** The parallel-work and research guidance is
+  shorter, and existing tracking/report files are described as existing primary
+  files instead of a heavier canonical-artifact rule.
+
 ## 0.8.15
 
 - **Keep small goals light.** Done review is now matched to risk: clear

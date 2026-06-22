@@ -34,6 +34,15 @@ one; the parent agent chooses the number and waves based on independence, risk,
 cost, and how much evidence it can integrate. It should synthesize each wave
 before launching more.
 
+## Clarification
+
+goal-setter asks before drafting only when the missing answer could change Done,
+evidence, scope, risk, or stop conditions. If the user asks to be grilled or to
+fully clarify a plan, it asks one material question at a time with a recommended
+answer, waits for feedback, and continues only while the next answer could still
+change the goal. If code, docs, or sources can answer the question, it checks
+those instead of asking.
+
 ## Codex
 
 Use `create_thread` only when all of these are true:
@@ -71,8 +80,9 @@ For non-trivial work, goal-setter considers:
 - evidence source and validation
 - compression around outcome, evidence, constraints, boundaries, iteration
   policy, and blocked stop condition
-- existing canonical artifact reuse for requested spreadsheets, reports, docs,
+- existing primary file reuse for requested spreadsheets, reports, docs,
   dashboards, or tracking files
+- one-question-at-a-time clarification when requested or materially needed
 - read-first anchors
 - hard boundaries and rules against weakening required checks
 - progress rules for long runs
