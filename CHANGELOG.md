@@ -3,6 +3,15 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.9.1
+
+- **Trim README back into an entry page.** README.md and README.ja.md now keep
+  the install path, when-to-use guidance, and links to detailed docs instead of
+  repeating runtime rules and long examples.
+- **Make Japanese docs plainer.** README.ja.md, docs/RUNTIME.ja.md, and
+  docs/EXAMPLES.ja.md now avoid unnecessary agent jargon while keeping required
+  tool names such as `spawn_agent` and `create_thread`.
+
 ## 0.9.0
 
 - **Make short goals the default starting point.** Length guidance now starts

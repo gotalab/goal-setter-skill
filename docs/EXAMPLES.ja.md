@@ -1,112 +1,107 @@
-# Examples
+# 例
 
-goal-setter の出力例です。実際の run では、先に repo や資料を読み、実在するファイル、検証コマンド、制約を入れ、結果に影響しない条項は落とします。
+goal-setter の出力例です。実際には、先にコードや資料を読み、実在するファイル、確認コマンド、守る条件を入れます。結果に影響しない内容は落とします。
 
-## 小さい Refactor
+## 小さい整理
 
-Before:
+入力:
 
 ```text
-refactor 後の checkout settings をきれいにする goal をセットして
+リファクタ後の checkout 設定をきれいにする goal を設定して
 ```
 
-After:
+出力例:
 
 ```text
-/goal checkout settings page の挙動を変えずに、refactor で増えた
-loading/error state の重複分岐を取り除く。先に settings page component、
-隣接テスト、既存 settings UI pattern を読む。public props、billing copy、
-Stripe/webhook behavior、pricing logic は変えない。refactor を広げない。
-focused checkout settings tests と repo の type/lint check がすべて green
-であることを確認し、通すためにテストを弱めたり削除したりしない。Done は重複分岐が
-消え、UI state が維持され、すべての check が通ったときだけ。
+/goal checkout 設定画面の表示と動きを変えずに、リファクタで増えた
+読み込み中・エラー時の重複分岐を取り除く。先に設定画面、近くのテスト、
+既存の表示パターンを読む。外から使われる入口、請求まわりの文言、
+支払い連携、価格の計算は変えない。作業範囲を広げない。関連する設定画面の
+テストと、型・整形の確認がすべて通ることを確かめる。通すためにテストを弱めたり
+削除したりしない。完了は、重複分岐が消え、画面の状態が保たれ、すべての確認が
+通った時だけ。
 ```
 
 ## 長い実装
 
-Before:
+入力:
 
 ```text
-invoice export を end-to-end で作る goal をセットして
+invoice export を最後まで作る goal を設定して
 ```
 
-After:
+出力例:
 
 ```text
-/goal billing admin が既存 admin surface から invoice CSV export を実行
-できるようにする。invoice calculation semantics は変えない。編集前に現在の
-billing data path、permission、export convention を復元する。既存 admin
-pattern に合う最小設計を選び、billing model、payment flow、無関係な admin UI
-は書き換えない。permission、filter、empty export、CSV escaping、
-operator-visible な success/failure path の focused tests を追加する。
-意思決定と証拠は簡潔な execution-notes.md に残す。関連 tests、typecheck、
-代表 CSV を download できる manual/smoke path で検証する。Done は test が
-通り、CSV が documented columns と一致し、smoke evidence で billing behavior
-drift なく export できると確認できたときだけ。
+/goal 請求管理者が既存の管理画面から invoice CSV を出力できるようにする。
+請求金額の計算方法は変えない。編集前に、現在の請求データの流れ、権限、
+出力の決まりを確認する。既存の管理画面に合う最小の作り方を選び、請求モデル、
+支払いの流れ、無関係な管理画面は書き換えない。権限、絞り込み、空の出力、
+CSV の文字の扱い、利用者に見える成功・失敗表示のテストを追加する。判断と証拠は
+短い execution-notes.md に残す。関連テスト、型の確認、代表的な CSV を
+ダウンロードできる確認で検証する。完了は、テストが通り、CSV が決められた列と
+一致し、請求の動きが変わっていないと確認できた時だけ。
 ```
 
-## `create_thread` が必要な並列実装
+## 別スレッドが必要な実装
 
-Before:
+入力:
 
 ```text
 game の faction が events, enemies, bosses, rewards, HUD, save-load,
-smoke evidence に効く goal をセットして
+画面確認の証拠に効く goal を設定して
 ```
 
-After:
+出力例:
 
 ```text
-/goal 1 run の中で faction ecosystem を観測できる状態にする: pressure と
+/goal 1回の実行の中で faction の影響を観測できる状態にする。pressure と
 player history が faction power を変え、それが room events、enemy mutations、
-bosses、rewards、HUD、persistence、browser smoke evidence に反映される。
+bosses、rewards、HUD、保存と読み込み、画面確認の証拠に反映される。
 faction simulation、event generation、enemy/boss mutation、rewards/relics、
-HUD/smoke evidence を個別検証できる write unit として扱う。Codex では
-各 unit に安定した担当範囲、個別の確認方法、理解済みの共有部分、既に使える
-git/worktree があるかを先に確認する。どれか欠けるなら serial に進めるか、repo
-構造を変える前に確認する。全部そろう場合だけ write unit ごとに `create_thread`
-worktree を作る。各 child thread には1つの unit、担当範囲、validation evidence、
-integration contract、編集前に unit-scoped goal を立てる指示を渡す。main thread
-が統合し、各 unit の証拠、build、tests、browser smoke が揃った時だけ Done。
+HUD/画面確認の証拠を別々に確認できる作業単位として扱う。Codex では、各単位に
+安定した担当範囲、個別の確認方法、理解済みの共有部分、既に使える Git の作業場所が
+あるかを先に確認する。どれか欠けるなら直列で進めるか、コード構造を変える前に確認
+する。全部そろう場合だけ作業単位ごとに `create_thread` を作る。各スレッドには
+1つの担当範囲、必要な証拠、統合ルール、編集前にその範囲だけの Goal を立てる指示を
+渡す。親スレッドが統合し、各単位の証拠、ビルド、テスト、画面確認が揃った時だけ完了。
 ```
 
-## ビジネスタスク
+## 資料作り
 
-Before:
+入力:
 
 ```text
-散らかった QBR メモを、経営に出せる形にする goal をセットして
+散らかった QBR メモを、経営に出せる形にする goal を設定して
 ```
 
-After:
+出力例:
 
 ```text
-/goal 共有されたメモと source files から、leadership-ready な QBR brief を
-作る。内容は current performance、risks、decisions needed、next actions に
-整理する。先に notes、source sheets/docs、前回 QBR format を読む。
-confirmed facts と assumptions を分け、数字・owner・customer quote・
-commitment を捏造しない。証拠がないものは unconfirmed として残す。
-すべての metric と重要 claim を named source に対応づけ、前回 format と照合する。
-source map だけでは unsupported claims を見逃しそうな場合だけ、独立した読み取り確認を使う。
-Done は共有可能な brief ができ、open questions が明示されているときだけ。
+/goal 共有されたメモと元資料から、経営向けに読める QBR 資料を作る。内容は
+現在の状況、リスク、必要な判断、次の行動に整理する。先にメモ、元の表や文書、
+前回の QBR 形式を読む。確認済みの事実と仮定を分け、数字、担当者、顧客発言、
+約束を作り上げない。証拠がないものは未確認として残す。すべての重要な数字と主張を
+元資料に対応づけ、前回の形式と照合する。元資料との対応だけでは支えのない主張を
+見落としそうな場合だけ、別の読み取り確認を使う。完了は、共有できる資料ができ、
+未解決の質問が明示されている時だけ。
 ```
 
 ## 日常タスク
 
-Before:
+入力:
 
 ```text
-apartment application を出せるところまで進める goal をセットして
+apartment application を出せるところまで進める goal を設定して
 ```
 
-After:
+出力例:
 
 ```text
-/goal apartment application package を submit-ready にする。ただし、送信・
-署名・支払い・private information の共有は明示承認なしに行わない。必要書類を
-棚卸しし、ユーザーが持っている files/notes と照合し、足りない message/checklist
-items を下書きし、提出前に見ればよい packet と remaining blockers を作る。
-sensitive data は local に保ち、書類や日付を捏造しない。Done はすべての
-required item が ready / missing / needs user action のどれかに分類され、
-最終 checklist が submission 前にユーザーが確認すべきことを明確に示したときだけ。
+/goal apartment application の提出直前まで準備する。ただし、送信、署名、
+支払い、個人情報の共有は明示承認なしに行わない。必要書類を洗い出し、ユーザーが
+持っているファイルやメモと照合し、足りない連絡文やチェック項目を下書きし、
+提出前に見ればよい一式と残った妨げを作る。個人情報は手元に保ち、書類や日付を
+作り上げない。完了は、すべての必要項目が ready / missing / needs user action
+のどれかに分類され、提出前にユーザーが確認すべきことが最終チェック表で分かる時だけ。
 ```
