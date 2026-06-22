@@ -7,14 +7,14 @@ goal and parallelism mechanisms that already exist in the runtime.
 
 | Runtime | Behavior |
 | --- | --- |
-| Codex, ordinary work | goal-setter can set the goal with the native goal tool |
-| Codex, decomposable parallel work | goal-setter returns a `/goal ...` line for the user to send |
+| Codex, no worker-tool launch needed | goal-setter can set the goal with the native goal tool |
+| Codex, `spawn_agent` or `create_thread` needed | goal-setter returns a `/goal ...` line for the user to send |
 | Claude Code | goal-setter returns a `/goal ...` line for the user to send |
 
-The Codex parallel case is different because `spawn_agent` and `create_thread`
-are gated to explicit user requests. A tool-set goal can describe the desired
-work, but the user-sent `/goal ...` line is what authorizes the parallel
-cascade.
+The Codex worker-tool case is different because `spawn_agent` and
+`create_thread` are gated to explicit user requests. A tool-set goal can
+describe the desired work, but the user-sent `/goal ...` line is what authorizes
+those tools, even when `spawn_agent` is only used for final verification.
 
 ## Parallel Work
 

@@ -3,6 +3,16 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.8.14
+
+- **Clarify Codex worker-tool activation.** Any Codex goal that must launch
+  `spawn_agent` or `create_thread` is now returned as a user-sent `/goal`, even
+  when `spawn_agent` is only for final verification. Native `create_goal` is
+  reserved for goals that do not need those worker tools.
+- **Align examples with the runtime rule.** README and examples now name
+  `spawn_agent` explicitly and use the same `create_thread` bootstrap wording as
+  the skill body.
+
 ## 0.8.13
 
 - **Compress goals around the official contract shape.** The skill now asks for

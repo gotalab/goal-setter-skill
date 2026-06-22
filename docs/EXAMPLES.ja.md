@@ -19,9 +19,9 @@ loading/error state の重複分岐を取り除く。先に settings page compon
 Stripe/webhook behavior、pricing logic は変えない。refactor を広げない。
 focused checkout settings tests と repo の type/lint check がすべて green
 であることを確認し、通すためにテストを弱めたり削除したりしない。Done 前に
-read-only subagent を spawn して、diff が既存挙動と検証結果を保っていることを
-確認する。Done は重複分岐が消え、UI state が維持され、すべての check が
-通ったときだけ。
+read-only subagent (`spawn_agent`) を spawn して、diff が既存挙動と検証結果を
+保っていることを確認する。Done は重複分岐が消え、UI state が維持され、すべての
+check が通ったときだけ。
 ```
 
 ## 長い実装
@@ -91,8 +91,8 @@ After:
 confirmed facts と assumptions を分け、数字・owner・customer quote・
 commitment を捏造しない。証拠がないものは unconfirmed として残す。
 すべての metric と重要 claim を named source に対応づけ、前回 format と
-照合し、read-only subagent で unsupported claims がないか確認する。Done は
-共有可能な brief ができ、open questions が明示されているときだけ。
+照合し、read-only subagent (`spawn_agent`) で unsupported claims がないか
+確認する。Done は共有可能な brief ができ、open questions が明示されているときだけ。
 ```
 
 ## 日常タスク

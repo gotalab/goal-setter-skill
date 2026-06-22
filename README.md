@@ -154,15 +154,16 @@ Draft a goal without activating it:
 $goal-setter draft a goal for migrating our API client to v2
 ```
 
-Shape and activate when the runtime can set the goal directly:
+Shape and activate when the runtime can set the goal directly and no Codex
+worker tool must launch:
 
 ```text
 $goal-setter set a goal: all checkout tests pass after the refactor
 ```
 
-For decomposable Codex work, goal-setter gives you an exact `/goal ...` line to
-send yourself. That user-sent line is what authorizes Codex parallelism such as
-`spawn_agent` and `create_thread`.
+For Codex work that must launch `spawn_agent` or `create_thread`, goal-setter
+gives you an exact `/goal ...` line to send yourself. That user-sent line is what
+authorizes those worker tools.
 
 ## Example
 
@@ -182,21 +183,24 @@ bosses, rewards, HUD, persistence, and browser smoke evidence.
 
 Treat faction simulation, event generation, enemy/boss mutation, rewards/relics,
 and HUD/smoke evidence as separately verifiable write units. In Codex, do not
-implement those units serially in the main thread. Create one separate
-create_thread worktree per write unit when the repo supports it; each child
-thread gets one owned area, evidence requirements, an integration rule,
-and a unit-scoped goal before editing. The main thread integrates and gates Done
-on each unit's evidence, build/tests/smoke, and final verification by a read-only
-subagent (`spawn_agent`).
+implement those units serially in the main thread. First verify the repo is an
+established git project with a usable HEAD; if not, bootstrap git, scaffold, and
+shared interfaces in the main thread. Then create one `create_thread` worktree
+per write unit; each child thread gets one owned area, evidence requirements, an
+integration rule, and a unit-scoped goal before editing. The main thread
+integrates and gates Done on each unit's evidence, build/tests/smoke, and final
+verification by a read-only subagent (`spawn_agent`).
 ```
 
 More examples: [docs/EXAMPLES.md](docs/EXAMPLES.md)
 
 ## Runtime Notes
 
-- Codex ordinary goals can be set through the native goal tool.
-- Codex parallel goals are handed back as a user-sent `/goal ...` line because
-  Codex parallel tools fire from explicit user requests.
+- Codex goals that do not need `spawn_agent` or `create_thread` can be set
+  through the native goal tool.
+- Codex goals that must launch `spawn_agent` or `create_thread` are handed back
+  as a user-sent `/goal ...` line because those tools fire from explicit user
+  requests.
 - Claude Code receives the exact `/goal ...` line and can realize the same
   decomposition as a dynamic workflow.
 

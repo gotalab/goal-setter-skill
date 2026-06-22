@@ -21,9 +21,10 @@ settings page component, adjacent tests, and existing settings UI patterns
 first. Keep public props, billing copy, Stripe/webhook behavior, and pricing
 logic unchanged; do not broaden the refactor. Validate with the focused
 checkout settings tests and the repo's type/lint check, all green; do not
-weaken or delete tests. Before Done, spawn a read-only subagent to verify the
-diff against the preserved behavior and checks; do not self-review. Done when
-the duplicate branch is gone, UI states still render, and all checks pass.
+weaken or delete tests. Before Done, spawn a read-only subagent (`spawn_agent`)
+to verify the diff against the preserved behavior and checks; do not
+self-review. Done when the duplicate branch is gone, UI states still render, and
+all checks pass.
 ```
 
 ## Long Implementation
@@ -96,8 +97,9 @@ format first. Separate confirmed facts from assumptions; do not invent numbers,
 owners, customer quotes, or commitments. Preserve uncertainty as "unconfirmed"
 when evidence is missing. Validate by mapping every metric and material claim
 back to a named source, checking the brief against the prior format, and
-spawning a read-only subagent to review for unsupported claims. Done when the
-brief is ready to share and all open questions are explicitly listed.
+spawning a read-only subagent (`spawn_agent`) to review for unsupported claims.
+Done when the brief is ready to share and all open questions are explicitly
+listed.
 ```
 
 ## Daily Task
@@ -158,8 +160,8 @@ docs/v2-migration.md first. Keep changes scoped to the migration: exported
 src/api functions keep their current signatures and request behavior; no
 refactors or features beyond it. Validate with npm test, npm run build, and
 npm run lint, all green; do not weaken, skip, or delete tests. Before claiming
-Done, spawn a read-only subagent to verify the diff against the migration doc;
-do not self-review. Done when grep finds zero @acme/api-client references in
-src/ and tests/ and all three checks pass. If a v1 behavior has no v2
-equivalent, stop and ask rather than approximate.
+Done, spawn a read-only subagent (`spawn_agent`) to verify the diff against the
+migration doc; do not self-review. Done when grep finds zero @acme/api-client
+references in src/ and tests/ and all three checks pass. If a v1 behavior has no
+v2 equivalent, stop and ask rather than approximate.
 ```

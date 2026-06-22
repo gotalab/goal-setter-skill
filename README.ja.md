@@ -130,13 +130,13 @@ npx skills add gotalab/goal-setter-skill
 $goal-setter APIクライアントのv2移行のgoalをドラフトして
 ```
 
-runtime が直接 set できる場合に、整形して発動する:
+runtime が直接 set でき、Codex の worker tool を起動しない場合に、整形して発動する:
 
 ```text
 $goal-setter goalをセットして: リファクタ後にcheckoutテストが全部通ること
 ```
 
-Codex で分解可能な作業の場合は、goal-setter がそのまま送れる `/goal ...` 行を返します。Codex の `spawn_agent` や `create_thread` は、ユーザー自身が送った依頼から発火するためです。
+Codex で `spawn_agent` や `create_thread` を起動する必要がある場合は、goal-setter がそのまま送れる `/goal ...` 行を返します。これらの tool は、ユーザー自身が送った依頼から発火するためです。
 
 ## 例
 
@@ -157,19 +157,20 @@ mutations、bosses、rewards、HUD、persistence、browser smoke evidence に
 
 faction simulation、event generation、enemy/boss mutation、rewards/relics、
 HUD/smoke evidence を個別検証できる write unit として扱う。Codex では
-main thread で serial 実装しない。repo が対応していれば write unit ごとに
-create_thread の worktree を作る。各 child thread には1つの担当範囲、検証証拠、
-統合ルール、編集前に unit-scoped goal を立てる指示を渡す。main thread が統合し、
-各 unit の証拠、build/tests/smoke、read-only subagent (`spawn_agent`) による
-最終検証が揃った時だけ Done。
+main thread で serial 実装しない。まず repo が usable HEAD を持つ established
+git project か確認し、そうでなければ main thread で git、scaffold、shared
+interfaces を bootstrap する。その後、write unit ごとに `create_thread` worktree
+を作る。各 child thread には1つの担当範囲、検証証拠、統合ルール、編集前に
+unit-scoped goal を立てる指示を渡す。main thread が統合し、各 unit の証拠、
+build/tests/smoke、read-only subagent (`spawn_agent`) による最終検証が揃った時だけ Done。
 ```
 
 詳しい例: [docs/EXAMPLES.ja.md](docs/EXAMPLES.ja.md)
 
 ## Runtime Notes
 
-- 通常の Codex goal は native goal tool で set できます。
-- Codex の並列 goal は、ユーザーが送る `/goal ...` 行として渡します。
+- `spawn_agent` や `create_thread` を起動しない Codex goal は native goal tool で set できます。
+- `spawn_agent` や `create_thread` を起動する Codex goal は、ユーザーが送る `/goal ...` 行として渡します。
 - Claude Code には `/goal ...` 行を渡し、同じ分解構造を dynamic workflow として実行させます。
 
 詳細: [docs/RUNTIME.ja.md](docs/RUNTIME.ja.md)
