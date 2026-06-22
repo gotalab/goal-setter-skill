@@ -1,6 +1,6 @@
 {
   "name": "goal-setter",
-  "version": "0.8.16",
+  "version": "0.8.17",
   "description": "Draft or activate compact Codex goals for verifiable long runs. Defines Done, evidence, constraints, stop rules, limited clarification, and only worthwhile extra review or separate threads.",
   "author": {
     "name": "gotalab",

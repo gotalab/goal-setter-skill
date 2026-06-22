@@ -45,8 +45,8 @@ permissions, filters, empty exports, CSV escaping, and operator-visible
 success/failure paths. Keep concise execution-notes.md checkpoints for decisions
 and evidence. Validate with relevant unit/integration tests, typecheck, and a
 manual or smoke path that downloads a representative CSV. Done only when tests
-pass, the CSV matches the documented columns, and a read-only subagent
-(`spawn_agent`) verifies there is no billing behavior drift.
+pass, the CSV matches the documented columns, and the smoke evidence shows the
+export works without billing behavior drift.
 ```
 
 ## Parallel Implementation With `create_thread`
@@ -94,10 +94,10 @@ needed, and next actions. Read the notes, source sheets/docs, and prior QBR
 format first. Separate confirmed facts from assumptions; do not invent numbers,
 owners, customer quotes, or commitments. Preserve uncertainty as "unconfirmed"
 when evidence is missing. Validate by mapping every metric and material claim
-back to a named source, checking the brief against the prior format, and
-spawning a read-only subagent (`spawn_agent`) to review for unsupported claims.
-Done when the brief is ready to share and all open questions are explicitly
-listed.
+back to a named source and checking the brief against the prior format. Use an
+independent read-only review only if unsupported claims would be hard to catch
+from the source map. Done when the brief is ready to share and all open
+questions are explicitly listed.
 ```
 
 ## Daily Task
@@ -158,9 +158,8 @@ docs/v2-migration.md first. Keep changes scoped to the migration: exported
 src/api functions keep their current signatures and request behavior; no
 refactors or features beyond it. Validate with npm test, npm run build, and
 npm run lint, all green; do not weaken, skip, or delete tests. Before claiming
-Done, spawn a read-only subagent (`spawn_agent`) to verify the diff against the
-migration doc; do not use self-review as a substitute for that pass. Done when
-grep finds zero @acme/api-client references in src/ and tests/ and all three
-checks pass. If a v1 behavior has no v2 equivalent, stop and ask rather than
-approximate.
+Done, compare the diff against the migration doc and confirm no required mapping
+was skipped. Done when grep finds zero @acme/api-client references in src/ and
+tests/ and all three checks pass. If a v1 behavior has no v2 equivalent, stop
+and ask rather than approximate.
 ```

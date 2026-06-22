@@ -32,6 +32,20 @@ run should be. Small changes with clear tests should stay light; broad or risky
 work may need read-only reviewers; truly independent write units may need
 separate threads.
 
+## When to Use a Goal
+
+Do not turn every request into a Goal. Use a normal prompt for one clear edit,
+an explanation, or a one-time review. Use a Goal when the work has a durable
+objective, a verifiable stopping condition, and enough room for Codex to keep
+checking evidence and trying the next useful step.
+
+| Work | Better format |
+| --- | --- |
+| One clear operation or explanation | Normal prompt |
+| Narrow work that may need a few tries | One sentence or short-paragraph Goal |
+| Migration, performance work, broad bug fixing, or evidence-backed research | Standard Goal |
+| Long research or high-risk changes | Goal plus the smallest needed plan, checklist, or evaluation file |
+
 ## What It Writes
 
 A generated goal usually includes:

@@ -3,6 +3,18 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.8.17
+
+- **Make short goals the default starting point.** Length guidance now starts
+  from one sentence or one short paragraph and treats 800-1,800 characters as a
+  range for genuinely complex goals, not the default.
+- **Clarify when to use Goal.** README now separates normal prompts from Goals:
+  use Goals for durable, verifiable work that can keep checking evidence and
+  trying the next useful step.
+- **Lighten examples.** Example goals no longer add read-only reviewers by
+  default; independent review is reserved for cases where it could change the
+  Done decision.
+
 ## 0.8.16
 
 - **Add bounded clarification mode.** When the user asks to be grilled or a
