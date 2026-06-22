@@ -3,7 +3,7 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
-## 0.8.17
+## 0.9.0
 
 - **Make short goals the default starting point.** Length guidance now starts
   from one sentence or one short paragraph and treats 800-1,800 characters as a
