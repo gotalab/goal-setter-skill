@@ -46,8 +46,8 @@ permissions, filters, empty exports, CSV escaping, and operator-visible
 success/failure paths. Keep concise execution-notes.md checkpoints for decisions
 and evidence. Validate with relevant unit/integration tests, typecheck, and a
 manual or smoke path that downloads a representative CSV. Done only when tests
-pass, the CSV matches the documented columns, and independent read-only
-verification finds no billing behavior drift.
+pass, the CSV matches the documented columns, and a read-only subagent
+(`spawn_agent`) verifies there is no billing behavior drift.
 ```
 
 ## Parallel Implementation With `create_thread`
@@ -74,8 +74,8 @@ create_thread per write unit, each in its own worktree. In each child thread's
 initial prompt, assign exactly one unit, owned area, validation evidence,
 integration contract, and instruct it to set a unit-scoped goal before editing.
 Run child threads in parallel, integrate in the main thread, and gate Done on
-every unit's evidence plus build, tests, browser smoke, and a read-only subagent
-final verification.
+every unit's evidence plus build, tests, browser smoke, and final verification
+by a read-only subagent (`spawn_agent`).
 ```
 
 ## Business Task

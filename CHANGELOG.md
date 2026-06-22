@@ -3,6 +3,26 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.8.13
+
+- **Compress goals around the official contract shape.** The skill now asks for
+  a final pass around outcome, verification surface, constraints, boundaries,
+  iteration policy, and blocked stop condition, cutting explanations, examples,
+  broad file lists, ordinary command-parallelism, and tool mechanics that do not
+  change the run.
+- **Reuse existing canonical artifacts.** When a requested spreadsheet, report,
+  checklist, doc, dashboard, or tracking file already has a canonical artifact,
+  goals now say to update it instead of creating a duplicate.
+- **Make adversarial verification explicit but bounded.** High-risk correctness,
+  safety, UX, security, research, or evidence-quality claims can ask a
+  read-only `spawn_agent` to look for counterexamples, unsupported claims,
+  missing checks, and overclaims, but only when there is a concrete target to
+  attack.
+- **Keep parallel wording lighter.** `spawn_agent` and `create_thread` are still
+  named when the goal must launch them, but ordinary command parallelization is
+  left to the executor and the full `create_thread` directive is reserved for
+  multiple non-trivial, independently verifiable write units.
+
 ## 0.8.12
 
 - **Leave subagent fan-out size to the parent agent.** Goals now avoid fixed

@@ -1,7 +1,7 @@
 {
   "name": "goal-setter",
-  "version": "0.8.11",
-  "description": "Shape rough requests into Codex goals that define the expected result, Done checks, verification, constraints, stop rules, and when to use subagents or create_thread.",
+  "version": "0.8.13",
+  "description": "Shape rough requests into compact Codex goals that define the expected result, evidence, constraints, stop rules, artifact reuse, and when to use subagents or create_thread.",
   "author": {
     "name": "gotalab",
     "url": "https://github.com/gotalab"
@@ -19,14 +19,14 @@
   ],
   "interface": {
     "displayName": "Goal Setter",
-    "shortDescription": "Codex goals with Done checks and run rules",
-    "longDescription": "Turns a rough request into a compact /goal for Codex: expected result, Done checks, verification, constraints, stop rules, and whether to use subagents, create_thread, or a user-sent /goal line for parallel work. It asks only when missing information would change the result, evidence, scope, validation, or risk.",
+    "shortDescription": "Codex goals with evidence and run rules",
+    "longDescription": "Turns a rough request into a compact /goal for Codex: expected result, evidence, constraints, stop rules, existing artifact reuse, adversarial verification when useful, and whether to use subagents, create_thread, or a user-sent /goal line for parallel work. It asks only when missing information would change the result, evidence, scope, validation, or risk.",
     "developerName": "gotalab",
     "category": "Productivity",
     "defaultPrompt": [
-      "Set a goal: define the expected result, Done checks, verification, constraints, and how Codex should run it.",
+      "Set a goal: define the expected result, evidence, constraints, and how Codex should run it.",
       "Draft a Codex-ready goal for this task without activating it.",
-      "Shape this splittable work into a goal that structures the independent pieces for parallel execution."
+      "Shape this review or splittable work into a goal that uses subagents or create_thread only when needed."
     ],
     "brandColor": "#6F5BFF",
     "composerIcon": "./assets/goal-setter-composer-icon.png",

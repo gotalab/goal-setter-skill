@@ -25,7 +25,8 @@ the decomposition structure:
 - an owned area and evidence requirement for each unit
 - item-by-item progress expectations
 - a parent integration check
-- a final independent verification pass
+- a final independent verification pass, with adversarial review when a
+  high-risk claim has a concrete target to attack
 
 Separability is judged by behavioral coupling, shared state, and integration
 risk before file layout. File paths are clues after reading the repo, not the
@@ -36,8 +37,8 @@ before launching more.
 
 ## Codex
 
-For non-trivial write units in an established Codex project with a usable git
-HEAD, the goal makes `create_thread` worktree fan-out mandatory:
+For multiple non-trivial write units in an established Codex project with a
+usable git HEAD, the goal makes `create_thread` worktree fan-out mandatory:
 
 - one separate thread per write unit
 - one owned area per child thread
@@ -45,11 +46,11 @@ HEAD, the goal makes `create_thread` worktree fan-out mandatory:
 - a unit-scoped goal in each child before editing
 - main-thread integration after all child evidence returns
 
-`spawn_agent` remains the default for read-only work: research, review, final
-verification, log analysis, existing-behavior discovery, and other noisy or
-parallelizable checks. Subagents return evidence, counterevidence, uncertainty,
-gaps, or read-only findings; the parent keeps synthesis, write decisions, and
-final judgment.
+`spawn_agent` remains the default for read-only work: research, multi-aspect
+review, adversarial review, final verification, log analysis, existing-behavior
+discovery, and other noisy or parallelizable checks. Subagents return evidence,
+counterevidence, uncertainty, gaps, or read-only findings; the parent keeps
+synthesis, write decisions, and final judgment.
 
 If `create_thread` is unavailable, the workspace is not a usable git/worktree
 base, or the write unit is too small for worktree isolation, the goal says so
@@ -69,11 +70,16 @@ For non-trivial work, goal-setter considers:
 - outcome and why it matters
 - objective and Done condition
 - evidence source and validation
+- compression around outcome, evidence, constraints, boundaries, iteration
+  policy, and blocked stop condition
+- existing canonical artifact reuse for requested spreadsheets, reports, docs,
+  dashboards, or tracking files
 - read-first anchors
 - hard boundaries and rules against weakening required checks
 - progress rules for long runs
 - stop conditions
-- independent verification
+- independent verification, including adversarial review for high-risk claims
+  with a concrete target
 - final report expectations
 - a question-and-hypothesis loop for uncertain research, including rejection criteria and stop rules
 

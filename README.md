@@ -38,9 +38,13 @@ A generated goal usually includes:
 - the intended outcome and why it matters
 - pass/fail Done criteria
 - validation commands or evidence to check
+- a compression pass around outcome, verification surface, constraints,
+  boundaries, iteration policy, and blocked stop condition
 - concrete checks where possible: counts, named files, screens, cases, timings, error messages, or before/after states
 - separate checks for each named item, without treating demos or substitutes as Done
 - the path from the user's request to the expected result, with pass/fail checks for software or output a user will directly use
+- updates to an existing canonical artifact when one already exists, instead of
+  duplicating spreadsheets, reports, docs, dashboards, or tracking files
 - what must be understood before execution
 - a question-and-hypothesis loop for uncertain research: central question, competing hypotheses, rejection criteria, evidence updates, and review that tries to disprove weak conclusions
 - the first files or sources to read, without over-enumerating paths
@@ -48,9 +52,11 @@ A generated goal usually includes:
 - compatibility and quality rules that preserve only real boundaries while
   favoring readable, changeable, low-complexity results
 - stop conditions for blocked, unsafe, or looping runs
-- independent verification before Done
+- independent verification before Done, including adversarial checks for high-risk
+  claims when there is a concrete result to attack
 - parallelization rules for subagents, `create_thread`, worktrees, and child goals
-- parent-chosen subagent waves for read-only investigation, review, debugging, and verification instead of fixed counts
+- parent-chosen subagent waves for read-only investigation, multi-aspect review,
+  adversarial review, debugging, and verification instead of fixed counts
 
 The goal stays short by default. Hard imperatives are reserved for real
 invariants; implementation order, internal design, and exact file boundaries stay
@@ -65,6 +71,10 @@ run choose the right Codex execution structure.
 - It asks only for ambiguity that changes the outcome, evidence, scope, or risk.
 - It separates read-only subagent work from write-thread work.
 - It leaves subagent count and waves to the parent agent, based on independence, risk, cost, and how much evidence it can integrate.
+- It names `spawn_agent` for read-only multi-aspect and adversarial review, but
+  leaves ordinary command parallelism to the executor.
+- It only emits full `create_thread` write fan-out when there are multiple
+  non-trivial, independently verifiable write units.
 - It tells child threads to set their own unit-scoped goals before editing.
 - It uses behavioral coupling, shared state, and integration risk before file
   layout when deciding whether work can split.
@@ -176,7 +186,8 @@ implement those units serially in the main thread. Create one separate
 create_thread worktree per write unit when the repo supports it; each child
 thread gets one owned area, evidence requirements, an integration rule,
 and a unit-scoped goal before editing. The main thread integrates and gates Done
-on each unit's evidence, build/tests/smoke, and read-only final verification.
+on each unit's evidence, build/tests/smoke, and final verification by a read-only
+subagent (`spawn_agent`).
 ```
 
 More examples: [docs/EXAMPLES.md](docs/EXAMPLES.md)
