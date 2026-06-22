@@ -18,10 +18,8 @@ loading/error state の重複分岐を取り除く。先に settings page compon
 隣接テスト、既存 settings UI pattern を読む。public props、billing copy、
 Stripe/webhook behavior、pricing logic は変えない。refactor を広げない。
 focused checkout settings tests と repo の type/lint check がすべて green
-であることを確認し、通すためにテストを弱めたり削除したりしない。Done 前に
-read-only subagent (`spawn_agent`) を spawn して、diff が既存挙動と検証結果を
-保っていることを確認する。Done は重複分岐が消え、UI state が維持され、すべての
-check が通ったときだけ。
+であることを確認し、通すためにテストを弱めたり削除したりしない。Done は重複分岐が
+消え、UI state が維持され、すべての check が通ったときだけ。
 ```
 
 ## 長い実装
@@ -64,14 +62,12 @@ player history が faction power を変え、それが room events、enemy mutat
 bosses、rewards、HUD、persistence、browser smoke evidence に反映される。
 faction simulation、event generation、enemy/boss mutation、rewards/relics、
 HUD/smoke evidence を個別検証できる write unit として扱う。Codex では
-main thread で serial 実装しない。まず repo が usable HEAD を持つ established
-git project か確認し、そうでなければ main thread で git + scaffold + shared
-interfaces を bootstrap する。その後、write unit ごとに create_thread で別
-thread を作り、それぞれ別 worktree で走らせる。各 child thread には1つの
-unit、担当範囲、validation evidence、integration contract、編集前に
-unit-scoped goal を立てる指示を渡す。main thread が統合し、各 unit の証拠、
-build、tests、browser smoke、read-only subagent (`spawn_agent`) による
-最終検証が揃った時だけ Done。
+各 unit に安定した担当範囲、個別の確認方法、理解済みの共有部分、既に使える
+git/worktree があるかを先に確認する。どれか欠けるなら serial に進めるか、repo
+構造を変える前に確認する。全部そろう場合だけ write unit ごとに `create_thread`
+worktree を作る。各 child thread には1つの unit、担当範囲、validation evidence、
+integration contract、編集前に unit-scoped goal を立てる指示を渡す。main thread
+が統合し、各 unit の証拠、build、tests、browser smoke が揃った時だけ Done。
 ```
 
 ## ビジネスタスク

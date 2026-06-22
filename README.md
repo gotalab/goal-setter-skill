@@ -4,7 +4,7 @@
 
 goal-setter is a Codex skill that turns rough work into compact goals for long
 agent runs: expected result, Done criteria, verification, constraints, stop
-rules, and when to use subagents, `create_thread`, and worktrees.
+rules, and when to use extra reviewers or separate threads.
 
 Built for **Codex**. Works on **Claude Code** too.
 
@@ -26,10 +26,10 @@ boundaries, then leaves implementation judgment to the model. That has become
 more important as stronger models can infer design, file boundaries, and
 debugging paths from the repo itself.
 
-goal-setter also handles the part that is easy to forget in Codex: execution
-shape. Read-only review and investigation should often be subagents; non-trivial
-write units may need separate `create_thread` worktrees; each child thread needs
-its own unit-scoped goal; the main thread should integrate evidence before Done.
+goal-setter also handles the part that is easy to forget in Codex: how heavy the
+run should be. Small changes with clear tests should stay light; broad or risky
+work may need read-only reviewers; truly independent write units may need
+separate threads.
 
 ## What It Writes
 
@@ -52,7 +52,8 @@ A generated goal usually includes:
 - compatibility and quality rules that preserve only real boundaries while
   favoring readable, changeable, low-complexity results
 - stop conditions for blocked, unsafe, or looping runs
-- independent verification before Done, including adversarial checks for high-risk
+- a review level matched to risk: tests only for low-risk work, a separate
+  read-only reviewer for broader work, and adversarial review for high-risk
   claims when there is a concrete result to attack
 - parallelization rules for subagents, `create_thread`, worktrees, and child goals
 - parent-chosen subagent waves for read-only investigation, multi-aspect review,
@@ -69,12 +70,12 @@ run choose the right Codex execution structure.
 
 - It reconstructs the intended outcome before drafting.
 - It asks only for ambiguity that changes the outcome, evidence, scope, or risk.
-- It separates read-only subagent work from write-thread work.
+- It keeps small work light and separates read-only review from write-thread work.
 - It leaves subagent count and waves to the parent agent, based on independence, risk, cost, and how much evidence it can integrate.
-- It names `spawn_agent` for read-only multi-aspect and adversarial review, but
-  leaves ordinary command parallelism to the executor.
+- It names `spawn_agent` for separate read-only review only when that review
+  could change the Done decision.
 - It only emits full `create_thread` write fan-out when there are multiple
-  non-trivial, independently verifiable write units.
+  independent, separately verifiable write units and an existing worktree base.
 - It tells child threads to set their own unit-scoped goals before editing.
 - It uses behavioral coupling, shared state, and integration risk before file
   layout when deciding whether work can split.
@@ -182,14 +183,14 @@ history change faction power, which changes room events, enemy mutations,
 bosses, rewards, HUD, persistence, and browser smoke evidence.
 
 Treat faction simulation, event generation, enemy/boss mutation, rewards/relics,
-and HUD/smoke evidence as separately verifiable write units. In Codex, do not
-implement those units serially in the main thread. First verify the repo is an
-established git project with a usable HEAD; if not, bootstrap git, scaffold, and
-shared interfaces in the main thread. Then create one `create_thread` worktree
-per write unit; each child thread gets one owned area, evidence requirements, an
-integration rule, and a unit-scoped goal before editing. The main thread
-integrates and gates Done on each unit's evidence, build/tests/smoke, and final
-verification by a read-only subagent (`spawn_agent`).
+and HUD/smoke evidence as separately verifiable write units. In Codex, first
+verify each unit has stable ownership, independent validation, understood shared
+interfaces, and an existing usable git/worktree base. If any condition is false,
+keep writes serial or ask before changing repository structure. If all hold,
+create one `create_thread` worktree per write unit; each child thread gets one
+owned area, evidence requirements, an integration rule, and a unit-scoped goal
+before editing. The main thread integrates and gates Done on each unit's
+evidence plus build/tests/smoke.
 ```
 
 More examples: [docs/EXAMPLES.md](docs/EXAMPLES.md)
@@ -211,6 +212,7 @@ Details: [docs/RUNTIME.md](docs/RUNTIME.md)
 ```text
 skills/goal-setter/SKILL.md          # the skill
 skills/goal-setter/scripts/          # goal length validator
+scripts/                             # packaging and release checks
 plugins/goal-setter/                 # Codex plugin bundle
 .claude-plugin/                      # Claude Code plugin metadata
 ```

@@ -21,10 +21,8 @@ settings page component, adjacent tests, and existing settings UI patterns
 first. Keep public props, billing copy, Stripe/webhook behavior, and pricing
 logic unchanged; do not broaden the refactor. Validate with the focused
 checkout settings tests and the repo's type/lint check, all green; do not
-weaken or delete tests. Before Done, spawn a read-only subagent (`spawn_agent`)
-to verify the diff against the preserved behavior and checks; do not
-self-review. Done when the duplicate branch is gone, UI states still render, and
-all checks pass.
+weaken or delete tests. Done when the duplicate branch is gone, UI states still
+render, and all checks pass.
 ```
 
 ## Long Implementation
@@ -68,15 +66,15 @@ history change faction power, which changes room events, enemy mutations,
 bosses, rewards, HUD, persistence, and browser smoke evidence. Treat faction
 simulation, event generation, enemy/boss mutation, rewards/relics, and HUD/smoke
 evidence as separately verifiable write units. In Codex, do not implement those
-units serially in the main thread. First verify the repo is an established git
-project with a usable HEAD; if not, bootstrap git + scaffold + shared
-interfaces in the main thread. Then create one separate thread with
-create_thread per write unit, each in its own worktree. In each child thread's
-initial prompt, assign exactly one unit, owned area, validation evidence,
-integration contract, and instruct it to set a unit-scoped goal before editing.
-Run child threads in parallel, integrate in the main thread, and gate Done on
-every unit's evidence plus build, tests, browser smoke, and final verification
-by a read-only subagent (`spawn_agent`).
+units serially in the main thread unless each unit has stable ownership,
+independent validation, understood shared interfaces, and an existing usable
+git/worktree base. If any condition is false, keep writes serial or ask before
+changing repository structure. If all hold, create one `create_thread` worktree
+per write unit. In each child thread's initial prompt, assign exactly one unit,
+owned area, validation evidence, integration contract, and instruct it to set a
+unit-scoped goal before editing. Run child threads in parallel, integrate in the
+main thread, and gate Done on every unit's evidence plus build, tests, and
+browser smoke.
 ```
 
 ## Business Task
@@ -161,7 +159,8 @@ src/api functions keep their current signatures and request behavior; no
 refactors or features beyond it. Validate with npm test, npm run build, and
 npm run lint, all green; do not weaken, skip, or delete tests. Before claiming
 Done, spawn a read-only subagent (`spawn_agent`) to verify the diff against the
-migration doc; do not self-review. Done when grep finds zero @acme/api-client
-references in src/ and tests/ and all three checks pass. If a v1 behavior has no
-v2 equivalent, stop and ask rather than approximate.
+migration doc; do not use self-review as a substitute for that pass. Done when
+grep finds zero @acme/api-client references in src/ and tests/ and all three
+checks pass. If a v1 behavior has no v2 equivalent, stop and ask rather than
+approximate.
 ```

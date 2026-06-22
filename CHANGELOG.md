@@ -3,6 +3,20 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.8.15
+
+- **Keep small goals light.** Done review is now matched to risk: clear
+  low-risk work can rely on the relevant checks, broader work can use one
+  read-only reviewer, and high-risk claims can use adversarial review.
+- **Do not create repo structure just to parallelize.** `create_thread` now
+  requires independent write units, stable ownership, separate checks, understood
+  shared parts, clear time savings, and an existing git/worktree base. Goals now
+  say not to initialize git, scaffold architecture, or create shared interfaces
+  solely to enable parallel work.
+- **Shorten public trigger text and add release checks.** Skill and plugin
+  descriptions are shorter, and root-to-plugin sync plus version checks are now
+  scripted.
+
 ## 0.8.14
 
 - **Clarify Codex worker-tool activation.** Any Codex goal that must launch

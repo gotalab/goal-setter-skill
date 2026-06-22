@@ -1,7 +1,7 @@
 {
   "name": "goal-setter",
-  "version": "0.8.14",
-  "description": "Shape rough requests into compact Codex goals that define the expected result, evidence, constraints, stop rules, artifact reuse, and when to return a user-sent /goal for spawn_agent or create_thread.",
+  "version": "0.8.15",
+  "description": "Draft or activate compact Codex goals for verifiable long runs. Defines Done, evidence, constraints, stop rules, and when extra review or separate threads are worth the cost.",
   "author": {
     "name": "gotalab",
     "url": "https://github.com/gotalab"
@@ -20,13 +20,13 @@
   "interface": {
     "displayName": "Goal Setter",
     "shortDescription": "Codex goals with evidence and run rules",
-    "longDescription": "Turns a rough request into a compact /goal for Codex: expected result, evidence, constraints, stop rules, existing artifact reuse, adversarial verification when useful, and whether a user-sent /goal line is required to launch spawn_agent or create_thread. It asks only when missing information would change the result, evidence, scope, validation, or risk.",
+    "longDescription": "Turns a rough request into a compact /goal for Codex: expected result, evidence, constraints, stop rules, existing artifact reuse, and a review level matched to risk. It asks only when missing information would change the result, evidence, scope, validation, or risk.",
     "developerName": "gotalab",
     "category": "Productivity",
     "defaultPrompt": [
       "Set a goal: define the expected result, evidence, constraints, and how Codex should run it.",
       "Draft a Codex-ready goal for this task without activating it.",
-      "Shape this review or splittable work into a goal that uses subagents or create_thread only when needed."
+      "Shape this review or splittable work into a goal that keeps small work light and uses extra workers only when needed."
     ],
     "brandColor": "#6F5BFF",
     "composerIcon": "./assets/goal-setter-composer-icon.png",

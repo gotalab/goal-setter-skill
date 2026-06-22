@@ -1,7 +1,7 @@
 {
   "name": "goal-setter",
-  "version": "0.8.14",
-  "description": "Shape rough requests into compact Codex-ready goals for long autonomous runs. Defines the expected result, evidence, constraints, stop rules, artifact reuse, and when to return a user-sent /goal for spawn_agent or create_thread; also works with Claude Code /goal.",
+  "version": "0.8.15",
+  "description": "Draft or activate compact Codex goals for verifiable long runs. Defines Done, evidence, constraints, stop rules, and when extra review or separate threads are worth the cost.",
   "author": {
     "name": "gotalab"
   },

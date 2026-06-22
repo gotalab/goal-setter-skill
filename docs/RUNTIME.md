@@ -18,15 +18,14 @@ those tools, even when `spawn_agent` is only used for final verification.
 
 ## Parallel Work
 
-When work splits into independent, separately verifiable units, the goal carries
-the decomposition structure:
+When work splits into independent, separately verifiable units and the savings
+are worth the added coordination, the goal carries the decomposition structure:
 
 - a discovery rule for the units
 - an owned area and evidence requirement for each unit
 - item-by-item progress expectations
 - a parent integration check
-- a final independent verification pass, with adversarial review when a
-  high-risk claim has a concrete target to attack
+- a final review level matched to risk
 
 Separability is judged by behavioral coupling, shared state, and integration
 risk before file layout. File paths are clues after reading the repo, not the
@@ -37,24 +36,24 @@ before launching more.
 
 ## Codex
 
-For multiple non-trivial write units in an established Codex project with a
-usable git HEAD, the goal makes `create_thread` worktree fan-out mandatory:
+Use `create_thread` only when all of these are true:
 
-- one separate thread per write unit
-- one owned area per child thread
-- evidence and an integration rule for each unit
-- a unit-scoped goal in each child before editing
-- main-thread integration after all child evidence returns
+- at least two write units are behaviorally independent
+- each unit has stable ownership and its own validation
+- shared interfaces are already understood well enough to integrate
+- the expected time saved exceeds thread setup, review, and merge cost
+- a usable git/worktree base already exists
 
-`spawn_agent` remains the default for read-only work: research, multi-aspect
-review, adversarial review, final verification, log analysis, existing-behavior
-discovery, and other noisy or parallelizable checks. Subagents return evidence,
-counterevidence, uncertainty, gaps, or read-only findings; the parent keeps
-synthesis, write decisions, and final judgment.
+Never initialize git, scaffold architecture, or create shared interfaces solely
+to enable parallel work. If the workspace is not already suitable, keep writes
+serial or ask before changing repository structure.
 
-If `create_thread` is unavailable, the workspace is not a usable git/worktree
-base, or the write unit is too small for worktree isolation, the goal says so
-explicitly instead of hiding the fallback behind an "or" clause.
+Use `spawn_agent` for read-only work when a separate pass could change the Done
+decision: research, multi-aspect review, adversarial review, final verification,
+log analysis, existing-behavior discovery, and other noisy checks. Low-risk work
+with strong automated checks does not need a subagent. Subagents return
+evidence, counterevidence, uncertainty, gaps, or read-only findings; the parent
+keeps synthesis, write decisions, and final judgment.
 
 ## Claude Code
 
@@ -78,7 +77,7 @@ For non-trivial work, goal-setter considers:
 - hard boundaries and rules against weakening required checks
 - progress rules for long runs
 - stop conditions
-- independent verification, including adversarial review for high-risk claims
+- a risk-matched final review, including adversarial review for high-risk claims
   with a concrete target
 - final report expectations
 - a question-and-hypothesis loop for uncertain research, including rejection criteria and stop rules
