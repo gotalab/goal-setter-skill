@@ -7,7 +7,7 @@ description: Draft, audit, or activate a compact /goal when the user asks for a 
 
 Turn a rough request into a compact `/goal` that says what result is expected, what Done means, how to check it, what must not be broken, when to stop, and how Codex should run it. Treat this as Goal intake: decide whether to ask, briefly explore, draft, activate, or say a normal prompt is a better fit.
 
-A Goal states the user's requested outcome and how to know it worked; it is not an implementation recipe. Never shrink or reinterpret the outcome; minimize only the surrounding prompt. Start from the smallest prompt that preserves the requested product/task outcome, then add only clauses that change execution, verification, safety, or output. Default to an inline condition. Set the goal through the runtime's native mechanism, or emit the exact `/goal …` line; never claim it was set unless it was.
+A Goal states the user's requested outcome and how to know it worked; it is not an implementation recipe. Favor verification targets and feedback loops over detailed procedure rules: long rule sets can fit sample tasks while failing real work, but outcome, evidence, and stop constraints travel across projects. Never shrink or reinterpret the outcome; minimize only the surrounding prompt. Start from the smallest prompt that preserves the requested product/task outcome, then add only clauses that change execution, verification, safety, or output. Default to an inline condition. Set the goal through the runtime's native mechanism, or emit the exact `/goal …` line; never claim it was set unless it was.
 
 ## When to use
 

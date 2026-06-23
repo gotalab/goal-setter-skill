@@ -3,6 +3,12 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.9.3
+
+- **Name the core philosophy.** The skill and README now state the contract
+  plainly: prefer verification targets and feedback loops over rigid procedure
+  rules, so goals travel better across real tasks.
+
 ## 0.9.2
 
 - **Add a long-run feedback loop.** Long or high-risk goals can now require an

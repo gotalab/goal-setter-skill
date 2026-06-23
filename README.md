@@ -7,6 +7,9 @@ turns a rough request into a short goal that fixes the result, the evidence for
 success, the boundaries, and the stop rules, while leaving implementation
 judgment to the runner.
 
+It favors verification targets over rule-heavy procedures: the goal should say
+what must be proven, not prescribe every step.
+
 Built for **Codex**. Works on **Claude Code** too.
 
 [日本語](README.ja.md)
