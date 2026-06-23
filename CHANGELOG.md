@@ -3,6 +3,13 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.9.2
+
+- **Add a long-run feedback loop.** Long or high-risk goals can now require an
+  open-items loop in `execution-notes.md`: update required checks after each
+  evidence pass, then continue to the highest-risk or least-certain open item
+  until Done or a real block condition is reached.
+
 ## 0.9.1
 
 - **Trim README back into an entry page.** README.md and README.ja.md now keep

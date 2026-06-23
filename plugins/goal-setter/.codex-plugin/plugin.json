@@ -1,6 +1,6 @@
 {
   "name": "goal-setter",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Draft or activate compact Codex goals for verifiable long runs. Defines the result, evidence, constraints, stop rules, limited clarification, and only worthwhile extra review or separate threads.",
   "author": {
     "name": "gotalab",
@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "Goal Setter",
     "shortDescription": "Codex goals with evidence and run rules",
-    "longDescription": "Turns a rough request into a compact /goal for Codex: expected result, evidence, constraints, stop rules, existing file reuse, and review only when it could change the outcome. It asks only when missing information would change the result, evidence, scope, validation, or risk.",
+    "longDescription": "Turns a rough request into a compact /goal for Codex: expected result, evidence, constraints, stop rules, existing file reuse, and a long-run open-items loop when useful. It asks only when missing information would change the result, evidence, scope, validation, or risk.",
     "developerName": "gotalab",
     "category": "Productivity",
     "defaultPrompt": [

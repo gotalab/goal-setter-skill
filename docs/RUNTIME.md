@@ -34,6 +34,15 @@ one; the parent agent chooses the number and waves based on independence, risk,
 cost, and how much evidence it can integrate. It should synthesize each wave
 before launching more.
 
+## Long Runs
+
+For long autonomous work, the goal can require an evidence-based open-items loop.
+The runner keeps the current required checks, evidence status, blockers, and
+material decisions in `execution-notes.md`. After each check, it updates that
+state. If Done is not met and no block condition applies, it continues to the
+next highest-risk or least-certain open item instead of stopping with only "next
+steps."
+
 ## Clarification
 
 goal-setter asks before drafting only when the missing answer could change Done,
@@ -85,7 +94,7 @@ For non-trivial work, goal-setter considers:
 - one-question-at-a-time clarification when requested or materially needed
 - read-first anchors
 - hard boundaries and rules against weakening required checks
-- progress rules for long runs
+- progress rules and open-item loops for long runs
 - stop conditions
 - a risk-matched final review, including adversarial review for high-risk claims
   with a concrete target

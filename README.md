@@ -34,8 +34,8 @@ going across several checks and the finish line must be judged by evidence.
   decision.
 - Asks one material question at a time only when the answer would change the
   goal.
-- Keeps small work light, and adds read-only review or separate write threads
-  only when they could change the outcome or save real time.
+- Keeps small work light; for long work, keeps an evidence-based open-items
+  loop and adds read-only review or separate write threads only when useful.
 
 Details live in [docs/RUNTIME.md](docs/RUNTIME.md). Examples live in
 [docs/EXAMPLES.md](docs/EXAMPLES.md).
