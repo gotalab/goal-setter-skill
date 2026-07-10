@@ -3,6 +3,24 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.9.4
+
+- **Use subagents as an execution rule.** Goals can be activated through the
+  native Goal tool even when the Skill uses subagents. When independent work or
+  verification can change Done, goal-setter actually spawns subagents instead
+  of merely describing the capability. Long-running Goals carry a concrete
+  spawn, wait, and synthesize instruction without fixing worker count or waves.
+- **Separate subagents from separate tasks.** goal-setter uses bounded
+  subagents for adaptive feedback loops, parallel discovery, context isolation,
+  or fresh-context verification without forcing a fixed pipeline, while
+  `create_thread` is reserved for explicit user requests to create separate
+  durable Codex tasks or worktrees.
+- **Interview when Done cannot be defined yet.** Dependent questions are asked
+  one at a time, while independent blockers can be bundled into one round.
+- **Align every public surface.** Updated the Skill, English and Japanese
+  README/runtime docs, examples, agent prompt, and plugin metadata to the same
+  contract.
+
 ## 0.9.3
 
 - **Name the core philosophy.** The skill and README now state the contract

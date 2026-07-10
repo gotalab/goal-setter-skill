@@ -1,8 +1,10 @@
 # Examples
 
-These examples show the shape of goal-setter output. In a real run,
-goal-setter reads the repo or source material first, fills in the actual files
-and checks, and drops clauses that would not change the run.
+These examples show the Goal text that goal-setter produces. They include the
+`/goal` prefix for readability; when activation is requested in Codex, the same
+text is set through the native Goal mechanism and the user does not resend it.
+In a real run, goal-setter reads the repo or source material first, fills in the
+actual files and checks, and drops clauses that would not change the run.
 
 ## Small Refactor
 
@@ -49,13 +51,14 @@ pass, the CSV matches the documented columns, and the smoke evidence shows the
 export works without billing behavior drift.
 ```
 
-## Parallel Implementation With `create_thread`
+## User-Requested Separate Tasks With `create_thread`
 
 Before:
 
 ```text
-set a goal: make the game factions affect events, enemies, bosses, rewards,
-HUD, save-load, and smoke evidence
+set a goal and split it into separate Codex tasks and worktrees: make the game
+factions affect events, enemies, bosses, rewards, HUD, save-load, and smoke
+evidence
 ```
 
 After:
@@ -65,12 +68,12 @@ After:
 history change faction power, which changes room events, enemy mutations,
 bosses, rewards, HUD, persistence, and browser smoke evidence. Treat faction
 simulation, event generation, enemy/boss mutation, rewards/relics, and HUD/smoke
-evidence as separately verifiable write units. In Codex, do not implement those
-units serially in the main thread unless each unit has stable ownership,
+evidence as separately verifiable write units. Because the user explicitly
+requested separate tasks, first confirm that each unit has stable ownership,
 independent validation, understood shared interfaces, and an existing usable
-git/worktree base. If any condition is false, keep writes serial or ask before
-changing repository structure. If all hold, create one `create_thread` worktree
-per write unit. In each child thread's initial prompt, assign exactly one unit,
+git/worktree base. If any condition is false, do not silently fall back to serial
+work; stop with why separate tasks are unsafe and the smallest decision needed.
+If all hold, create one `create_thread` worktree per write unit. In each child thread's initial prompt, assign exactly one unit,
 owned area, validation evidence, integration contract, and instruct it to set a
 unit-scoped goal before editing. Run child threads in parallel, integrate in the
 main thread, and gate Done on every unit's evidence plus build, tests, and

@@ -35,10 +35,12 @@ going across several checks and the finish line must be judged by evidence.
 - Reconstructs the intended result before drafting.
 - Adds only clauses that change the result, evidence, boundary, risk, or stop
   decision.
-- Asks one material question at a time only when the answer would change the
-  goal.
-- Keeps small work light; for long work, keeps an evidence-based open-items
-  loop and adds read-only review or separate write threads only when useful.
+- Interviews one material question at a time when the request is too ambiguous
+  for an honest Goal and each answer determines the next question; bundles
+  independent blockers.
+- Keeps small work light; uses subagents when feedback loops, parallel
+  exploration, context isolation, or independent verification can improve Done,
+  and creates separate tasks only when the user explicitly asks for them.
 
 Details live in [docs/RUNTIME.md](docs/RUNTIME.md). Examples live in
 [docs/EXAMPLES.md](docs/EXAMPLES.md).
@@ -101,15 +103,22 @@ Draft a goal without activating it:
 $goal-setter draft a goal for migrating our API client to v2
 ```
 
-Shape and activate a goal when Codex does not need extra worker tools:
+Shape and activate a goal:
 
 ```text
 $goal-setter set a goal: all checkout tests pass after the refactor
 ```
 
-When the goal must launch Codex worker tools such as `spawn_agent` or
-`create_thread`, goal-setter returns an exact `/goal ...` line for you to send.
-That user-sent line is what authorizes those tools.
+goal-setter sets the Goal through Codex's native Goal mechanism. When feedback
+loops, parallel exploration, context isolation, or independent verification
+could improve the Done decision, goal-setter actually spawns subagents; it does
+not merely describe them as available. It does not force a fixed sequence of
+roles or stages; the parent chooses the next useful shape from current evidence
+and cost. If that delegation should continue across Goal turns, the Goal keeps
+an outcome-level instruction to spawn subagents, wait for their evidence, and
+synthesize it.
+`create_thread` creates separate user-owned tasks, so it is used only when the
+user explicitly requests separate tasks, threads, or worktrees.
 
 ## Docs
 

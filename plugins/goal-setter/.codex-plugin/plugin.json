@@ -1,7 +1,7 @@
 {
   "name": "goal-setter",
-  "version": "0.9.3",
-  "description": "Draft or activate compact Codex goals for verifiable long runs. Defines the result, evidence, constraints, stop rules, limited clarification, and only worthwhile extra review or separate threads.",
+  "version": "0.9.4",
+  "description": "Draft or activate compact Codex goals for verifiable long runs. Defines the result, evidence, constraints, stop rules, limited clarification, and proportionate subagent use; separate tasks remain user-directed.",
   "author": {
     "name": "gotalab",
     "url": "https://github.com/gotalab"
@@ -20,13 +20,13 @@
   "interface": {
     "displayName": "Goal Setter",
     "shortDescription": "Codex goals with evidence and run rules",
-    "longDescription": "Turns a rough request into a compact /goal for Codex: expected result, evidence, constraints, stop rules, existing file reuse, and a long-run open-items loop when useful. It favors verification targets over rigid procedures and asks only when missing information would change the result, evidence, scope, validation, or risk.",
+    "longDescription": "Turns a rough request into a compact /goal for Codex: expected result, evidence, constraints, stop rules, existing file reuse, and concrete subagent execution when feedback loops, parallel investigation, context isolation, or independent verification can change Done. The parent chooses the shape dynamically; separate Codex tasks remain user-directed.",
     "developerName": "gotalab",
     "category": "Productivity",
     "defaultPrompt": [
       "Set a goal: define the expected result, evidence, constraints, and how Codex should run it.",
       "Draft a Codex-ready goal for this task without activating it.",
-      "Shape this review or splittable work into a goal that keeps small work light and uses extra workers only when needed."
+      "Shape this review or splittable work into a goal that keeps small work light, spawns subagents when they can improve Done, and creates separate tasks only when I explicitly request them."
     ],
     "brandColor": "#6F5BFF",
     "composerIcon": "./assets/goal-setter-composer-icon.png",

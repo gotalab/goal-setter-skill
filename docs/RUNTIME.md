@@ -7,14 +7,21 @@ goal and parallelism mechanisms that already exist in the runtime.
 
 | Runtime | Behavior |
 | --- | --- |
-| Codex, no worker-tool launch needed | goal-setter can set the goal with the native goal tool |
-| Codex, `spawn_agent` or `create_thread` needed | goal-setter returns a `/goal ...` line for the user to send |
+| Codex, activation requested | goal-setter sets the goal with the native goal tool |
+| Codex, draft only requested or no native goal tool available | goal-setter returns an exact `/goal ...` line |
 | Claude Code | goal-setter returns a `/goal ...` line for the user to send |
 
-The Codex worker-tool case is different because `spawn_agent` and
-`create_thread` are gated to explicit user requests. A tool-set goal can
-describe the desired work, but the user-sent `/goal ...` line is what authorizes
-those tools, even when `spawn_agent` is only used for final verification.
+goal-setter activates the Goal normally. When parallel exploration, context
+isolation, or independent verification could improve Done, it starts subagents
+instead of merely mentioning that they are available. The user does not need to
+resend `/goal` solely to authorize them. When the same delegation is needed in a
+long-running Goal, the Goal tells Codex concretely to spawn subagents for the
+named work, wait for their evidence, and synthesize it. Worker count and wave
+shape remain the parent's judgment unless the user fixes them.
+
+`create_thread` is not subagent fan-out. It creates separate user-owned Codex
+tasks and is used only when the user explicitly requests separate tasks,
+threads, or worktrees.
 
 ## Parallel Work
 
@@ -46,15 +53,18 @@ steps."
 ## Clarification
 
 goal-setter asks before drafting only when the missing answer could change Done,
-evidence, scope, risk, or stop conditions. If the user asks to be grilled or to
-fully clarify a plan, it asks one material question at a time with a recommended
-answer, waits for feedback, and continues only while the next answer could still
-change the goal. If code, docs, or sources can answer the question, it checks
-those instead of asking.
+evidence, scope, risk, or stop conditions. If the request is too ambiguous to
+define an honest pass/fail Goal, or the user asks to be grilled, it enters a real
+interview instead of guessing. It asks dependent questions one at a time with a
+recommended answer, and bundles independent blocking questions when their answers
+do not affect one another. It stops interviewing once the Goal is safe to define.
+If code, docs, or sources can answer the question, it checks those instead.
 
 ## Codex
 
-Use `create_thread` only when all of these are true:
+Use `create_thread` only when the user explicitly requested a separate task,
+thread, or worktree; do not infer it merely because work is decomposable. For
+parallel write fan-out across multiple tasks, all of these must also be true:
 
 - at least two write units are behaviorally independent
 - each unit has stable ownership and its own validation
@@ -63,15 +73,26 @@ Use `create_thread` only when all of these are true:
 - a usable git/worktree base already exists
 
 Never initialize git, scaffold architecture, or create shared interfaces solely
-to enable parallel work. If the workspace is not already suitable, keep writes
-serial or ask before changing repository structure.
+to enable parallel work. If the workspace is not already suitable, do not
+silently create tasks or fall back to serial work; report the missing condition
+and the smallest decision needed. A user-requested single handoff or new thread
+does not inherit the multi-task fan-out gates.
 
-Use `spawn_agent` for read-only work when a separate pass could change the Done
-decision: research, multi-aspect review, adversarial review, final verification,
-log analysis, existing-behavior discovery, and other noisy checks. Low-risk work
-with strong automated checks does not need a subagent. Subagents return
-evidence, counterevidence, uncertainty, gaps, or read-only findings; the parent
-keeps synthesis, write decisions, and final judgment.
+Use `spawn_agent` when a stronger feedback loop, parallel
+exploration, context isolation, or a separate read-only pass could change the
+Done decision. Common patterns include moving noisy research or log analysis out
+of the main context, investigating independent questions in parallel, feeding
+new evidence into another focused pass, and challenging actual output from a
+fresh context. These are not fixed stages or roles. The parent chooses a serial,
+parallel, or repeated-wave shape from current evidence, dependencies, and cost.
+Low-risk work with strong automated checks does not need a subagent. Start with
+the smallest useful wave, synthesize it, and launch more only when another pass
+could still change Done. Review subagents stay read-only; the parent keeps
+synthesis, integration, write decisions, and final judgment. This is an
+execution rule: actually spawn the subagents. Do not replace it with a statement
+that subagents are available or with an in-context self-review. When the same
+delegation should continue across Goal turns, put the concrete spawn, wait, and
+synthesize instruction in the Goal.
 
 ## Claude Code
 
