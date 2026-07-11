@@ -12,12 +12,13 @@ goal and parallelism mechanisms that already exist in the runtime.
 | Claude Code | goal-setter returns a `/goal ...` line for the user to send |
 
 goal-setter activates the Goal normally. When parallel exploration, context
-isolation, or independent verification could improve Done, it starts subagents
-instead of merely mentioning that they are available. The user does not need to
-resend `/goal` solely to authorize them. When the same delegation is needed in a
-long-running Goal, the Goal tells Codex concretely to spawn subagents for the
-named work, wait for their evidence, and synthesize it. Worker count and wave
-shape remain the parent's judgment unless the user fixes them.
+isolation, or independent verification could improve Done, it writes a concrete
+execution rule into the Goal: the running Codex task spawns subagents for the
+named work, waits for their evidence, and synthesizes it. Goal intake itself
+stays in the parent context unless understanding the request requires substantial
+independent investigation. The user does not need to resend `/goal` solely to
+authorize subagents. Worker count and wave shape remain the parent's judgment
+unless the user fixes them.
 
 `create_thread` is not subagent fan-out. It creates separate user-owned Codex
 tasks and is used only when the user explicitly requests separate tasks,
@@ -78,7 +79,7 @@ silently create tasks or fall back to serial work; report the missing condition
 and the smallest decision needed. A user-requested single handoff or new thread
 does not inherit the multi-task fan-out gates.
 
-Use `spawn_agent` when a stronger feedback loop, parallel
+During Goal execution, use `spawn_agent` when a stronger feedback loop, parallel
 exploration, context isolation, or a separate read-only pass could change the
 Done decision. Common patterns include moving noisy research or log analysis out
 of the main context, investigating independent questions in parallel, feeding
@@ -89,10 +90,9 @@ Low-risk work with strong automated checks does not need a subagent. Start with
 the smallest useful wave, synthesize it, and launch more only when another pass
 could still change Done. Review subagents stay read-only; the parent keeps
 synthesis, integration, write decisions, and final judgment. This is an
-execution rule: actually spawn the subagents. Do not replace it with a statement
-that subagents are available or with an in-context self-review. When the same
-delegation should continue across Goal turns, put the concrete spawn, wait, and
-synthesize instruction in the Goal.
+execution rule for the running Goal: actually spawn the subagents. Do not replace
+it with a statement that subagents are available or with an in-context
+self-review.
 
 ## Claude Code
 

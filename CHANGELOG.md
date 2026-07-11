@@ -3,6 +3,19 @@
 Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
 below are historical and may describe behavior that was later corrected.
 
+## 0.9.5
+
+- **Separate Goal intake from Goal execution.** Goal intake stays in the parent
+  context unless understanding the request needs substantial independent
+  investigation. When independent work or verification can change Done, the
+  emitted Goal concretely tells the running Codex task to spawn subagents, wait
+  for their evidence, and synthesize it; worker count and waves remain dynamic.
+- **Keep multi-day run state.** Long autonomous Goals continue to maintain the
+  evidence-based `execution-notes.md` loop for resumability and review.
+- **Unify clarification routing.** Working-system intake now follows the same
+  rule as the rest of the Skill: dependent questions are asked one at a time,
+  while independent blockers can be bundled.
+
 ## 0.9.4
 
 - **Use subagents as an execution rule.** Goals can be activated through the

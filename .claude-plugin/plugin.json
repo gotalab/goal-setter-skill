@@ -1,6 +1,6 @@
 {
   "name": "goal-setter",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "Draft or activate compact Codex goals for verifiable long runs. Defines the result, evidence, constraints, stop rules, limited clarification, and proportionate subagent use; separate tasks remain user-directed.",
   "author": {
     "name": "gotalab"
